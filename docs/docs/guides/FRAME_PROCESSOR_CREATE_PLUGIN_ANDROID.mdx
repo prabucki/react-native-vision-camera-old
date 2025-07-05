@@ -16,15 +16,15 @@ Android Frame Processor Plugins can be written in either **Java**, **Kotlin** or
 
 ### Mostly automatic setup
 
-1. Run [Vision Camera Plugin Builder CLI](https://github.com/mateusz1913/vision-camera-plugin-builder)
+1. Run [Vision Camera Plugin Builder CLI](https://github.com/mateusz1913/vision-camera-old-plugin-builder)
 
 ```sh
-npx vision-camera-plugin-builder android
+npx vision-camera-old-plugin-builder android
 ```
 
 :::info
 The CLI will ask you for the path to project's Android Manifest file, name of the plugin (e.g. `QRCodeFrameProcessor`), name of the exposed method (e.g. `scanQRCodes`) and language you want to use for plugin development (Java or Kotlin).
-For reference see the [CLI's docs](https://github.com/mateusz1913/vision-camera-plugin-builder#%EF%B8%8F-options).
+For reference see the [CLI's docs](https://github.com/mateusz1913/vision-camera-old-plugin-builder#%EF%B8%8F-options).
 :::
 
 2. Register the package in MainApplication.java
@@ -76,7 +76,7 @@ public class QRCodeFrameProcessorPlugin extends FrameProcessorPlugin {
 The JS function name will be equal to the name you pass to the `super(...)` call (with a `__` prefix). Make sure it is unique across other Frame Processor Plugins.
 :::
 
-4. **Implement your Frame Processing.** See the [Example Plugin (Java)](https://github.com/mrousavy/react-native-vision-camera/blob/main/example/android/app/src/main/java/com/mrousavy/camera/example/ExampleFrameProcessorPlugin.java) for reference.
+4. **Implement your Frame Processing.** See the [Example Plugin (Java)](https://github.com/mrousavy/react-native-vision-camera-old/blob/main/example/android/app/src/main/java/com/mrousavy/camera/example/ExampleFrameProcessorPlugin.java) for reference.
 5. Create a new Java file which registers the Frame Processor Plugin in a React Package, for the QR Code Scanner plugin this file will be called `QRCodeFrameProcessorPluginPackage.java`:
 
 ```java {12}
@@ -140,7 +140,7 @@ class ExampleFrameProcessorPluginKotlin: FrameProcessorPlugin("scanQRCodes") {
 The JS function name will be equal to the name you pass to the `FrameProcessorPlugin(...)` call (with a `__` prefix). Make sure it is unique across other Frame Processor Plugins.
 :::
 
-4. **Implement your Frame Processing.** See the [Example Plugin (Java)](https://github.com/mrousavy/react-native-vision-camera/blob/main/example/android/app/src/main/java/com/mrousavy/camera/example/ExampleFrameProcessorPlugin.java) for reference.
+4. **Implement your Frame Processing.** See the [Example Plugin (Java)](https://github.com/mrousavy/react-native-vision-camera-old/blob/main/example/android/app/src/main/java/com/mrousavy/camera/example/ExampleFrameProcessorPlugin.java) for reference.
 5. Create a new Kotlin file which registers the Frame Processor Plugin in a React Package, for the QR Code Scanner plugin this file will be called `QRCodeFrameProcessorPluginPackage.kt`:
 
 ```kotlin {9}

@@ -1,5 +1,5 @@
 /* global __example_plugin __example_plugin_swift */
-import type { Frame } from 'react-native-vision-camera';
+import type { Frame } from 'react-native-vision-camera-old';
 
 declare let _WORKLET: true | undefined;
 

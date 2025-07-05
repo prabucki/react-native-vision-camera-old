@@ -3,7 +3,7 @@
   "extends": "../tsconfig",
   "compilerOptions": {
     "paths": {
-      "react-native-vision-camera": ["../src/index"]
+      "react-native-vision-camera-old": ["../src/index"]
     },
   },
   "include": [

@@ -169,7 +169,7 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation project(':react-native-vision-camera')
+    implementation project(':react-native-vision-camera-old')
     implementation "androidx.camera:camera-core:1.1.0-alpha08"
 }
 

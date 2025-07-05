@@ -1,6 +1,6 @@
 # ios
 
-This folder contains the iOS-platform-specific code for react-native-vision-camera.
+This folder contains the iOS-platform-specific code for react-native-vision-camera-old.
 
 ## Prerequesites
 

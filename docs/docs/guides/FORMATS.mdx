@@ -39,7 +39,7 @@ function App() {
 ```
 
 :::note
-See the [CameraPreset.ts](https://github.com/mrousavy/react-native-vision-camera/blob/main/src/CameraPreset.ts) type for more information about presets
+See the [CameraPreset.ts](https://github.com/mrousavy/react-native-vision-camera-old/blob/main/src/CameraPreset.ts) type for more information about presets
 :::
 
 :::warning
@@ -110,7 +110,7 @@ export const sortFormatsByResolution = (left: CameraDeviceFormat, right: CameraD
   // in this case, points aren't "normalized" (e.g. higher resolution = 1 point, lower resolution = -1 points)
   let leftPoints = left.photoHeight * left.photoWidth
   let rightPoints = right.photoHeight * right.photoWidth
-  
+
   // we also care about video dimensions, not only photo.
   leftPoints += left.videoWidth * left.videoHeight
   rightPoints += right.videoWidth * right.videoHeight

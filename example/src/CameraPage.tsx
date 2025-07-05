@@ -11,8 +11,8 @@ import {
   useCameraDevices,
   useFrameProcessor,
   VideoFile,
-} from 'react-native-vision-camera';
-import { Camera, frameRateIncluded } from 'react-native-vision-camera';
+} from 'react-native-vision-camera-old';
+import { Camera, frameRateIncluded } from 'react-native-vision-camera-old';
 import { CONTENT_SPACING, MAX_ZOOM_FACTOR, SAFE_AREA_PADDING } from './Constants';
 import Reanimated, { Extrapolate, interpolate, useAnimatedGestureHandler, useAnimatedProps, useSharedValue } from 'react-native-reanimated';
 import { useEffect } from 'react';

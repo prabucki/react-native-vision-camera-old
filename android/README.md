@@ -1,6 +1,6 @@
 # android
 
-This folder contains the Android-platform-specific code for react-native-vision-camera.
+This folder contains the Android-platform-specific code for react-native-vision-camera-old.
 
 ## Prerequesites
 

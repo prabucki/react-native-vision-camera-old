@@ -1,7 +1,7 @@
 <!--
                     ❤️ Thank you for your contribution! ❤️
               Make sure you have read the Contributing Guidelines:
-  https://github.com/mrousavy/react-native-vision-camera/blob/main/CONTRIBUTING.md
+  https://github.com/mrousavy/react-native-vision-camera-old/blob/main/CONTRIBUTING.md
 -->
 
 ## What

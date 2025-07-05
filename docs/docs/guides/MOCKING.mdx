@@ -53,7 +53,7 @@ module.exports = {
     import { Camera, sortDevices } from 'react-native-vision-camera-old';
 
     export const VisionCameraOld = Camera;
-    export const visionCameraSortDevices = sortDevices;
+    export const visionCameraOldSortDevices = sortDevices;
    ```
 
    ```js
@@ -97,7 +97,7 @@ module.exports = {
       }
     }
 
-    export const visionCameraSortDevices = (_left, _right) => 1;
+    export const visionCameraOldSortDevices = (_left, _right) => 1;
    ```
 
    These mocked modules allows us to get authorized camera permissions, get one back camera

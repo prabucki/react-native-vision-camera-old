@@ -1,13 +1,13 @@
 //
 //  ExampleFrameProcessorPlugin.m
-//  VisionCameraExample
+//  VisionCameraOldExample
 //
 //  Created by Marc Rousavy on 01.05.21.
 //
 
 #import <Foundation/Foundation.h>
-#import <VisionCamera/FrameProcessorPlugin.h>
-#import <VisionCamera/Frame.h>
+#import <VisionCameraOld/FrameProcessorPlugin.h>
+#import <VisionCameraOld/Frame.h>
 
 // Example for an Objective-C Frame Processor plugin
 

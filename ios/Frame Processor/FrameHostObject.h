@@ -1,6 +1,6 @@
 //
 //  FrameHostObject.h
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Created by Marc Rousavy on 22.03.21.
 //  Copyright © 2021 mrousavy. All rights reserved.

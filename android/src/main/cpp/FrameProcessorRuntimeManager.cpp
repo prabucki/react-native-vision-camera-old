@@ -11,7 +11,7 @@
 #include "CameraView.h"
 #include "FrameHostObject.h"
 #include "JSIJNIConversion.h"
-#include "VisionCameraScheduler.h"
+#include "VisionCameraOldScheduler.h"
 #include "java-bindings/JImageProxy.h"
 #include "java-bindings/JFrameProcessorPlugin.h"
 
@@ -20,7 +20,7 @@ namespace vision {
 // type aliases
 using TSelf = local_ref<HybridClass<vision::FrameProcessorRuntimeManager>::jhybriddata>;
 using TJSCallInvokerHolder = jni::alias_ref<facebook::react::CallInvokerHolder::javaobject>;
-using TAndroidScheduler = jni::alias_ref<VisionCameraScheduler::javaobject>;
+using TAndroidScheduler = jni::alias_ref<VisionCameraOldScheduler::javaobject>;
 
 // JNI binding
 void vision::FrameProcessorRuntimeManager::registerNatives() {
@@ -48,7 +48,7 @@ TSelf vision::FrameProcessorRuntimeManager::initHybrid(
   // cast from JNI hybrid objects to C++ instances
   auto runtime = reinterpret_cast<jsi::Runtime*>(jsRuntimePointer);
   auto jsCallInvoker = jsCallInvokerHolder->cthis()->getCallInvoker();
-  auto scheduler = std::shared_ptr<VisionCameraScheduler>(androidScheduler->cthis());
+  auto scheduler = std::shared_ptr<VisionCameraOldScheduler>(androidScheduler->cthis());
 
   return makeCxxInstance(jThis, runtime, jsCallInvoker, scheduler);
 }

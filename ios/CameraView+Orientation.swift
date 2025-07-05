@@ -1,6 +1,6 @@
 //
 //  CameraView+Orientation.swift
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Created by Marc Rousavy on 04.01.22.
 //  Copyright © 2022 mrousavy. All rights reserved.
@@ -11,7 +11,7 @@ import UIKit
 import AVFoundation
 
 extension CameraView {
-  
+
   private func interfaceOrientation(from: UIDeviceOrientation) -> UIInterfaceOrientation {
     switch (from) {
       case .landscapeLeft:
@@ -24,7 +24,7 @@ extension CameraView {
         return .portrait
     }
   }
-  
+
   private func captureVideoOrientation(from: UIInterfaceOrientation) -> AVCaptureVideoOrientation {
     switch (from) {
       case .landscapeLeft:
@@ -37,7 +37,7 @@ extension CameraView {
         return .portrait
     }
   }
-  
+
   /// Orientation of the input connection (preview)
   private var inputOrientation: UIInterfaceOrientation {
     return self.interfaceOrientation(from: UIDevice.current.orientation)
@@ -69,7 +69,7 @@ extension CameraView {
         connection.setInterfaceOrientation(connectionOrientation)
       }
     }
-    
+
     // update the preview layer orientation when the user rotates the device
     // adapted from https://stackoverflow.com/a/36575423
     DispatchQueue.main.async {

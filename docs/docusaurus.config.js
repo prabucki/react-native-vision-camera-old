@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'VisionCamera',
+  title: 'VisionCameraOld',
   tagline: '📸 The Camera library that sees the vision.',
   url: 'https://react-native-vision-camera-old.com',
   baseUrl: '/',
@@ -18,7 +18,7 @@ module.exports = {
       additionalLanguages: ['swift', 'java', 'kotlin'],
     },
     navbar: {
-      title: 'VisionCamera',
+      title: 'VisionCameraOld',
       logo: {
         alt: 'Logo',
         src: './android-chrome-192x192.png',
@@ -103,7 +103,7 @@ module.exports = {
       },
       {
         name: 'og:title',
-        content: 'VisionCamera Documentation'
+        content: 'VisionCameraOld Documentation'
       },
       {
         name: 'og:type',
@@ -121,7 +121,7 @@ module.exports = {
     announcementBar: {
       id: 'support_us',
       content:
-        '<b>I am currently working on <a target="_blank" href="https://github.com/mrousavy/react-native-vision-camera-old/issues/1376">VisionCamera V3 ✨</a> which brings a lot of new features and a full rewrite on Android. Please consider <a target="_blank" href="https://github.com/sponsors/mrousavy">sponsoring me on GitHub</a> so I can work on this.</b>',
+        '<b>I am currently working on <a target="_blank" href="https://github.com/mrousavy/react-native-vision-camera-old/issues/1376">VisionCameraOld V3 ✨</a> which brings a lot of new features and a full rewrite on Android. Please consider <a target="_blank" href="https://github.com/sponsors/mrousavy">sponsoring me on GitHub</a> so I can work on this.</b>',
       backgroundColor: '#ff5c5c',
       textColor: '#ffffff',
       isCloseable: false,
@@ -155,7 +155,7 @@ module.exports = {
     [
       'docusaurus-plugin-typedoc',
       {
-        name: 'VisionCamera',
+        name: 'VisionCameraOld',
         entryPoints: ['../src'],
         exclude: "../src/index.ts",
         tsconfig: '../tsconfig.json',

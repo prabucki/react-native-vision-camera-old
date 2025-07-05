@@ -3,7 +3,7 @@ contact_links:
   - name: Troubleshooting Guide
     url: https://react-native-vision-camera-old.com/docs/guides/troubleshooting
     about: Please read the Troubleshooting Guide before opening an issue.
-  - name: VisionCamera Discussions
+  - name: VisionCameraOld Discussions
     url: https://github.com/mrousavy/react-native-vision-camera-old/discussions
     about: Please ask and answer questions here.
   - name: Google's CameraX Issue Tracker

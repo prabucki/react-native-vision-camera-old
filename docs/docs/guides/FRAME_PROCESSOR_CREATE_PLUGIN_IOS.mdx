@@ -42,8 +42,8 @@ For reference see the [CLI's docs](https://github.com/mateusz1913/vision-camera-
 3. Add the following code:
 
 ```objc {12}
-#import <VisionCamera/FrameProcessorPlugin.h>
-#import <VisionCamera/Frame.h>
+#import <VisionCameraOld/FrameProcessorPlugin.h>
+#import <VisionCameraOld/Frame.h>
 
 @interface QRCodeFrameProcessorPlugin : NSObject
 @end
@@ -79,14 +79,14 @@ The JS function name will be equal to the Objective-C function name you choose (
 3. Inside the newly created Bridging Header, add the following code:
 
 ```objc
-#import <VisionCamera/FrameProcessorPlugin.h>
-#import <VisionCamera/Frame.h>
+#import <VisionCameraOld/FrameProcessorPlugin.h>
+#import <VisionCameraOld/Frame.h>
 ```
 
 4. Create an Objective-C source file with the same name as the Swift file, for the QR Code Plugin this will be `QRCodeFrameProcessorPlugin.m`. Add the following code:
 
 ```objc
-#import <VisionCamera/FrameProcessorPlugin.h>
+#import <VisionCameraOld/FrameProcessorPlugin.h>
 
 @interface VISION_EXPORT_SWIFT_FRAME_PROCESSOR(scanQRCodes, QRCodeFrameProcessorPlugin)
 @end

@@ -1,6 +1,6 @@
 //
 //  AVAssetWriter.Status+descriptor.swift
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Created by Marc Rousavy on 01.05.21.
 //  Copyright © 2021 mrousavy. All rights reserved.

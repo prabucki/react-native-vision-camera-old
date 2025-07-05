@@ -13,7 +13,7 @@
 #include "WorkletRuntime.h"
 
 #include "CameraView.h"
-#include "VisionCameraScheduler.h"
+#include "VisionCameraOldScheduler.h"
 #include "java-bindings/JFrameProcessorPlugin.h"
 
 namespace vision {
@@ -23,17 +23,17 @@ using namespace facebook;
 class FrameProcessorRuntimeManager : public jni::HybridClass<FrameProcessorRuntimeManager> {
  public:
   static auto constexpr kJavaDescriptor = "Lcom/mrousavy/camera/frameprocessor/FrameProcessorRuntimeManager;";
-  static auto constexpr TAG = "VisionCamera";
+  static auto constexpr TAG = "VisionCameraOld";
   static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis,
                                                 jlong jsContext,
                                                 jni::alias_ref<facebook::react::CallInvokerHolder::javaobject> jsCallInvokerHolder,
-                                                jni::alias_ref<vision::VisionCameraScheduler::javaobject> androidScheduler);
+                                                jni::alias_ref<vision::VisionCameraOldScheduler::javaobject> androidScheduler);
   static void registerNatives();
 
   explicit FrameProcessorRuntimeManager(jni::alias_ref<FrameProcessorRuntimeManager::jhybridobject> jThis,
                                         jsi::Runtime* runtime,
                                         std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker,
-                                        std::shared_ptr<vision::VisionCameraScheduler> scheduler) :
+                                        std::shared_ptr<vision::VisionCameraOldScheduler> scheduler) :
       javaPart_(jni::make_global(jThis)),
       runtime_(runtime),
       jsCallInvoker_(jsCallInvoker),
@@ -46,7 +46,7 @@ class FrameProcessorRuntimeManager : public jni::HybridClass<FrameProcessorRunti
   jsi::Runtime* runtime_;
   std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker_;
   std::shared_ptr<reanimated::WorkletRuntime> workletRuntime_;
-  std::shared_ptr<vision::VisionCameraScheduler> scheduler_;
+  std::shared_ptr<vision::VisionCameraOldScheduler> scheduler_;
 
   jni::global_ref<CameraView::javaobject> findCameraViewById(int viewId);
   void registerPlugins();

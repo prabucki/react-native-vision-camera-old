@@ -52,7 +52,7 @@ module.exports = {
 
     import { Camera, sortDevices } from 'react-native-vision-camera-old';
 
-    export const VisionCamera = Camera;
+    export const VisionCameraOld = Camera;
     export const visionCameraSortDevices = sortDevices;
    ```
 
@@ -64,7 +64,7 @@ module.exports = {
 
     console.log('[DETOX] Using mocked react-native-vision-camera-old');
 
-    export class VisionCamera extends React.PureComponent {
+    export class VisionCameraOld extends React.PureComponent {
       static async getAvailableCameraDevices() {
         return (
           [
@@ -113,7 +113,7 @@ we must reference the proxy module.
 import { Camera } from 'react-native-vision-camera-old';
 
 // now
-import { VisionCamera } from '/your_path_to_created_folder/vision-camera-old/vision-camera-old';
+import { VisionCameraOld } from '/your_path_to_created_folder/vision-camera-old/vision-camera-old';
 ```
 
 ### Trigger

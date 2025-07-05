@@ -6,8 +6,8 @@ body:
   - type: textarea
     attributes:
       label: What feature or enhancement are you suggesting?
-      description: Explain what the feature or enhancement you're suggesting is, how it might improve VisionCamera and what it's pros and cons are.
-      placeholder: I think it would be great to have support for rotation in VisionCamera.
+      description: Explain what the feature or enhancement you're suggesting is, how it might improve VisionCameraOld and what it's pros and cons are.
+      placeholder: I think it would be great to have support for rotation in VisionCameraOld.
     validations:
       required: true
   - type: dropdown

@@ -1,6 +1,6 @@
 //
 //  JSIUtils.mm
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Forked and Adjusted by Marc Rousavy on 02.05.21.
 //  Copyright © 2021 mrousavy & Facebook. All rights reserved.

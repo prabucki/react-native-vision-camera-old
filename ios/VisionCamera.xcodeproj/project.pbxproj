@@ -77,9 +77,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		134814201AA4EA6300B7C361 /* libVisionCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVisionCamera.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B80416F026AB16E8000DEB6A /* VisionCameraScheduler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VisionCameraScheduler.mm; sourceTree = "<group>"; };
-		B80416F126AB16F3000DEB6A /* VisionCameraScheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisionCameraScheduler.h; sourceTree = "<group>"; };
+		134814201AA4EA6300B7C361 /* libVisionCameraOld.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVisionCameraOld.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B80416F026AB16E8000DEB6A /* VisionCameraOldScheduler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VisionCameraOldScheduler.mm; sourceTree = "<group>"; };
+		B80416F126AB16F3000DEB6A /* VisionCameraOldScheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisionCameraOldScheduler.h; sourceTree = "<group>"; };
 		B80C0DFE260BDD97001699AB /* FrameProcessorPluginRegistry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameProcessorPluginRegistry.h; sourceTree = "<group>"; };
 		B80C0DFF260BDDF7001699AB /* FrameProcessorPluginRegistry.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FrameProcessorPluginRegistry.mm; sourceTree = "<group>"; };
 		B80D67A825FA25380008FE8D /* FrameProcessorCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameProcessorCallback.h; sourceTree = "<group>"; };
@@ -165,7 +165,7 @@
 		134814211AA4EA7D00B7C361 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				134814201AA4EA6300B7C361 /* libVisionCamera.a */,
+				134814201AA4EA6300B7C361 /* libVisionCameraOld.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -273,8 +273,8 @@
 				B80C0DFE260BDD97001699AB /* FrameProcessorPluginRegistry.h */,
 				B80C0DFF260BDDF7001699AB /* FrameProcessorPluginRegistry.mm */,
 				B88873E5263D46C7008B1D0E /* FrameProcessorPlugin.h */,
-				B80416F026AB16E8000DEB6A /* VisionCameraScheduler.mm */,
-				B80416F126AB16F3000DEB6A /* VisionCameraScheduler.h */,
+				B80416F026AB16E8000DEB6A /* VisionCameraOldScheduler.mm */,
+				B80416F126AB16F3000DEB6A /* VisionCameraOldScheduler.h */,
 				B8948BDF26DCEE2B00B430E2 /* FrameProcessorPerformanceDataCollector.swift */,
 			);
 			path = "Frame Processor";
@@ -283,9 +283,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		58B511DA1A9E6C8500147676 /* VisionCamera */ = {
+		58B511DA1A9E6C8500147676 /* VisionCameraOld */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "VisionCamera" */;
+			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "VisionCameraOld" */;
 			buildPhases = (
 				B80D6CAB25F770FE006F2CB7 /* Run SwiftFormat */,
 				B81F6C7625E515810008974A /* Run SwiftLint */,
@@ -297,9 +297,9 @@
 			);
 			dependencies = (
 			);
-			name = VisionCamera;
+			name = VisionCameraOld;
 			productName = RCTDataManager;
-			productReference = 134814201AA4EA6300B7C361 /* libVisionCamera.a */;
+			productReference = 134814201AA4EA6300B7C361 /* libVisionCameraOld.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -316,7 +316,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "VisionCamera" */;
+			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "VisionCameraOld" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -329,7 +329,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				58B511DA1A9E6C8500147676 /* VisionCamera */,
+				58B511DA1A9E6C8500147676 /* VisionCameraOld */,
 			);
 		};
 /* End PBXProject section */
@@ -551,7 +551,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = VisionCamera;
+				PRODUCT_NAME = VisionCameraOld;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = CameraBridge.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -572,7 +572,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = VisionCamera;
+				PRODUCT_NAME = VisionCameraOld;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = CameraBridge.h;
 				SWIFT_VERSION = 5.2;
@@ -583,7 +583,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "VisionCamera" */ = {
+		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "VisionCameraOld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511ED1A9E6C8500147676 /* Debug */,
@@ -592,7 +592,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "VisionCamera" */ = {
+		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "VisionCameraOld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511F01A9E6C8500147676 /* Debug */,

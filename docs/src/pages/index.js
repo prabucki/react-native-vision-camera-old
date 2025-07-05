@@ -13,7 +13,7 @@ const features = [
     imageUrl: './img/example.png',
     description: (
       <>
-        VisionCamera was designed from the ground up to provide all features a camera app should have. You have full control over what device is used, and can even configure options such as frame rate, colorspace and more.
+        VisionCameraOld was designed from the ground up to provide all features a camera app should have. You have full control over what device is used, and can even configure options such as frame rate, colorspace and more.
       </>
     ),
   },
@@ -22,7 +22,7 @@ const features = [
     imageUrl: './img/example_intro.png',
     description: (
       <>
-        While having a lot of features, VisionCamera makes sure you don't get overwhelmed from the beginning. It provides hooks and functions to help you get started faster, and if you need full control, you can easily do that.
+        While having a lot of features, VisionCameraOld makes sure you don't get overwhelmed from the beginning. It provides hooks and functions to help you get started faster, and if you need full control, you can easily do that.
       </>
     ),
   },
@@ -57,7 +57,7 @@ function Home() {
   const {siteConfig = {}} = context;
   return (
     <Layout
-      title="VisionCamera Documentation"
+      title="VisionCameraOld Documentation"
       description="📸 The Camera library that sees the vision.">
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">

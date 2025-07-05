@@ -22,9 +22,9 @@ class FrameProcessorRuntimeManager(context: ReactApplicationContext, frameProces
     init {
       try {
         System.loadLibrary("reanimated")
-        System.loadLibrary("VisionCamera")
+        System.loadLibrary("VisionCameraOld")
       } catch (e: UnsatisfiedLinkError) {
-        Log.w(TAG, "Failed to load Reanimated/VisionCamera C++ library. Frame Processors are disabled!")
+        Log.w(TAG, "Failed to load Reanimated/VisionCameraOld C++ library. Frame Processors are disabled!")
         enableFrameProcessors = false
       }
     }
@@ -33,14 +33,14 @@ class FrameProcessorRuntimeManager(context: ReactApplicationContext, frameProces
   @DoNotStrip
   private var mHybridData: HybridData? = null
   private var mContext: WeakReference<ReactApplicationContext>? = null
-  private var mScheduler: VisionCameraScheduler? = null
+  private var mScheduler: VisionCameraOldScheduler? = null
 
   init {
     if (enableFrameProcessors) {
       val holder = context.catalystInstance.jsCallInvokerHolder as CallInvokerHolderImpl
       val jsRuntimeHolder =
-        context.javaScriptContextHolder?.get() ?: throw Error("JSI Runtime is null! VisionCamera does not yet support bridgeless mode..")
-      mScheduler = VisionCameraScheduler(frameProcessorThread)
+        context.javaScriptContextHolder?.get() ?: throw Error("JSI Runtime is null! VisionCameraOld does not yet support bridgeless mode..")
+      mScheduler = VisionCameraOldScheduler(frameProcessorThread)
       mContext = WeakReference(context)
       mHybridData = initHybrid(jsRuntimeHolder, holder, mScheduler!!)
       initializeRuntime()
@@ -78,7 +78,7 @@ class FrameProcessorRuntimeManager(context: ReactApplicationContext, frameProces
   private external fun initHybrid(
     jsContext: Long,
     jsCallInvokerHolder: CallInvokerHolderImpl,
-    scheduler: VisionCameraScheduler
+    scheduler: VisionCameraOldScheduler
   ): HybridData
   private external fun initializeRuntime()
   private external fun registerPlugin(plugin: FrameProcessorPlugin)

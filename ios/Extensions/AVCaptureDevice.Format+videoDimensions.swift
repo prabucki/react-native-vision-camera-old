@@ -1,6 +1,6 @@
 //
 //  AVCaptureDevice.Format+videoDimensions.swift
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Created by Marc Rousavy on 03.08.21.
 //  Copyright © 2021 mrousavy. All rights reserved.

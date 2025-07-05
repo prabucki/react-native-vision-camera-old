@@ -15,7 +15,7 @@
 
 Read the READMEs in [`android/`](android/README.md) and [`ios/`](ios/README.md) for a quick overview of the native development workflow.
 
-> You can also open VisionCamera in [a quick online editor (github1s)](https://github1s.com/mrousavy/react-native-vision-camera-old)
+> You can also open VisionCameraOld in [a quick online editor (github1s)](https://github1s.com/mrousavy/react-native-vision-camera-old)
 
 ### JS/TS
 
@@ -27,7 +27,7 @@ Read the READMEs in [`android/`](android/README.md) and [`ios/`](ios/README.md) 
 
 ### iOS
 
-1. Open the `example/ios/VisionCameraExample.xcworkspace` file with Xcode
+1. Open the `example/ios/VisionCameraOldExample.xcworkspace` file with Xcode
 2. Change signing configuration to your developer account
 3. Select your device in the devices drop-down
 4. Hit run

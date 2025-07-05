@@ -1,6 +1,6 @@
 //
 //  FrameProcessorRuntimeManager.m
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Created by Marc Rousavy on 23.03.21.
 //  Copyright © 2021 mrousavy. All rights reserved.
@@ -23,10 +23,10 @@
   #if __has_include(<RNReanimated/NativeReanimatedModule.h>)
     #if __has_include(<RNReanimated/WorkletRuntime.h>)
       #import <RNReanimated/WorkletRuntime.h>
-      #import "VisionCameraScheduler.h"
+      #import "VisionCameraOldScheduler.h"
       #define ENABLE_FRAME_PROCESSORS
     #else
-      #warning Your react-native-reanimated version is not compatible with VisionCamera, Frame Processors are disabled. Make sure you're using react-native-reanimated 3.5.0 or above!
+      #warning Your react-native-reanimated version is not compatible with VisionCameraOld, Frame Processors are disabled. Make sure you're using react-native-reanimated 3.5.0 or above!
     #endif
   #else
     #warning NativeReanimatedModule.h header could not be found, Frame Processors are disabled. If you want to use Frame Processors, make sure you install react-native-reanimated 3.5.0 or above!
@@ -37,11 +37,11 @@
 #import "../React Utils/JSIUtils.h"
 
 // Forward declarations for the Swift classes
-__attribute__((objc_runtime_name("_TtC12VisionCamera12CameraQueues")))
+__attribute__((objc_runtime_name("_TtC12VisionCameraOld12CameraQueues")))
 @interface CameraQueues : NSObject
 @property (nonatomic, class, readonly, strong) dispatch_queue_t _Nonnull frameProcessorQueue;
 @end
-__attribute__((objc_runtime_name("_TtC12VisionCamera10CameraView")))
+__attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraView")))
 @interface CameraView : UIView
 @property (nonatomic, copy) FrameProcessorCallback _Nullable frameProcessorCallback;
 @end

@@ -38,7 +38,7 @@ fun CameraView.startRecording(options: ReadableMap, onRecordCallback: Callback) 
   }
 
   val id = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-  val file = File.createTempFile("VisionCamera-${id}", ".mp4")
+  val file = File.createTempFile("VisionCameraOld-${id}", ".mp4")
   val fileOptions = FileOutputOptions.Builder(file).build()
 
   val recorder = videoCapture!!.output

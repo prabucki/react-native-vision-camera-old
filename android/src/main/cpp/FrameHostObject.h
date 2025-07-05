@@ -31,7 +31,7 @@ class JSI_EXPORT FrameHostObject : public jsi::HostObject {
   jni::global_ref<JImageProxy> frame;
 
  private:
-  static auto constexpr TAG = "VisionCamera";
+  static auto constexpr TAG = "VisionCameraOld";
 
   void assertIsFrameStrong(jsi::Runtime& runtime, const std::string& accessedPropName) const; // NOLINT(runtime/references)
 };

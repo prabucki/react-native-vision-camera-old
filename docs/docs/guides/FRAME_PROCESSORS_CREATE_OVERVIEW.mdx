@@ -28,7 +28,7 @@ function App() {
 }
 ```
 
-To achieve **maximum performance**, the `scanQRCodes` function is written in a native language (e.g. Objective-C), but it will be directly called from the VisionCamera Frame Processor JavaScript-Runtime.
+To achieve **maximum performance**, the `scanQRCodes` function is written in a native language (e.g. Objective-C), but it will be directly called from the VisionCameraOld Frame Processor JavaScript-Runtime.
 
 ### Types
 
@@ -195,7 +195,7 @@ This way you can handle queueing up the frames yourself and asynchronously call 
 
 ### Benchmarking Frame Processor Plugins
 
-Your Frame Processor Plugins have to be fast. VisionCamera automatically detects slow Frame Processors and outputs relevant information in the native console (Xcode: **Debug Area**, Android Studio: **Logcat**):
+Your Frame Processor Plugins have to be fast. VisionCameraOld automatically detects slow Frame Processors and outputs relevant information in the native console (Xcode: **Debug Area**, Android Studio: **Logcat**):
 
 <div align="center">
   <img src={useBaseUrl("img/slow-log.png")} width="80%" />

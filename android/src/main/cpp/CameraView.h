@@ -19,7 +19,7 @@ using TFrameProcessor = std::function<void(jni::alias_ref<JImageProxy::javaobjec
 class CameraView : public jni::HybridClass<CameraView> {
  public:
   static auto constexpr kJavaDescriptor = "Lcom/mrousavy/camera/CameraView;";
-  static auto constexpr TAG = "VisionCamera";
+  static auto constexpr TAG = "VisionCameraOld";
   static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
   static void registerNatives();
 

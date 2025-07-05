@@ -9,7 +9,7 @@ type FrameProcessor = (frame: Frame) => void;
  * Make sure to add the `'worklet'` directive to the top of the Frame Processor function, otherwise it will not get compiled into a worklet.
  *
  * @param frameProcessor The Frame Processor
- * @param dependencies The React dependencies which will be copied into the VisionCamera JS-Runtime.
+ * @param dependencies The React dependencies which will be copied into the VisionCameraOld JS-Runtime.
  * @returns The memoized Frame Processor.
  * @example
  * ```ts

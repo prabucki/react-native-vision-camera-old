@@ -21,9 +21,9 @@
     "ios/**/*.mm",
     "ios/**/*.cpp",
     "ios/**/*.swift",
-    "ios/VisionCamera.xcodeproj/project.pbxproj",
+    "ios/VisionCameraOld.xcodeproj/project.pbxproj",
     "app.plugin.js",
-    "VisionCamera.podspec",
+    "VisionCameraOld.podspec",
     "README.md"
   ],
   "scripts": {

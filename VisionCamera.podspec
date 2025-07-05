@@ -16,7 +16,7 @@ folly_version = '2021.04.26.00'
 boost_compiler_flags = '-Wno-documentation'
 
 Pod::Spec.new do |s|
-  s.name         = "VisionCamera"
+  s.name         = "VisionCameraOld"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]

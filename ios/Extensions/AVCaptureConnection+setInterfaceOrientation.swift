@@ -1,6 +1,6 @@
 //
 //  AVCaptureConnection+setInterfaceOrientation.swift
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Created by Marc Rousavy on 26.07.21.
 //  Copyright © 2021 mrousavy. All rights reserved.

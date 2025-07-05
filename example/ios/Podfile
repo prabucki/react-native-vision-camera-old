@@ -12,13 +12,13 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'VisionCameraExample' do
+target 'VisionCameraOldExample' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
   flags = get_default_flags()
 
-  pod 'VisionCamera', :path => '../..'
+  pod 'VisionCameraOld', :path => '../..'
 
   use_react_native!(
     :path => config[:reactNativePath],

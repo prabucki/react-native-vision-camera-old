@@ -36,7 +36,7 @@ yarn bootstrap
 
 ### iOS
 
-1. Open the `example/ios/VisionCameraExample.xcworkspace` file with Xcode
+1. Open the `example/ios/VisionCameraOldExample.xcworkspace` file with Xcode
 2. Change signing configuration to your developer account
 3. Select your device in the devices drop-down
 4. Hit run

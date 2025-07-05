@@ -62,7 +62,7 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
 
-    // Registering VisionCamera Frame Processor Plugins
+    // Registering VisionCameraOld Frame Processor Plugins
     FrameProcessorPlugin.register(new ExampleFrameProcessorPlugin());
   }
 }

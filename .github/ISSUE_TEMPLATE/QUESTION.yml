@@ -17,7 +17,7 @@ body:
       placeholder: I tried to use `Camera.takePhoto()`
   - type: input
     attributes:
-      label: VisionCamera Version
+      label: VisionCameraOld Version
       description: Which version of react-native-vision-camera-old are you using?
       placeholder: ex. 2.0.1-beta.1
     validations:

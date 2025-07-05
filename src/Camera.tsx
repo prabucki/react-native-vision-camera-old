@@ -45,7 +45,7 @@ if (CameraModule == null) console.error("Camera: Native Module 'CameraView' was 
 /**
  * ### A powerful `<Camera>` component.
  *
- * Read the [VisionCamera documentation](https://react-native-vision-camera-old.com/) for more information.
+ * Read the [VisionCameraOld documentation](https://react-native-vision-camera-old.com/) for more information.
  *
  * The `<Camera>` component's most important (and therefore _required_) properties are:
  *

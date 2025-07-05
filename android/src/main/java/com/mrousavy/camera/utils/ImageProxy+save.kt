@@ -1,4 +1,4 @@
-package com.mrousavy.camera.utils
+package com.mrousavy.old.camera.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -7,8 +7,8 @@ import android.graphics.Matrix
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.exifinterface.media.ExifInterface
-import com.mrousavy.camera.CameraView
-import com.mrousavy.camera.InvalidFormatError
+import com.mrousavy.old.camera.CameraView
+import com.mrousavy.old.camera.InvalidFormatError
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream

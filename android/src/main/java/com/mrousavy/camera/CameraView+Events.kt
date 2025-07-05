@@ -1,4 +1,4 @@
-package com.mrousavy.camera
+package com.mrousavy.old.camera
 
 import android.util.Log
 import com.facebook.react.bridge.Arguments

@@ -1,10 +1,10 @@
-package com.mrousavy.camera.example;
+package com.mrousavy.old.camera.example;
 
 import android.util.Log;
 import androidx.camera.core.ImageProxy;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin;
+import com.mrousavy.old.camera.frameprocessor.FrameProcessorPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public class ExampleFrameProcessorPlugin extends FrameProcessorPlugin {

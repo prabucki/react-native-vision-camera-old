@@ -1,4 +1,4 @@
-package com.mrousavy.camera.frameprocessor;
+package com.mrousavy.old.camera.frameprocessor;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

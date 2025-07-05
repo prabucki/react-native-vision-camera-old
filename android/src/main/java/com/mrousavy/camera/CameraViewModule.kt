@@ -1,4 +1,4 @@
-package com.mrousavy.camera
+package com.mrousavy.old.camera
 
 import android.Manifest
 import android.content.Context
@@ -21,12 +21,12 @@ import com.facebook.react.modules.core.PermissionListener
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.turbomodule.core.CallInvokerHolderImpl
-import com.mrousavy.camera.CameraView
-import com.mrousavy.camera.ViewNotFoundError
+import com.mrousavy.old.camera.CameraView
+import com.mrousavy.old.camera.ViewNotFoundError
 import java.util.concurrent.ExecutorService
-import com.mrousavy.camera.frameprocessor.FrameProcessorRuntimeManager
-import com.mrousavy.camera.parsers.*
-import com.mrousavy.camera.utils.*
+import com.mrousavy.old.camera.frameprocessor.FrameProcessorRuntimeManager
+import com.mrousavy.old.camera.parsers.*
+import com.mrousavy.old.camera.utils.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.guava.await
 import java.util.concurrent.Executors

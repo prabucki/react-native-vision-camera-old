@@ -1,4 +1,4 @@
-package com.mrousavy.camera
+package com.mrousavy.old.camera
 
 import androidx.camera.core.FocusMeteringAction
 import com.facebook.react.bridge.ReadableMap

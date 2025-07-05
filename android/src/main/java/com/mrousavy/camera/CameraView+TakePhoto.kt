@@ -1,4 +1,4 @@
-package com.mrousavy.camera
+package com.mrousavy.old.camera
 
 import android.annotation.SuppressLint
 import android.hardware.camera2.*
@@ -10,7 +10,7 @@ import androidx.exifinterface.media.ExifInterface
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
-import com.mrousavy.camera.utils.*
+import com.mrousavy.old.camera.utils.*
 import kotlinx.coroutines.*
 import java.io.File
 import kotlin.system.measureTimeMillis

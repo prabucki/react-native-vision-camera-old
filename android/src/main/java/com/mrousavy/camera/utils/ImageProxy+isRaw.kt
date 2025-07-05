@@ -1,4 +1,4 @@
-package com.mrousavy.camera.utils
+package com.mrousavy.old.camera.utils
 
 import android.graphics.ImageFormat
 import androidx.camera.core.ImageProxy

@@ -1,4 +1,4 @@
-package com.mrousavy.camera
+package com.mrousavy.old.camera
 
 import android.graphics.ImageFormat
 import androidx.camera.video.VideoRecordEvent.Finalize.VideoRecordError

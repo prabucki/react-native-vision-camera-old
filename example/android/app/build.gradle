@@ -98,9 +98,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.mrousavy.camera.example"
+    namespace "com.mrousavy.old.camera.example"
     defaultConfig {
-        applicationId "com.mrousavy.camera.example"
+        applicationId "com.mrousavy.old.camera.example"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

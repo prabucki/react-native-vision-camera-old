@@ -1,4 +1,4 @@
-package com.mrousavy.camera
+package com.mrousavy.old.camera
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule

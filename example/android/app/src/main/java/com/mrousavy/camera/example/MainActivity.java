@@ -1,4 +1,4 @@
-package com.mrousavy.camera.example;
+package com.mrousavy.old.camera.example;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

@@ -1,4 +1,4 @@
-package com.mrousavy.camera.utils
+package com.mrousavy.old.camera.utils
 
 import androidx.exifinterface.media.ExifInterface
 import com.facebook.react.bridge.Arguments

@@ -1,4 +1,4 @@
-package com.mrousavy.camera.utils
+package com.mrousavy.old.camera.utils
 
 import android.util.Range
 import android.util.Size

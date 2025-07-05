@@ -1,4 +1,4 @@
-package com.mrousavy.camera.utils
+package com.mrousavy.old.camera.utils
 
 import androidx.camera.core.AspectRatio
 import kotlin.math.abs

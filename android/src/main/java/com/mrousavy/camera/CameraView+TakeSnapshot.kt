@@ -1,11 +1,11 @@
-package com.mrousavy.camera
+package com.mrousavy.old.camera
 
 import android.graphics.Bitmap
 import androidx.exifinterface.media.ExifInterface
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
-import com.mrousavy.camera.utils.buildMetadataMap
+import com.mrousavy.old.camera.utils.buildMetadataMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
@@ -14,7 +14,7 @@ import java.io.FileOutputStream
 import kotlinx.coroutines.guava.await
 
 suspend fun CameraView.takeSnapshot(options: ReadableMap): WritableMap = coroutineScope {
-  val camera = camera ?: throw com.mrousavy.camera.CameraNotReadyError()
+  val camera = camera ?: throw com.mrousavy.old.camera.CameraNotReadyError()
   val enableFlash = options.getString("flash") == "on"
 
   try {

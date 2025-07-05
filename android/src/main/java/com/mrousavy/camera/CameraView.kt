@@ -1,4 +1,4 @@
-package com.mrousavy.camera
+package com.mrousavy.old.camera
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -25,9 +25,9 @@ import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.bridge.*
 import com.facebook.react.uimanager.events.RCTEventEmitter
-import com.mrousavy.camera.frameprocessor.FrameProcessorPerformanceDataCollector
-import com.mrousavy.camera.frameprocessor.FrameProcessorRuntimeManager
-import com.mrousavy.camera.utils.*
+import com.mrousavy.old.camera.frameprocessor.FrameProcessorPerformanceDataCollector
+import com.mrousavy.old.camera.frameprocessor.FrameProcessorRuntimeManager
+import com.mrousavy.old.camera.utils.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.guava.await
 import java.lang.IllegalArgumentException

@@ -1,4 +1,4 @@
-package com.mrousavy.camera.example;
+package com.mrousavy.old.camera.example;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
@@ -10,8 +10,8 @@ import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 
-import com.mrousavy.camera.CameraPackage;
-import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin;
+import com.mrousavy.old.camera.CameraPackage;
+import com.mrousavy.old.camera.frameprocessor.FrameProcessorPlugin;
 import com.facebook.react.bridge.JSIModulePackage;
 
 public class MainApplication extends Application implements ReactApplication {

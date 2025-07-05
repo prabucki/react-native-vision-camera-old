@@ -1,4 +1,4 @@
-package com.mrousavy.camera.parsers
+package com.mrousavy.old.camera.parsers
 
 import android.graphics.ImageFormat
 

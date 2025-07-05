@@ -1,8 +1,8 @@
-package com.mrousavy.camera.utils
+package com.mrousavy.old.camera.utils
 
 import com.facebook.react.bridge.Promise
-import com.mrousavy.camera.CameraError
-import com.mrousavy.camera.UnknownCameraError
+import com.mrousavy.old.camera.CameraError
+import com.mrousavy.old.camera.UnknownCameraError
 
 inline fun withPromise(promise: Promise, closure: () -> Any?) {
   try {

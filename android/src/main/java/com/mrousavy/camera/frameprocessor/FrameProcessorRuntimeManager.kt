@@ -1,4 +1,4 @@
-package com.mrousavy.camera.frameprocessor
+package com.mrousavy.old.camera.frameprocessor
 
 import android.util.Log
 import androidx.annotation.Keep
@@ -7,8 +7,8 @@ import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.turbomodule.core.CallInvokerHolderImpl
 import com.facebook.react.uimanager.UIManagerHelper
-import com.mrousavy.camera.CameraView
-import com.mrousavy.camera.ViewNotFoundError
+import com.mrousavy.old.camera.CameraView
+import com.mrousavy.old.camera.ViewNotFoundError
 import java.lang.ref.WeakReference
 import java.util.concurrent.ExecutorService
 

@@ -10,7 +10,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 
-import com.mrousavy.old.camera.CameraPackage;
+import com.mrousavy.old.camera.CameraPackageOld;
 import com.mrousavy.old.camera.frameprocessor.FrameProcessorPlugin;
 import com.facebook.react.bridge.JSIModulePackage;
 
@@ -28,7 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          packages.add(new CameraPackage());
+          packages.add(new CameraPackageOld());
           return packages;
         }
 

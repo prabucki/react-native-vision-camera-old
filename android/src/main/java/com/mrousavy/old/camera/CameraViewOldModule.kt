@@ -21,7 +21,7 @@ import com.facebook.react.modules.core.PermissionListener
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.turbomodule.core.CallInvokerHolderImpl
-import com.mrousavy.old.camera.CameraView
+import com.mrousavy.old.camera.CameraViewOld
 import com.mrousavy.old.camera.ViewNotFoundError
 import java.util.concurrent.ExecutorService
 import com.mrousavy.old.camera.frameprocessor.FrameProcessorRuntimeManager
@@ -31,11 +31,11 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.guava.await
 import java.util.concurrent.Executors
 
-@ReactModule(name = CameraViewModule.TAG)
+@ReactModule(name = CameraViewOldModule.TAG)
 @Suppress("unused")
-class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class CameraViewOldModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
   companion object {
-    const val TAG = "CameraView"
+    const val TAG = "CameraViewOld"
     var RequestCode = 10
 
     fun parsePermissionStatus(status: Int): String {
@@ -53,7 +53,7 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
 
   private fun cleanup() {
     if (coroutineScope.isActive) {
-      coroutineScope.cancel("CameraViewModule has been destroyed.")
+      coroutineScope.cancel("CameraViewOldModule has been destroyed.")
     }
     frameProcessorManager = null
   }
@@ -82,9 +82,9 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
     return TAG
   }
 
-  private fun findCameraView(viewId: Int): CameraView {
+  private fun findCameraViewOld(viewId: Int): CameraViewOld {
     Log.d(TAG, "Finding view $viewId...")
-    val view = if (reactApplicationContext != null) UIManagerHelper.getUIManager(reactApplicationContext, viewId)?.resolveView(viewId) as CameraView? else null
+    val view = if (reactApplicationContext != null) UIManagerHelper.getUIManager(reactApplicationContext, viewId)?.resolveView(viewId) as CameraViewOld? else null
     Log.d(TAG,  if (reactApplicationContext != null) "Found view $viewId!" else "Couldn't find view $viewId!")
     return view ?: throw ViewNotFoundError(viewId)
   }
@@ -93,7 +93,7 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
   fun takePhoto(viewTag: Int, options: ReadableMap, promise: Promise) {
     coroutineScope.launch {
       withPromise(promise) {
-        val view = findCameraView(viewTag)
+        val view = findCameraViewOld(viewTag)
         view.takePhoto(options)
       }
     }
@@ -104,7 +104,7 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
   fun takeSnapshot(viewTag: Int, options: ReadableMap, promise: Promise) {
     coroutineScope.launch {
       withPromise(promise) {
-        val view = findCameraView(viewTag)
+        val view = findCameraViewOld(viewTag)
         view.takeSnapshot(options)
       }
     }
@@ -114,7 +114,7 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
   @ReactMethod
   fun startRecording(viewTag: Int, options: ReadableMap, onRecordCallback: Callback) {
     coroutineScope.launch {
-      val view = findCameraView(viewTag)
+      val view = findCameraViewOld(viewTag)
       try {
         view.startRecording(options, onRecordCallback)
       } catch (error: CameraError) {
@@ -130,7 +130,7 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
   @ReactMethod
   fun pauseRecording(viewTag: Int, promise: Promise) {
     withPromise(promise) {
-      val view = findCameraView(viewTag)
+      val view = findCameraViewOld(viewTag)
       view.pauseRecording()
       return@withPromise null
     }
@@ -139,7 +139,7 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
   @ReactMethod
   fun resumeRecording(viewTag: Int, promise: Promise) {
     withPromise(promise) {
-      val view = findCameraView(viewTag)
+      val view = findCameraViewOld(viewTag)
       view.resumeRecording()
       return@withPromise null
     }
@@ -148,7 +148,7 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
   @ReactMethod
   fun stopRecording(viewTag: Int, promise: Promise) {
     withPromise(promise) {
-      val view = findCameraView(viewTag)
+      val view = findCameraViewOld(viewTag)
       view.stopRecording()
       return@withPromise null
     }
@@ -158,7 +158,7 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
   fun focus(viewTag: Int, point: ReadableMap, promise: Promise) {
     coroutineScope.launch {
       withPromise(promise) {
-        val view = findCameraView(viewTag)
+        val view = findCameraViewOld(viewTag)
         view.focus(point)
         return@withPromise null
       }
@@ -335,7 +335,7 @@ class CameraViewModule(reactContext: ReactApplicationContext) : ReactContextBase
         }
 
         val difference = System.currentTimeMillis() - startTime
-        Log.w(TAG, "CameraViewModule::getAvailableCameraDevices took: $difference ms")
+        Log.w(TAG, "CameraViewOldModule::getAvailableCameraDevices took: $difference ms")
         return@withPromise cameraDevices
       }
     }

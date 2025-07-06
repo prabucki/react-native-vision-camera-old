@@ -2,7 +2,7 @@
 // Created by Marc Rousavy on 14.06.21.
 //
 
-#include "CameraView.h"
+#include "CameraViewOld.h"
 
 #include <jni.h>
 #include <fbjni/fbjni.h>
@@ -17,20 +17,20 @@ namespace vision {
 using namespace facebook;
 using namespace jni;
 
-using TSelf = local_ref<CameraView::jhybriddata>;
+using TSelf = local_ref<CameraViewOld::jhybriddata>;
 
-TSelf CameraView::initHybrid(alias_ref<HybridClass::jhybridobject> jThis) {
+TSelf CameraViewOld::initHybrid(alias_ref<HybridClass::jhybridobject> jThis) {
     return makeCxxInstance(jThis);
 }
 
-void CameraView::registerNatives() {
+void CameraViewOld::registerNatives() {
     registerHybrid({
-        makeNativeMethod("initHybrid", CameraView::initHybrid),
-        makeNativeMethod("frameProcessorCallback", CameraView::frameProcessorCallback),
+        makeNativeMethod("initHybrid", CameraViewOld::initHybrid),
+        makeNativeMethod("frameProcessorCallback", CameraViewOld::frameProcessorCallback),
     });
 }
 
-void CameraView::frameProcessorCallback(const alias_ref<JImageProxy::javaobject>& frame) {
+void CameraViewOld::frameProcessorCallback(const alias_ref<JImageProxy::javaobject>& frame) {
   if (frameProcessor_ == nullptr) {
     __android_log_write(ANDROID_LOG_WARN, TAG, "Called Frame Processor callback, but `frameProcessor` is null!");
     return;
@@ -47,11 +47,11 @@ void CameraView::frameProcessorCallback(const alias_ref<JImageProxy::javaobject>
   }
 }
 
-void CameraView::setFrameProcessor(const TFrameProcessor&& frameProcessor) {
+void CameraViewOld::setFrameProcessor(const TFrameProcessor&& frameProcessor) {
   frameProcessor_ = frameProcessor;
 }
 
-void vision::CameraView::unsetFrameProcessor() {
+void vision::CameraViewOld::unsetFrameProcessor() {
   frameProcessor_ = nullptr;
 }
 

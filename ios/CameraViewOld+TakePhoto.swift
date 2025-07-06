@@ -1,5 +1,5 @@
 //
-//  CameraView+TakePhoto.swift
+//  CameraViewOld+TakePhoto.swift
 //  mrousavy
 //
 //  Created by Marc Rousavy on 16.12.20.
@@ -22,7 +22,7 @@ struct TakePhotoOptions {
   var qualityPrioritization: String?
 }
 
-extension CameraView {
+extension CameraViewOld {
   func takePhoto(options: NSDictionary, promise: Promise) {
     cameraQueue.async {
       guard let photoOutput = self.photoOutput,

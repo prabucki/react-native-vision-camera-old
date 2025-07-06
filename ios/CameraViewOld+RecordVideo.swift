@@ -1,5 +1,5 @@
 //
-//  CameraView+RecordVideo.swift
+//  CameraViewOld+RecordVideo.swift
 //  mrousavy
 //
 //  Created by Marc Rousavy on 16.12.20.
@@ -8,9 +8,9 @@
 
 import AVFoundation
 
-// MARK: - CameraView + AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate
+// MARK: - CameraViewOld + AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate
 
-extension CameraView: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
+extension CameraViewOld: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
   /**
    Starts a video + audio recording with a custom Asset Writer.
    */
@@ -276,7 +276,7 @@ extension CameraView: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAud
   }
 
   /**
-   Gets the orientation of the CameraView's images (CMSampleBuffers).
+   Gets the orientation of the CameraViewOld's images (CMSampleBuffers).
    */
   var bufferOrientation: UIImage.Orientation {
     guard let cameraPosition = videoDeviceInput?.device.position else {

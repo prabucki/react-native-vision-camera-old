@@ -15,7 +15,7 @@ import java.util.*
 
 data class TemporaryFile(val path: String)
 
-fun CameraView.startRecording(options: ReadableMap, onRecordCallback: Callback) {
+fun CameraViewOld.startRecording(options: ReadableMap, onRecordCallback: Callback) {
   if (videoCapture == null) {
     if (video == true) {
       throw CameraNotReadyError()
@@ -83,7 +83,7 @@ fun CameraView.startRecording(options: ReadableMap, onRecordCallback: Callback) 
 }
 
 @SuppressLint("RestrictedApi")
-fun CameraView.pauseRecording() {
+fun CameraViewOld.pauseRecording() {
   if (videoCapture == null) {
     throw CameraNotReadyError()
   }
@@ -95,7 +95,7 @@ fun CameraView.pauseRecording() {
 }
 
 @SuppressLint("RestrictedApi")
-fun CameraView.resumeRecording() {
+fun CameraViewOld.resumeRecording() {
   if (videoCapture == null) {
     throw CameraNotReadyError()
   }
@@ -107,7 +107,7 @@ fun CameraView.resumeRecording() {
 }
 
 @SuppressLint("RestrictedApi")
-fun CameraView.stopRecording() {
+fun CameraViewOld.stopRecording() {
   if (videoCapture == null) {
     throw CameraNotReadyError()
   }

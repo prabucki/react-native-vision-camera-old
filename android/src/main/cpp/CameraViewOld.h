@@ -16,9 +16,9 @@ namespace vision {
 using namespace facebook;
 using TFrameProcessor = std::function<void(jni::alias_ref<JImageProxy::javaobject>)>;
 
-class CameraView : public jni::HybridClass<CameraView> {
+class CameraViewOld : public jni::HybridClass<CameraViewOld> {
  public:
-  static auto constexpr kJavaDescriptor = "Lcom/mrousavy/old/camera/CameraView;";
+  static auto constexpr kJavaDescriptor = "Lcom/mrousavy/old/camera/CameraViewOld;";
   static auto constexpr TAG = "VisionCameraOld";
   static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
   static void registerNatives();
@@ -29,12 +29,12 @@ class CameraView : public jni::HybridClass<CameraView> {
 
  private:
   friend HybridBase;
-  jni::global_ref<CameraView::javaobject> javaPart_;
+  jni::global_ref<CameraViewOld::javaobject> javaPart_;
   TFrameProcessor frameProcessor_;
 
   void frameProcessorCallback(const jni::alias_ref<JImageProxy::javaobject>& frame);
 
-  explicit CameraView(jni::alias_ref<CameraView::jhybridobject> jThis) :
+  explicit CameraViewOld(jni::alias_ref<CameraViewOld::jhybridobject> jThis) :
     javaPart_(jni::make_global(jThis)),
     frameProcessor_(nullptr)
   {}

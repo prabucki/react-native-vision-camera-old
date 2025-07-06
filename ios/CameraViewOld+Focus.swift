@@ -1,5 +1,5 @@
 //
-//  CameraView+focus.swift
+//  CameraViewOld+focus.swift
 //  mrousavy
 //
 //  Created by Marc Rousavy on 19.02.21.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension CameraView {
+extension CameraViewOld {
   func focus(point: CGPoint, promise: Promise) {
     withPromise(promise) {
       guard let device = self.videoDeviceInput?.device else {

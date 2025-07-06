@@ -1,5 +1,5 @@
 //
-//  CameraView.swift
+//  CameraViewOld.swift
 //  mrousavy
 //
 //  Created by Marc Rousavy on 09.11.20.
@@ -11,12 +11,12 @@ import Foundation
 import UIKit
 
 //
-// TODOs for the CameraView which are currently too hard to implement either because of AVFoundation's limitations, or my brain capacity
+// TODOs for the CameraViewOld which are currently too hard to implement either because of AVFoundation's limitations, or my brain capacity
 //
-// CameraView+RecordVideo
+// CameraViewOld+RecordVideo
 // TODO: Better startRecording()/stopRecording() (promise + callback, wait for TurboModules/JSI)
 
-// CameraView+TakePhoto
+// CameraViewOld+TakePhoto
 // TODO: Photo HDR
 
 private let propsThatRequireReconfiguration = ["cameraId",
@@ -32,9 +32,9 @@ private let propsThatRequireDeviceReconfiguration = ["fps",
                                                      "lowLightBoost",
                                                      "colorSpace"]
 
-// MARK: - CameraView
+// MARK: - CameraViewOld
 
-public final class CameraView: UIView {
+public final class CameraViewOld: UIView {
   // pragma MARK: React Properties
 
   // pragma MARK: Exported Properties
@@ -90,14 +90,14 @@ public final class CameraView: UIView {
   internal var photoOutput: AVCapturePhotoOutput?
   internal var videoOutput: AVCaptureVideoDataOutput?
   internal var audioOutput: AVCaptureAudioDataOutput?
-  // CameraView+RecordView (+ FrameProcessorDelegate.mm)
+  // CameraViewOld+RecordView (+ FrameProcessorDelegate.mm)
   internal var isRecording = false
   internal var recordingSession: RecordingSession?
   @objc public var frameProcessorCallback: FrameProcessorCallback?
   internal var lastFrameProcessorCall = DispatchTime.now().uptimeNanoseconds
-  // CameraView+TakePhoto
+  // CameraViewOld+TakePhoto
   internal var photoCaptureDelegates: [PhotoCaptureDelegate] = []
-  // CameraView+Zoom
+  // CameraViewOld+Zoom
   internal var pinchGestureRecognizer: UIPinchGestureRecognizer?
   internal var pinchScaleOffset: CGFloat = 1.0
 

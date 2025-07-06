@@ -1,5 +1,5 @@
 //
-//  CameraView+Zoom.swift
+//  CameraViewOld+Zoom.swift
 //  mrousavy
 //
 //  Created by Marc Rousavy on 18.12.20.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension CameraView {
+extension CameraViewOld {
   var minAvailableZoom: CGFloat {
     return videoDeviceInput?.device.minAvailableVideoZoomFactor ?? 1
   }

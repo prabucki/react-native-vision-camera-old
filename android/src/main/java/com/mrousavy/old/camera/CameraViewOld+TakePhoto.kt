@@ -16,14 +16,14 @@ import java.io.File
 import kotlin.system.measureTimeMillis
 
 @SuppressLint("UnsafeOptInUsageError")
-suspend fun CameraView.takePhoto(options: ReadableMap): WritableMap = coroutineScope {
+suspend fun CameraViewOld.takePhoto(options: ReadableMap): WritableMap = coroutineScope {
   if (fallbackToSnapshot) {
-    Log.i(CameraView.TAG, "takePhoto() called, but falling back to Snapshot because 1 use-case is already occupied.")
+    Log.i(CameraViewOld.TAG, "takePhoto() called, but falling back to Snapshot because 1 use-case is already occupied.")
     return@coroutineScope takeSnapshot(options)
   }
 
   val startFunc = System.nanoTime()
-  Log.i(CameraView.TAG, "takePhoto() called")
+  Log.i(CameraViewOld.TAG, "takePhoto() called")
   if (imageCapture == null) {
     if (photo == true) {
       throw CameraNotReadyError()
@@ -67,15 +67,15 @@ suspend fun CameraView.takePhoto(options: ReadableMap): WritableMap = coroutineS
 
   val results = awaitAll(
     async(coroutineContext) {
-      Log.d(CameraView.TAG, "Taking picture...")
+      Log.d(CameraViewOld.TAG, "Taking picture...")
       val startCapture = System.nanoTime()
       val pic = imageCapture!!.takePicture(takePhotoExecutor)
       val endCapture = System.nanoTime()
-      Log.i(CameraView.TAG_PERF, "Finished image capture in ${(endCapture - startCapture) / 1_000_000}ms")
+      Log.i(CameraViewOld.TAG_PERF, "Finished image capture in ${(endCapture - startCapture) / 1_000_000}ms")
       pic
     },
     async(Dispatchers.IO) {
-      Log.d(CameraView.TAG, "Creating temp file...")
+      Log.d(CameraViewOld.TAG, "Creating temp file...")
       File.createTempFile("mrousavy", ".jpg", context.cacheDir).apply { deleteOnExit() }
     }
   )
@@ -85,12 +85,12 @@ suspend fun CameraView.takePhoto(options: ReadableMap): WritableMap = coroutineS
   val exif: ExifInterface?
   @Suppress("BlockingMethodInNonBlockingContext")
   withContext(Dispatchers.IO) {
-    Log.d(CameraView.TAG, "Saving picture to ${file.absolutePath}...")
+    Log.d(CameraViewOld.TAG, "Saving picture to ${file.absolutePath}...")
     val milliseconds = measureTimeMillis {
       val flipHorizontally = lensFacing == CameraCharacteristics.LENS_FACING_FRONT
       photo.save(file, flipHorizontally)
     }
-    Log.i(CameraView.TAG_PERF, "Finished image saving in ${milliseconds}ms")
+    Log.i(CameraViewOld.TAG_PERF, "Finished image saving in ${milliseconds}ms")
     // TODO: Read Exif from existing in-memory photo buffer instead of file?
     exif = if (skipMetadata) null else ExifInterface(file)
   }
@@ -106,9 +106,9 @@ suspend fun CameraView.takePhoto(options: ReadableMap): WritableMap = coroutineS
 
   photo.close()
 
-  Log.d(CameraView.TAG, "Finished taking photo!")
+  Log.d(CameraViewOld.TAG, "Finished taking photo!")
 
   val endFunc = System.nanoTime()
-  Log.i(CameraView.TAG_PERF, "Finished function execution in ${(endFunc - startFunc) / 1_000_000}ms")
+  Log.i(CameraViewOld.TAG_PERF, "Finished function execution in ${(endFunc - startFunc) / 1_000_000}ms")
   return@coroutineScope map
 }

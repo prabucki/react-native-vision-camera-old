@@ -1,5 +1,5 @@
 //
-//  CameraView+AVAudioSession.swift
+//  CameraViewOld+AVAudioSession.swift
 //  VisionCameraOld
 //
 //  Created by Marc Rousavy on 26.03.21.
@@ -10,9 +10,9 @@ import AVFoundation
 import Foundation
 
 /**
- Extension for CameraView that sets up the AVAudioSession.
+ Extension for CameraViewOld that sets up the AVAudioSession.
  */
-extension CameraView {
+extension CameraViewOld {
   /**
    Configures the Audio Capture Session with an audio input and audio data output.
    */

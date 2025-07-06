@@ -6,7 +6,7 @@ import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
-suspend fun CameraView.focus(pointMap: ReadableMap) {
+suspend fun CameraViewOld.focus(pointMap: ReadableMap) {
   val cameraControl = camera?.cameraControl ?: throw CameraNotReadyError()
   if (!pointMap.hasKey("x") || !pointMap.hasKey("y")) {
     throw InvalidTypeScriptUnionError("point", pointMap.toString())

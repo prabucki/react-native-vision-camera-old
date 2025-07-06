@@ -1,5 +1,5 @@
 //
-//  CameraView+AVCaptureSession.swift
+//  CameraViewOld+AVCaptureSession.swift
 //  VisionCameraOld
 //
 //  Created by Marc Rousavy on 26.03.21.
@@ -10,9 +10,9 @@ import AVFoundation
 import Foundation
 
 /**
- Extension for CameraView that sets up the AVCaptureSession, Device and Format.
+ Extension for CameraViewOld that sets up the AVCaptureSession, Device and Format.
  */
-extension CameraView {
+extension CameraViewOld {
   // pragma MARK: Configure Capture Session
 
   /**

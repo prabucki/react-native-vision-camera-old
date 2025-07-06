@@ -1,5 +1,5 @@
 //
-//  CameraViewManager.m
+//  CameraViewOldManager.m
 //  mrousavy
 //
 //  Created by Marc Rousavy on 09.11.20.
@@ -11,7 +11,7 @@
 #import <React/RCTViewManager.h>
 #import <React/RCTUtils.h>
 
-@interface RCT_EXTERN_REMAP_MODULE(CameraView, CameraViewManager, RCTViewManager)
+@interface RCT_EXTERN_REMAP_MODULE(CameraViewOld, CameraViewOldManager, RCTViewManager)
 
 // Module Functions
 RCT_EXTERN_METHOD(getCameraPermissionStatus:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject);

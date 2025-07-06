@@ -6,15 +6,15 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.events.RCTEventEmitter
 
-fun CameraView.invokeOnInitialized() {
-  Log.i(CameraView.TAG, "invokeOnInitialized()")
+fun CameraViewOld.invokeOnInitialized() {
+  Log.i(CameraViewOld.TAG, "invokeOnInitialized()")
 
   val reactContext = context as ReactContext
   reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, "cameraInitialized", null)
 }
 
-fun CameraView.invokeOnError(error: Throwable) {
-  Log.e(CameraView.TAG, "invokeOnError(...):")
+fun CameraViewOld.invokeOnError(error: Throwable) {
+  Log.e(CameraViewOld.TAG, "invokeOnError(...):")
   error.printStackTrace()
 
   val cameraError = when (error) {
@@ -31,8 +31,8 @@ fun CameraView.invokeOnError(error: Throwable) {
   reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, "cameraError", event)
 }
 
-fun CameraView.invokeOnFrameProcessorPerformanceSuggestionAvailable(currentFps: Double, suggestedFps: Double) {
-  Log.e(CameraView.TAG, "invokeOnFrameProcessorPerformanceSuggestionAvailable(suggestedFps: $suggestedFps):")
+fun CameraViewOld.invokeOnFrameProcessorPerformanceSuggestionAvailable(currentFps: Double, suggestedFps: Double) {
+  Log.e(CameraViewOld.TAG, "invokeOnFrameProcessorPerformanceSuggestionAvailable(suggestedFps: $suggestedFps):")
 
   val event = Arguments.createMap()
   val type = if (suggestedFps > currentFps) "can-use-higher-fps" else "should-use-lower-fps"
@@ -42,7 +42,7 @@ fun CameraView.invokeOnFrameProcessorPerformanceSuggestionAvailable(currentFps: 
   reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, "cameraPerformanceSuggestionAvailable", event)
 }
 
-fun CameraView.invokeOnViewReady() {
+fun CameraViewOld.invokeOnViewReady() {
   val event = Arguments.createMap()
   val reactContext = context as ReactContext
   reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, "cameraViewReady", event)

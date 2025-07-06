@@ -41,8 +41,8 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld12CameraQueues")))
 @interface CameraQueues : NSObject
 @property (nonatomic, class, readonly, strong) dispatch_queue_t _Nonnull frameProcessorQueue;
 @end
-__attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraView")))
-@interface CameraView : UIView
+__attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
+@interface CameraViewOld : UIView
 @property (nonatomic, copy) FrameProcessorCallback _Nullable frameProcessorCallback;
 @end
 
@@ -135,7 +135,7 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraView")))
     RCTExecuteOnMainQueue([=]() {
       auto currentBridge = [RCTBridge currentBridge];
       auto anonymousView = [currentBridge.uiManager viewForReactTag:[NSNumber numberWithDouble:viewTag]];
-      auto view = static_cast<CameraView*>(anonymousView);
+      auto view = static_cast<CameraViewOld*>(anonymousView);
 
       dispatch_async(CameraQueues.frameProcessorQueue, [=]() {
         NSLog(@"FrameProcessorBindings: Converting worklet to Objective-C callback...");
@@ -189,7 +189,7 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraView")))
       auto anonymousView = [currentBridge.uiManager viewForReactTag:[NSNumber numberWithDouble:viewTag]];
       if (!anonymousView) return;
 
-      auto view = static_cast<CameraView*>(anonymousView);
+      auto view = static_cast<CameraViewOld*>(anonymousView);
       view.frameProcessorCallback = nil;
       NSLog(@"FrameProcessorBindings: Frame processor removed!");
     });

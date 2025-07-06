@@ -7,10 +7,10 @@ import com.facebook.react.uimanager.ViewManager
 
 class CameraPackageOld : ReactPackage {
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-    return listOf(CameraViewModule(reactContext))
+    return listOf(CameraViewOldModule(reactContext))
   }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf(CameraViewManager(reactContext))
+    return listOf(CameraViewOldManager(reactContext))
   }
 }

@@ -41,7 +41,7 @@ add_library(
         src/main/cpp/JSIJNIConversion.cpp
         src/main/cpp/FrameHostObject.cpp
         src/main/cpp/FrameProcessorRuntimeManager.cpp
-        src/main/cpp/CameraView.cpp
+        src/main/cpp/CameraViewOld.cpp
         src/main/cpp/VisionCameraOldScheduler.cpp
         src/main/cpp/java-bindings/JFrameProcessorPlugin.cpp
         src/main/cpp/java-bindings/JImageProxy.cpp

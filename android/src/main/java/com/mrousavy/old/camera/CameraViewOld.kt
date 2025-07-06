@@ -38,23 +38,23 @@ import kotlin.math.max
 import kotlin.math.min
 
 //
-// TODOs for the CameraView which are currently too hard to implement either because of CameraX' limitations, or my brain capacity.
+// TODOs for the CameraViewOld which are currently too hard to implement either because of CameraX' limitations, or my brain capacity.
 //
-// CameraView
+// CameraViewOld
 // TODO: Actually use correct sizes for video and photo (currently it's both the video size)
 // TODO: Configurable FPS higher than 30
-// TODO: High-speed video recordings (export in CameraViewModule::getAvailableVideoDevices(), and set in CameraView::configurePreview()) (120FPS+)
+// TODO: High-speed video recordings (export in CameraViewOldModule::getAvailableVideoDevices(), and set in CameraViewOld::configurePreview()) (120FPS+)
 // TODO: configureSession() enableDepthData
 // TODO: configureSession() enableHighQualityPhotos
 // TODO: configureSession() enablePortraitEffectsMatteDelivery
 // TODO: configureSession() colorSpace
 
-// CameraView+RecordVideo
+// CameraViewOld+RecordVideo
 // TODO: Better startRecording()/stopRecording() (promise + callback, wait for TurboModules/JSI)
 // TODO: videoStabilizationMode
 // TODO: Return Video size/duration
 
-// CameraView+TakePhoto
+// CameraViewOld+TakePhoto
 // TODO: Mirror selfie images
 // TODO: takePhoto() depth data
 // TODO: takePhoto() raw capture
@@ -67,10 +67,10 @@ import kotlin.math.min
 
 @Suppress("KotlinJniMissingFunction") // I use fbjni, Android Studio is not smart enough to realize that.
 @SuppressLint("ClickableViewAccessibility", "ViewConstructor")
-class CameraView(context: Context, private val frameProcessorThread: ExecutorService) : FrameLayout(context), LifecycleOwner {
+class CameraViewOld(context: Context, private val frameProcessorThread: ExecutorService) : FrameLayout(context), LifecycleOwner {
   companion object {
-    const val TAG = "CameraView"
-    const val TAG_PERF = "CameraView.performance"
+    const val TAG = "CameraViewOld"
+    const val TAG_PERF = "CameraViewOld.performance"
 
     private val propsThatRequireSessionReconfiguration = arrayListOf("cameraId", "format", "fps", "hdr", "lowLightBoost", "photo", "video", "enableFrameProcessor")
     private val arrayListOfZoom = arrayListOf("zoom")

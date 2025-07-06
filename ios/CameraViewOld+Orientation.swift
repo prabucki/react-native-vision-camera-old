@@ -1,5 +1,5 @@
 //
-//  CameraView+Orientation.swift
+//  CameraViewOld+Orientation.swift
 //  VisionCameraOld
 //
 //  Created by Marc Rousavy on 04.01.22.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
-extension CameraView {
+extension CameraViewOld {
 
   private func interfaceOrientation(from: UIDeviceOrientation) -> UIInterfaceOrientation {
     switch (from) {

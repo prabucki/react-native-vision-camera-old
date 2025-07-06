@@ -7,7 +7,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.turbomodule.core.CallInvokerHolderImpl
 import com.facebook.react.uimanager.UIManagerHelper
-import com.mrousavy.old.camera.CameraView
+import com.mrousavy.old.camera.CameraViewOld
 import com.mrousavy.old.camera.ViewNotFoundError
 import java.lang.ref.WeakReference
 import java.util.concurrent.ExecutorService
@@ -55,10 +55,10 @@ class FrameProcessorRuntimeManager(context: ReactApplicationContext, frameProces
   @Suppress("unused")
   @DoNotStrip
   @Keep
-  fun findCameraViewById(viewId: Int): CameraView {
+  fun findCameraViewOldById(viewId: Int): CameraViewOld {
     Log.d(TAG, "Finding view $viewId...")
     val ctx = mContext?.get()
-    val view = if (ctx != null) UIManagerHelper.getUIManager(ctx, viewId)?.resolveView(viewId) as CameraView? else null
+    val view = if (ctx != null) UIManagerHelper.getUIManager(ctx, viewId)?.resolveView(viewId) as CameraViewOld? else null
     Log.d(TAG,  if (view != null) "Found view $viewId!" else "Couldn't find view $viewId!")
     return view ?: throw ViewNotFoundError(viewId)
   }

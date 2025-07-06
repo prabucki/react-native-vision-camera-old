@@ -7,7 +7,7 @@ import android.graphics.Matrix
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.exifinterface.media.ExifInterface
-import com.mrousavy.old.camera.CameraView
+import com.mrousavy.old.camera.CameraViewOld
 import com.mrousavy.old.camera.InvalidFormatError
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -96,7 +96,7 @@ fun ImageProxy.save(file: File, flipHorizontally: Boolean) {
         val milliseconds = measureTimeMillis {
           bytes = flipImage(bytes)
         }
-        Log.i(CameraView.TAG_PERF, "Flipping Image took $milliseconds ms.")
+        Log.i(CameraViewOld.TAG_PERF, "Flipping Image took $milliseconds ms.")
       }
 
       val output = FileOutputStream(file)

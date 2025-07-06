@@ -12,7 +12,7 @@
 
 #include "WorkletRuntime.h"
 
-#include "CameraView.h"
+#include "CameraViewOld.h"
 #include "VisionCameraOldScheduler.h"
 #include "java-bindings/JFrameProcessorPlugin.h"
 
@@ -48,7 +48,7 @@ class FrameProcessorRuntimeManager : public jni::HybridClass<FrameProcessorRunti
   std::shared_ptr<reanimated::WorkletRuntime> workletRuntime_;
   std::shared_ptr<vision::VisionCameraOldScheduler> scheduler_;
 
-  jni::global_ref<CameraView::javaobject> findCameraViewById(int viewId);
+  jni::global_ref<CameraViewOld::javaobject> findCameraViewOldById(int viewId);
   void registerPlugins();
   void initializeRuntime();
   void installJSIBindings();

@@ -1,5 +1,5 @@
 //
-//  CameraViewManager.swift
+//  CameraViewOldManager.swift
 //  mrousavy
 //
 //  Created by Marc Rousavy on 09.11.20.
@@ -9,8 +9,8 @@
 import AVFoundation
 import Foundation
 
-@objc(CameraViewManager)
-final class CameraViewManager: RCTViewManager {
+@objc(CameraViewOldManager)
+final class CameraViewOldManager: RCTViewManager {
   // pragma MARK: Properties
 
   private var runtimeManager: FrameProcessorRuntimeManager?
@@ -38,38 +38,38 @@ final class CameraViewManager: RCTViewManager {
   }
 
   override final func view() -> UIView! {
-    return CameraView()
+    return CameraViewOld()
   }
 
   // pragma MARK: React Functions
 
   @objc
   final func startRecording(_ node: NSNumber, options: NSDictionary, onRecordCallback: @escaping RCTResponseSenderBlock) {
-    let component = getCameraView(withTag: node)
+    let component = getCameraViewOld(withTag: node)
     component.startRecording(options: options, callback: onRecordCallback)
   }
 
   @objc
   final func pauseRecording(_ node: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    let component = getCameraView(withTag: node)
+    let component = getCameraViewOld(withTag: node)
     component.pauseRecording(promise: Promise(resolver: resolve, rejecter: reject))
   }
 
   @objc
   final func resumeRecording(_ node: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    let component = getCameraView(withTag: node)
+    let component = getCameraViewOld(withTag: node)
     component.resumeRecording(promise: Promise(resolver: resolve, rejecter: reject))
   }
 
   @objc
   final func stopRecording(_ node: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    let component = getCameraView(withTag: node)
+    let component = getCameraViewOld(withTag: node)
     component.stopRecording(promise: Promise(resolver: resolve, rejecter: reject))
   }
 
   @objc
   final func takePhoto(_ node: NSNumber, options: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    let component = getCameraView(withTag: node)
+    let component = getCameraViewOld(withTag: node)
     component.takePhoto(options: options, promise: Promise(resolver: resolve, rejecter: reject))
   }
 
@@ -80,14 +80,14 @@ final class CameraViewManager: RCTViewManager {
       promise.reject(error: .parameter(.invalid(unionName: "point", receivedValue: point.description)))
       return
     }
-    let component = getCameraView(withTag: node)
+    let component = getCameraViewOld(withTag: node)
     component.focus(point: CGPoint(x: x.doubleValue, y: y.doubleValue), promise: promise)
   }
 
   @objc
   final func getAvailableVideoCodecs(_ node: NSNumber, fileType: String?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     withPromise(resolve: resolve, reject: reject) {
-      let component = getCameraView(withTag: node)
+      let component = getCameraViewOld(withTag: node)
       guard let videoOutput = component.videoOutput else {
         throw CameraError.session(SessionError.cameraNotReady)
       }
@@ -174,9 +174,9 @@ final class CameraViewManager: RCTViewManager {
 
   // MARK: Private
 
-  private func getCameraView(withTag tag: NSNumber) -> CameraView {
+  private func getCameraViewOld(withTag tag: NSNumber) -> CameraViewOld {
     // swiftlint:disable force_cast
-    return bridge.uiManager.view(forReactTag: tag) as! CameraView
+    return bridge.uiManager.view(forReactTag: tag) as! CameraViewOld
   }
 
   private final func getAllDeviceTypes() -> [AVCaptureDevice.DeviceType] {

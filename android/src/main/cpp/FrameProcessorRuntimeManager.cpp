@@ -8,7 +8,7 @@
 #include <utility>
 #include <string>
 
-#include "CameraView.h"
+#include "CameraViewOld.h"
 #include "FrameHostObject.h"
 #include "JSIJNIConversion.h"
 #include "VisionCameraOldScheduler.h"
@@ -65,10 +65,10 @@ void vision::FrameProcessorRuntimeManager::initializeRuntime() {
                       "Initialized Vision JS-Runtime!");
 }
 
-global_ref<CameraView::javaobject> FrameProcessorRuntimeManager::findCameraViewById(int viewId) {
-  static const auto findCameraViewByIdMethod = javaPart_->getClass()->getMethod<CameraView(jint)>("findCameraViewById");
-  auto weakCameraView = findCameraViewByIdMethod(javaPart_.get(), viewId);
-  return make_global(weakCameraView);
+global_ref<CameraViewOld::javaobject> FrameProcessorRuntimeManager::findCameraViewOldById(int viewId) {
+  static const auto findCameraViewOldByIdMethod = javaPart_->getClass()->getMethod<CameraViewOld(jint)>("findCameraViewOldById");
+  auto weakCameraViewOld = findCameraViewOldByIdMethod(javaPart_.get(), viewId);
+  return make_global(weakCameraViewOld);
 }
 
 void FrameProcessorRuntimeManager::registerPlugins() {
@@ -109,8 +109,8 @@ void FrameProcessorRuntimeManager::setFrameProcessor(jsi::Runtime& rnRuntime,
   registerPlugins();
 
   // find camera view
-  auto cameraView = findCameraViewById(viewTag);
-  __android_log_write(ANDROID_LOG_INFO, TAG, "Found CameraView!");
+  auto cameraView = findCameraViewOldById(viewTag);
+  __android_log_write(ANDROID_LOG_INFO, TAG, "Found CameraViewOld!");
 
   // convert jsi::Function to a ShareableValue (can be shared across runtimes)
   __android_log_write(ANDROID_LOG_INFO, TAG,
@@ -137,7 +137,7 @@ void FrameProcessorRuntimeManager::unsetFrameProcessor(int viewTag) {
   __android_log_write(ANDROID_LOG_INFO, TAG, "Removing Frame Processor...");
 
   // find camera view
-  auto cameraView = findCameraViewById(viewTag);
+  auto cameraView = findCameraViewOldById(viewTag);
 
   // call Java method to unset frame processor
   cameraView->cthis()->unsetFrameProcessor();

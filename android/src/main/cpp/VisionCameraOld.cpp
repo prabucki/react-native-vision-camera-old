@@ -1,13 +1,13 @@
 #include <jni.h>
 #include <fbjni/fbjni.h>
 #include "FrameProcessorRuntimeManager.h"
-#include "CameraView.h"
+#include "CameraViewOld.h"
 #include "VisionCameraOldScheduler.h"
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *) {
   return facebook::jni::initialize(vm, [] {
     vision::FrameProcessorRuntimeManager::registerNatives();
-    vision::CameraView::registerNatives();
+    vision::CameraViewOld::registerNatives();
     vision::VisionCameraOldScheduler::registerNatives();
   });
 }

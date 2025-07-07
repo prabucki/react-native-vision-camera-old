@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FrameProcessorRuntimeManager.h"
-#import "FrameProcessorPluginRegistry.h"
+#import "FrameProcessorPluginRegistryOld.h"
 #import "FrameHostObjectOld.h"
 
 #import <memory>
@@ -94,11 +94,11 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
     // TODO: call reanimated::RuntimeDecorator::decorateRuntime(*runtime, "FRAME_PROCESSOR");
     visionRuntime.global().setProperty(visionRuntime, "_FRAME_PROCESSOR", jsi::Value(true));
 
-    for (NSString* pluginKey in [FrameProcessorPluginRegistry frameProcessorPlugins]) {
+    for (NSString* pluginKey in [FrameProcessorPluginRegistryOld frameProcessorPlugins]) {
       auto pluginName = [pluginKey UTF8String];
 
       NSLog(@"FrameProcessorBindings: Installing Frame Processor plugin \"%s\"...", pluginName);
-      FrameProcessorPlugin callback = [[FrameProcessorPluginRegistry frameProcessorPlugins] valueForKey:pluginKey];
+      FrameProcessorPlugin callback = [[FrameProcessorPluginRegistryOld frameProcessorPlugins] valueForKey:pluginKey];
 
       auto function = [callback](jsi::Runtime& runtime,
                                               const jsi::Value& thisValue,

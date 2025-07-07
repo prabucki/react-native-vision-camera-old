@@ -1,5 +1,5 @@
 //
-//  FrameProcessorPluginRegistry.h
+//  FrameProcessorPluginRegistryOld.h
 //  VisionCameraOld
 //
 //  Created by Marc Rousavy on 24.03.21.
@@ -13,7 +13,7 @@
 
 typedef id (^FrameProcessorPlugin) (Frame* frame, NSArray<id>* arguments);
 
-@interface FrameProcessorPluginRegistry : NSObject
+@interface FrameProcessorPluginRegistryOld : NSObject
 
 + (NSMutableDictionary<NSString*, FrameProcessorPlugin>*)frameProcessorPlugins;
 + (void) addFrameProcessorPlugin:(NSString*)name callback:(FrameProcessorPlugin)callback;

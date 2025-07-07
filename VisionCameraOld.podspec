@@ -48,7 +48,7 @@ Pod::Spec.new do |s|
     "ios/Frame Processor/Frame.h",
     "ios/Frame Processor/FrameProcessorCallback.h",
     "ios/Frame Processor/FrameProcessorRuntimeManager.h",
-    "ios/Frame Processor/FrameProcessorPluginRegistry.h",
+    "ios/Frame Processor/FrameProcessorPluginRegistryOld.h",
     "ios/Frame Processor/FrameProcessorPlugin.h",
     "ios/React Utils/RCTBridge+runOnJS.h",
     "ios/React Utils/JSConsoleHelper.h",

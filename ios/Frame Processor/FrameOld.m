@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CMSampleBuffer.h>
 
-@implementation Frame {
+@implementation FrameOld {
   CMSampleBufferRef buffer;
   UIImageOrientation orientation;
 }

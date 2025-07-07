@@ -14,7 +14,7 @@
 #import "FrameOld.h"
 
 @protocol FrameProcessorPluginBase
-+ (id) callback:(Frame*)frame withArgs:(NSArray<id>*)args;
++ (id) callback:(FrameOld*)frame withArgs:(NSArray<id>*)args;
 @end
 
 
@@ -23,7 +23,7 @@
 
 /**
  * Use this Macro to register the given function as a Frame Processor.
- * * Make sure the given function is a C-style function with the following signature: static inline id callback(Frame* frame, NSArray* args)
+ * * Make sure the given function is a C-style function with the following signature: static inline id callback(FrameOld* frame, NSArray* args)
  * * Make sure the given function's name is unique across other frame processor plugins
  * * Make sure your frame processor returns a Value that can be converted to JS
  * * Make sure to use this Macro in an @implementation, not @interface
@@ -35,7 +35,7 @@
                                                                                     \
 +(void)load                                                                   \
 {                                                                                   \
-  [FrameProcessorPluginRegistryOld addFrameProcessorPlugin:@"__" @ #frame_processor callback:^id(Frame* frame, NSArray<id>* args) { \
+  [FrameProcessorPluginRegistryOld addFrameProcessorPlugin:@"__" @ #frame_processor callback:^id(FrameOld* frame, NSArray<id>* args) { \
     return frame_processor(frame, args);                                            \
   }];                                                                               \
 }
@@ -55,7 +55,7 @@ objc_name : NSObject<FrameProcessorPluginBase>                                  
                                                                                     \
 __attribute__((constructor)) static void VISION_CONCAT(initialize_, objc_name)()    \
 {                                                                                   \
-  [FrameProcessorPluginRegistryOld addFrameProcessorPlugin:@"__" @ #name callback:^id(Frame* frame, NSArray<id>* args) { \
+  [FrameProcessorPluginRegistryOld addFrameProcessorPlugin:@"__" @ #name callback:^id(FrameOld* frame, NSArray<id>* args) { \
     return [objc_name callback:frame withArgs:args];                              \
   }];                                                                             \
 }

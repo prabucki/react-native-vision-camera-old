@@ -50,7 +50,7 @@ For reference see the [CLI's docs](https://github.com/mateusz1913/vision-camera-
 
 @implementation QRCodeFrameProcessorPlugin
 
-static inline id scanQRCodes(Frame* frame, NSArray* args) {
+static inline id scanQRCodes(FrameOld* frame, NSArray* args) {
   CMSampleBufferRef buffer = frame.buffer;
   UIImageOrientation orientation = frame.orientation;
   // code goes here

@@ -16,7 +16,7 @@ using namespace facebook;
 
 class JSI_EXPORT FrameHostObjectOld: public jsi::HostObject {
 public:
-  explicit FrameHostObjectOld(Frame* frame): frame(frame) {}
+  explicit FrameHostObjectOld(FrameOld* frame): frame(frame) {}
 
 public:
   jsi::Value get(jsi::Runtime&, const jsi::PropNameID& name) override;
@@ -24,7 +24,7 @@ public:
   void close();
 
 public:
-  Frame* frame;
+  FrameOld* frame;
 
 private:
   void assertIsFrameStrong(jsi::Runtime& runtime, const std::string& accessedPropName);

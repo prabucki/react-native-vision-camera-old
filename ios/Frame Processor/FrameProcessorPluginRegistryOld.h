@@ -11,7 +11,7 @@
 #import <Foundation/Foundation.h>
 #import "FrameOld.h"
 
-typedef id (^FrameProcessorPlugin) (Frame* frame, NSArray<id>* arguments);
+typedef id (^FrameProcessorPlugin) (FrameOld* frame, NSArray<id>* arguments);
 
 @interface FrameProcessorPluginRegistryOld : NSObject
 

@@ -77,7 +77,7 @@ jsi::Value convertObjCObjectToJSIValue(jsi::Runtime &runtime, id value)
   } else if (value == (id)kCFNull) {
     return jsi::Value::null();
   } else if ([value isKindOfClass:[Frame class]]) {
-    auto frameHostObject = std::make_shared<FrameHostObjectOld>((Frame*)value);
+    auto frameHostObject = std::make_shared<FrameHostObjectOld>((FrameOld*)value);
     return jsi::Object::createFromHostObject(runtime, frameHostObject);
   }
   return jsi::Value::undefined();

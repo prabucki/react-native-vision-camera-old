@@ -143,7 +143,7 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
         std::weak_ptr<reanimated::WorkletRuntime> weakWorkletRuntime = workletRuntime;
         std::weak_ptr<reanimated::ShareableWorklet> weakShareableWorklet = worklet;
 
-        view.frameProcessorCallback = ^(Frame* frame) {
+        view.frameProcessorCallback = ^(FrameOld* frame) {
           auto workletRuntime = weakWorkletRuntime.lock();
           auto shareableWorklet = weakShareableWorklet.lock();
           if (workletRuntime == nullptr || shareableWorklet == nullptr) {

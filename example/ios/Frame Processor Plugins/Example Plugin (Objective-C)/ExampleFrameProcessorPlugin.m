@@ -16,7 +16,7 @@
 
 @implementation ExampleFrameProcessorPlugin
 
-static inline id example_plugin(Frame* frame, NSArray* arguments) {
+static inline id example_plugin(FrameOld* frame, NSArray* arguments) {
   CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer);
   NSLog(@"ExamplePlugin: %zu x %zu Image. Logging %lu parameters:", CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer), (unsigned long)arguments.count);
 

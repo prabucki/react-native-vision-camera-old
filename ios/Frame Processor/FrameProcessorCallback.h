@@ -11,4 +11,4 @@
 #import <Foundation/Foundation.h>
 #import "FrameOld.h"
 
-typedef void (^FrameProcessorCallback) (Frame* frame);
+typedef void (^FrameProcessorCallback) (FrameOld* frame);

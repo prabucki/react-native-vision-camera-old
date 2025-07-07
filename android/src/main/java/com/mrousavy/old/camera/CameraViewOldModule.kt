@@ -24,7 +24,7 @@ import com.facebook.react.turbomodule.core.CallInvokerHolderImpl
 import com.mrousavy.old.camera.CameraViewOld
 import com.mrousavy.old.camera.ViewNotFoundError
 import java.util.concurrent.ExecutorService
-import com.mrousavy.old.camera.frameprocessor.FrameProcessorRuntimeManager
+import com.mrousavy.old.camera.frameprocessor.FrameProcessorRuntimeManagerOld
 import com.mrousavy.old.camera.parsers.*
 import com.mrousavy.old.camera.utils.*
 import kotlinx.coroutines.*
@@ -49,7 +49,7 @@ class CameraViewOldModule(reactContext: ReactApplicationContext) : ReactContextB
 
   var frameProcessorThread: ExecutorService = Executors.newSingleThreadExecutor()
   private val coroutineScope = CoroutineScope(Dispatchers.Default) // TODO: or Dispatchers.Main?
-  private var frameProcessorManager: FrameProcessorRuntimeManager? = null
+  private var frameProcessorManager: FrameProcessorRuntimeManagerOld? = null
 
   private fun cleanup() {
     if (coroutineScope.isActive) {
@@ -63,7 +63,7 @@ class CameraViewOldModule(reactContext: ReactApplicationContext) : ReactContextB
 
     if (frameProcessorManager == null) {
       frameProcessorThread.execute {
-        frameProcessorManager = FrameProcessorRuntimeManager(reactApplicationContext, frameProcessorThread)
+        frameProcessorManager = FrameProcessorRuntimeManagerOld(reactApplicationContext, frameProcessorThread)
       }
     }
   }

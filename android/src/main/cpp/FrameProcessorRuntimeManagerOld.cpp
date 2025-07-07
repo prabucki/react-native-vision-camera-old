@@ -2,7 +2,7 @@
 // Created by Marc Rousavy on 11.06.21.
 //
 
-#include "FrameProcessorRuntimeManager.h"
+#include "FrameProcessorRuntimeManagerOld.h"
 #include <android/log.h>
 #include <jni.h>
 #include <utility>
@@ -18,32 +18,32 @@
 namespace vision {
 
 // type aliases
-using TSelf = local_ref<HybridClass<vision::FrameProcessorRuntimeManager>::jhybriddata>;
+using TSelf = local_ref<HybridClass<vision::FrameProcessorRuntimeManagerOld>::jhybriddata>;
 using TJSCallInvokerHolder = jni::alias_ref<facebook::react::CallInvokerHolder::javaobject>;
 using TAndroidScheduler = jni::alias_ref<VisionCameraOldScheduler::javaobject>;
 
 // JNI binding
-void vision::FrameProcessorRuntimeManager::registerNatives() {
+void vision::FrameProcessorRuntimeManagerOld::registerNatives() {
   registerHybrid({
     makeNativeMethod("initHybrid",
-                     FrameProcessorRuntimeManager::initHybrid),
+                     FrameProcessorRuntimeManagerOld::initHybrid),
     makeNativeMethod("installJSIBindings",
-                     FrameProcessorRuntimeManager::installJSIBindings),
+                     FrameProcessorRuntimeManagerOld::installJSIBindings),
     makeNativeMethod("initializeRuntime",
-                     FrameProcessorRuntimeManager::initializeRuntime),
+                     FrameProcessorRuntimeManagerOld::initializeRuntime),
     makeNativeMethod("registerPlugin",
-                     FrameProcessorRuntimeManager::registerPlugin),
+                     FrameProcessorRuntimeManagerOld::registerPlugin),
   });
 }
 
 // JNI init
-TSelf vision::FrameProcessorRuntimeManager::initHybrid(
+TSelf vision::FrameProcessorRuntimeManagerOld::initHybrid(
     alias_ref<jhybridobject> jThis,
     jlong jsRuntimePointer,
     TJSCallInvokerHolder jsCallInvokerHolder,
     TAndroidScheduler androidScheduler) {
   __android_log_write(ANDROID_LOG_INFO, TAG,
-                      "Initializing FrameProcessorRuntimeManager...");
+                      "Initializing FrameProcessorRuntimeManagerOld...");
 
   // cast from JNI hybrid objects to C++ instances
   auto runtime = reinterpret_cast<jsi::Runtime*>(jsRuntimePointer);
@@ -53,7 +53,7 @@ TSelf vision::FrameProcessorRuntimeManager::initHybrid(
   return makeCxxInstance(jThis, runtime, jsCallInvoker, scheduler);
 }
 
-void vision::FrameProcessorRuntimeManager::initializeRuntime() {
+void vision::FrameProcessorRuntimeManagerOld::initializeRuntime() {
   __android_log_write(ANDROID_LOG_INFO, TAG,
                       "Initializing Vision JS-Runtime...");
 
@@ -65,18 +65,18 @@ void vision::FrameProcessorRuntimeManager::initializeRuntime() {
                       "Initialized Vision JS-Runtime!");
 }
 
-global_ref<CameraViewOld::javaobject> FrameProcessorRuntimeManager::findCameraViewOldById(int viewId) {
+global_ref<CameraViewOld::javaobject> FrameProcessorRuntimeManagerOld::findCameraViewOldById(int viewId) {
   static const auto findCameraViewOldByIdMethod = javaPart_->getClass()->getMethod<CameraViewOld(jint)>("findCameraViewOldById");
   auto weakCameraViewOld = findCameraViewOldByIdMethod(javaPart_.get(), viewId);
   return make_global(weakCameraViewOld);
 }
 
-void FrameProcessorRuntimeManager::registerPlugins() {
+void FrameProcessorRuntimeManagerOld::registerPlugins() {
   static const auto registerPluginsMethod = javaPart_->getClass()->getMethod<void()>("registerPlugins");
   registerPluginsMethod(javaPart_.get());
 }
 
-void FrameProcessorRuntimeManager::logErrorToJS(const std::string& message) {
+void FrameProcessorRuntimeManagerOld::logErrorToJS(const std::string& message) {
   if (!this->jsCallInvoker_) {
     return;
   }
@@ -95,7 +95,7 @@ void FrameProcessorRuntimeManager::logErrorToJS(const std::string& message) {
   });
 }
 
-void FrameProcessorRuntimeManager::setFrameProcessor(jsi::Runtime& rnRuntime,
+void FrameProcessorRuntimeManagerOld::setFrameProcessor(jsi::Runtime& rnRuntime,
                                                      int viewTag,
                                                      const jsi::Value& frameProcessor,
                                                      const jsi::Value& workletRuntimeValue) {
@@ -133,7 +133,7 @@ void FrameProcessorRuntimeManager::setFrameProcessor(jsi::Runtime& rnRuntime,
   });
 }
 
-void FrameProcessorRuntimeManager::unsetFrameProcessor(int viewTag) {
+void FrameProcessorRuntimeManagerOld::unsetFrameProcessor(int viewTag) {
   __android_log_write(ANDROID_LOG_INFO, TAG, "Removing Frame Processor...");
 
   // find camera view
@@ -146,7 +146,7 @@ void FrameProcessorRuntimeManager::unsetFrameProcessor(int viewTag) {
 }
 
 // actual JSI installer
-void FrameProcessorRuntimeManager::installJSIBindings() {
+void FrameProcessorRuntimeManagerOld::installJSIBindings() {
   __android_log_write(ANDROID_LOG_INFO, TAG, "Installing JSI bindings...");
 
   if (runtime_ == nullptr) {
@@ -221,7 +221,7 @@ void FrameProcessorRuntimeManager::installJSIBindings() {
   __android_log_write(ANDROID_LOG_INFO, TAG, "Finished installing JSI bindings!");
 }
 
-void FrameProcessorRuntimeManager::registerPlugin(alias_ref<JFrameProcessorPlugin::javaobject> plugin) {
+void FrameProcessorRuntimeManagerOld::registerPlugin(alias_ref<JFrameProcessorPlugin::javaobject> plugin) {
   // _runtimeManager might never be null, but we can never be too sure.
   if (!workletRuntime_) {
     throw std::runtime_error("Tried to register plugin before initializing JS runtime! Call `initializeRuntime()` first.");

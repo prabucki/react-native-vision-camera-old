@@ -47,7 +47,7 @@ Pod::Spec.new do |s|
     "ios/CameraBridge.h",
     "ios/Frame Processor/FrameOld.h",
     "ios/Frame Processor/FrameProcessorCallback.h",
-    "ios/Frame Processor/FrameProcessorRuntimeManager.h",
+    "ios/Frame Processor/FrameProcessorRuntimeManagerOld.h",
     "ios/Frame Processor/FrameProcessorPluginRegistryOld.h",
     "ios/Frame Processor/FrameProcessorPlugin.h",
     "ios/React Utils/RCTBridge+runOnJS.h",

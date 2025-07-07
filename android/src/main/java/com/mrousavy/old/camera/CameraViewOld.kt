@@ -26,7 +26,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.bridge.*
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.mrousavy.old.camera.frameprocessor.FrameProcessorPerformanceDataCollector
-import com.mrousavy.old.camera.frameprocessor.FrameProcessorRuntimeManager
+import com.mrousavy.old.camera.frameprocessor.FrameProcessorRuntimeManagerOld
 import com.mrousavy.old.camera.utils.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.guava.await
@@ -210,7 +210,7 @@ class CameraViewOld(context: Context, private val frameProcessorThread: Executor
     }
 
   init {
-    if (FrameProcessorRuntimeManager.enableFrameProcessors) {
+    if (FrameProcessorRuntimeManagerOld.enableFrameProcessors) {
       mHybridData = initHybrid()
     }
 

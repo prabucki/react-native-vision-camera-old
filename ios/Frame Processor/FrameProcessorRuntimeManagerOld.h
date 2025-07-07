@@ -1,5 +1,5 @@
 //
-//  FrameProcessorRuntimeManager.h
+//  FrameProcessorRuntimeManagerOld.h
 //  VisionCameraOld
 //
 //  Created by Marc Rousavy on 23.03.21.
@@ -11,7 +11,7 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTBridge.h>
 
-@interface FrameProcessorRuntimeManager : NSObject
+@interface FrameProcessorRuntimeManagerOld : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
 

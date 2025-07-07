@@ -20,9 +20,9 @@ namespace vision {
 
 using namespace facebook;
 
-class FrameProcessorRuntimeManager : public jni::HybridClass<FrameProcessorRuntimeManager> {
+class FrameProcessorRuntimeManagerOld : public jni::HybridClass<FrameProcessorRuntimeManagerOld> {
  public:
-  static auto constexpr kJavaDescriptor = "Lcom/mrousavy/old/camera/frameprocessor/FrameProcessorRuntimeManager;";
+  static auto constexpr kJavaDescriptor = "Lcom/mrousavy/old/camera/frameprocessor/FrameProcessorRuntimeManagerOld;";
   static auto constexpr TAG = "VisionCameraOld";
   static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis,
                                                 jlong jsContext,
@@ -30,7 +30,7 @@ class FrameProcessorRuntimeManager : public jni::HybridClass<FrameProcessorRunti
                                                 jni::alias_ref<vision::VisionCameraOldScheduler::javaobject> androidScheduler);
   static void registerNatives();
 
-  explicit FrameProcessorRuntimeManager(jni::alias_ref<FrameProcessorRuntimeManager::jhybridobject> jThis,
+  explicit FrameProcessorRuntimeManagerOld(jni::alias_ref<FrameProcessorRuntimeManagerOld::jhybridobject> jThis,
                                         jsi::Runtime* runtime,
                                         std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker,
                                         std::shared_ptr<vision::VisionCameraOldScheduler> scheduler) :
@@ -42,7 +42,7 @@ class FrameProcessorRuntimeManager : public jni::HybridClass<FrameProcessorRunti
 
  private:
   friend HybridBase;
-  jni::global_ref<FrameProcessorRuntimeManager::javaobject> javaPart_;
+  jni::global_ref<FrameProcessorRuntimeManagerOld::javaobject> javaPart_;
   jsi::Runtime* runtime_;
   std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker_;
   std::shared_ptr<reanimated::WorkletRuntime> workletRuntime_;

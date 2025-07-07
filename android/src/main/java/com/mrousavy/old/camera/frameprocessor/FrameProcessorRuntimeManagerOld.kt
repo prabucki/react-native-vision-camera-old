@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference
 import java.util.concurrent.ExecutorService
 
 @Suppress("KotlinJniMissingFunction") // I use fbjni, Android Studio is not smart enough to realize that.
-class FrameProcessorRuntimeManager(context: ReactApplicationContext, frameProcessorThread: ExecutorService) {
+class FrameProcessorRuntimeManagerOld(context: ReactApplicationContext, frameProcessorThread: ExecutorService) {
   companion object {
     const val TAG = "FrameProcessorRuntime"
     val Plugins: ArrayList<FrameProcessorPlugin> = ArrayList()

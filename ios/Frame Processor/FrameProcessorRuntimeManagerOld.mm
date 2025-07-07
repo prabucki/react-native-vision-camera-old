@@ -1,5 +1,5 @@
 //
-//  FrameProcessorRuntimeManager.m
+//  FrameProcessorRuntimeManagerOld.m
 //  VisionCameraOld
 //
 //  Created by Marc Rousavy on 23.03.21.
@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FrameProcessorRuntimeManager.h"
+#import "FrameProcessorRuntimeManagerOld.h"
 #import "FrameProcessorPluginRegistryOld.h"
 #import "FrameHostObjectOld.h"
 
@@ -46,7 +46,7 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
 @property (nonatomic, copy) FrameProcessorCallback _Nullable frameProcessorCallback;
 @end
 
-@implementation FrameProcessorRuntimeManager {
+@implementation FrameProcessorRuntimeManagerOld {
 #ifdef ENABLE_FRAME_PROCESSORS
   std::shared_ptr<reanimated::WorkletRuntime> workletRuntime;
 #endif

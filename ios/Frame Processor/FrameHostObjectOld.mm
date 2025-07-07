@@ -1,16 +1,16 @@
 //
-//  FrameHostObject.m
+//  FrameHostObjectOld.m
 //  VisionCameraOld
 //
 //  Created by Marc Rousavy on 22.03.21.
 //  Copyright © 2021 mrousavy. All rights reserved.
 //
 
-#import "FrameHostObject.h"
+#import "FrameHostObjectOld.h"
 #import <Foundation/Foundation.h>
 #import <jsi/jsi.h>
 
-std::vector<jsi::PropNameID> FrameHostObject::getPropertyNames(jsi::Runtime& rt) {
+std::vector<jsi::PropNameID> FrameHostObjectOld::getPropertyNames(jsi::Runtime& rt) {
   std::vector<jsi::PropNameID> result;
   result.push_back(jsi::PropNameID::forUtf8(rt, std::string("toString")));
   result.push_back(jsi::PropNameID::forUtf8(rt, std::string("isValid")));
@@ -22,7 +22,7 @@ std::vector<jsi::PropNameID> FrameHostObject::getPropertyNames(jsi::Runtime& rt)
   return result;
 }
 
-jsi::Value FrameHostObject::get(jsi::Runtime& runtime, const jsi::PropNameID& propName) {
+jsi::Value FrameHostObjectOld::get(jsi::Runtime& runtime, const jsi::PropNameID& propName) {
   auto name = propName.utf8(runtime);
 
   if (name == "toString") {
@@ -82,14 +82,14 @@ jsi::Value FrameHostObject::get(jsi::Runtime& runtime, const jsi::PropNameID& pr
   return jsi::Value::undefined();
 }
 
-void FrameHostObject::assertIsFrameStrong(jsi::Runtime &runtime, const std::string &accessedPropName) {
+void FrameHostObjectOld::assertIsFrameStrong(jsi::Runtime &runtime, const std::string &accessedPropName) {
   if (frame == nil) {
     auto message = "Cannot get `" + accessedPropName + "`, frame is already closed!";
     throw jsi::JSError(runtime, message.c_str());
   }
 }
 
-void FrameHostObject::close() {
+void FrameHostObjectOld::close() {
   if (frame != nil) {
     CMSampleBufferInvalidate(frame.buffer);
     // ARC will hopefully delete it lol

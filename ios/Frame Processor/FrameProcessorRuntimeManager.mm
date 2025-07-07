@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FrameProcessorRuntimeManager.h"
 #import "FrameProcessorPluginRegistry.h"
-#import "FrameHostObject.h"
+#import "FrameHostObjectOld.h"
 
 #import <memory>
 
@@ -105,7 +105,7 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
                                               const jsi::Value* arguments,
                                               size_t count) -> jsi::Value {
         auto frameHostObject = arguments[0].asObject(runtime).asHostObject(runtime);
-        auto frame = static_cast<FrameHostObject*>(frameHostObject.get());
+        auto frame = static_cast<FrameHostObjectOld*>(frameHostObject.get());
 
         auto args = convertJSICStyleArrayToNSArray(runtime,
                                                    arguments + 1, // start at index 1 since first arg = Frame
@@ -150,7 +150,7 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
             return;
           }
 
-          auto frameHostObject = std::make_shared<FrameHostObject>(frame);
+          auto frameHostObject = std::make_shared<FrameHostObjectOld>(frame);
           jsi::Runtime &runtime = workletRuntime->getJSIRuntime();
           auto hostObject = jsi::Object::createFromHostObject(runtime, frameHostObject);
           workletRuntime->runGuarded(shareableWorklet, hostObject);

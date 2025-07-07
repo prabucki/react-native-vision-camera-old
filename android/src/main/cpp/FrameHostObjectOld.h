@@ -16,10 +16,10 @@ namespace vision {
 
 using namespace facebook;
 
-class JSI_EXPORT FrameHostObject : public jsi::HostObject {
+class JSI_EXPORT FrameHostObjectOld : public jsi::HostObject {
  public:
-  explicit FrameHostObject(jni::alias_ref<JImageProxy::javaobject> image);
-  ~FrameHostObject();
+  explicit FrameHostObjectOld(jni::alias_ref<JImageProxy::javaobject> image);
+  ~FrameHostObjectOld();
 
  public:
   jsi::Value get(jsi::Runtime &, const jsi::PropNameID &name) override;

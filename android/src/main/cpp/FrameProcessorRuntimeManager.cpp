@@ -9,7 +9,7 @@
 #include <string>
 
 #include "CameraViewOld.h"
-#include "FrameHostObject.h"
+#include "FrameHostObjectOld.h"
 #include "JSIJNIConversion.h"
 #include "VisionCameraOldScheduler.h"
 #include "java-bindings/JImageProxy.h"
@@ -123,7 +123,7 @@ void FrameProcessorRuntimeManager::setFrameProcessor(jsi::Runtime& rnRuntime,
       // assign lambda to frame processor
       cameraView->cthis()->setFrameProcessor([=](jni::alias_ref<JImageProxy::javaobject> frame) {
           // create HostObject which holds the Frame (JImageProxy)
-          auto frameHostObject = std::make_shared<FrameHostObject>(frame);
+          auto frameHostObject = std::make_shared<FrameHostObjectOld>(frame);
           jsi::Runtime &runtime = workletRuntime_->getJSIRuntime();
           auto hostObject = jsi::Object::createFromHostObject(runtime, frameHostObject);
           workletRuntime_->runGuarded(shareableWorklet, hostObject);
@@ -242,7 +242,7 @@ void FrameProcessorRuntimeManager::registerPlugin(alias_ref<JFrameProcessorPlugi
                                  size_t count) -> jsi::Value {
     // Unbox object and get typed HostObject
     auto boxedHostObject = arguments[0].asObject(runtime).asHostObject(runtime);
-    auto frameHostObject = static_cast<FrameHostObject*>(boxedHostObject.get());
+    auto frameHostObject = static_cast<FrameHostObjectOld*>(boxedHostObject.get());
 
     // parse params - we are offset by `1` because the frame is the first parameter.
     auto params = JArrayClass<jobject>::newArray(count - 1);

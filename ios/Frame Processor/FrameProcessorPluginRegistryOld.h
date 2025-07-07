@@ -9,7 +9,7 @@
 #pragma once
 
 #import <Foundation/Foundation.h>
-#import "Frame.h"
+#import "FrameOld.h"
 
 typedef id (^FrameProcessorPlugin) (Frame* frame, NSArray<id>* arguments);
 

@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <VisionCameraOld/FrameProcessorPlugin.h>
-#import <VisionCameraOld/Frame.h>
+#import <VisionCameraOld/FrameOld.h>
 
 // Example for an Objective-C Frame Processor plugin
 

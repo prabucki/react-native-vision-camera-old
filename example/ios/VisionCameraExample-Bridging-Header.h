@@ -3,4 +3,4 @@
 //
 
 #import <VisionCameraOld/FrameProcessorPlugin.h>
-#import <VisionCameraOld/Frame.h>
+#import <VisionCameraOld/FrameOld.h>

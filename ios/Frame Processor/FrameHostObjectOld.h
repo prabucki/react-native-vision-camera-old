@@ -10,7 +10,7 @@
 
 #import <jsi/jsi.h>
 #import <CoreMedia/CMSampleBuffer.h>
-#import "Frame.h"
+#import "FrameOld.h"
 
 using namespace facebook;
 

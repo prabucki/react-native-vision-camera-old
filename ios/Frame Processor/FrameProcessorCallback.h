@@ -9,6 +9,6 @@
 #pragma once
 
 #import <Foundation/Foundation.h>
-#import "Frame.h"
+#import "FrameOld.h"
 
 typedef void (^FrameProcessorCallback) (Frame* frame);

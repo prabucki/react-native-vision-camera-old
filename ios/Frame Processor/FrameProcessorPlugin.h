@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FrameProcessorPluginRegistryOld.h"
-#import "Frame.h"
+#import "FrameOld.h"
 
 @protocol FrameProcessorPluginBase
 + (id) callback:(Frame*)frame withArgs:(NSArray<id>*)args;

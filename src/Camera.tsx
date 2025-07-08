@@ -5,7 +5,7 @@ import type { CameraDevice } from './CameraDevice';
 import type { ErrorWithCause } from './CameraError';
 import { CameraCaptureError, CameraRuntimeError, tryParseNativeCameraError, isErrorWithCause } from './CameraError';
 import type { CameraProps } from './CameraProps';
-import type { Frame } from './Frame';
+import type { FrameOld } from './FrameOld';
 import type { PhotoFile, TakePhotoOptions } from './PhotoFile';
 import type { Point } from './Point';
 import type { TakeSnapshotOptions } from './Snapshot';
@@ -76,7 +76,7 @@ export class Camera extends React.PureComponent<CameraProps> {
   static displayName = 'Camera';
   /** @internal */
   displayName = Camera.displayName;
-  private lastFrameProcessor: ((frame: Frame) => void) | undefined;
+  private lastFrameProcessor: ((frame: FrameOld) => void) | undefined;
   private isNativeViewMounted = false;
 
   private readonly ref: React.RefObject<RefType>;
@@ -434,7 +434,7 @@ export class Camera extends React.PureComponent<CameraProps> {
     }
   }
 
-  private setFrameProcessor(frameProcessor: (frame: Frame) => void): void {
+  private setFrameProcessor(frameProcessor: (frame: FrameOld) => void): void {
     this.assertFrameProcessorsEnabled();
     // @ts-expect-error JSI functions aren't typed
     global.setFrameProcessor(this.handle, FrameProcessorContext.createWorklet(frameProcessor), FrameProcessorContext.workletRuntime);

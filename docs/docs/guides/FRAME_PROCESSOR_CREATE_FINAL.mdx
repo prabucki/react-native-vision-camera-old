@@ -9,12 +9,12 @@ sidebar_label: Finish creating your Frame Processor Plugin
 To make the Frame Processor Plugin available to the Frame Processor Worklet Runtime, create the following wrapper function in JS/TS:
 
 ```ts
-import type { Frame } from 'react-native-vision-camera-old'
+import type { FrameOld } from 'react-native-vision-camera-old'
 
 /**
  * Scans QR codes.
  */
-export function scanQRCodes(frame: Frame): string[] {
+export function scanQRCodes(frame: FrameOld): string[] {
   'worklet'
   return __scanQRCodes(frame)
 }

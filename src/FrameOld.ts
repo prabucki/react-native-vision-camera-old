@@ -1,7 +1,7 @@
 /**
  * A single frame, as seen by the camera.
  */
-export interface Frame {
+export interface FrameOld {
   /**
    * Whether the underlying buffer is still valid or not. The buffer will be released after the frame processor returns, or `close()` is called.
    */

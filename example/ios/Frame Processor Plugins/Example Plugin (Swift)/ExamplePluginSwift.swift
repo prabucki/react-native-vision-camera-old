@@ -12,7 +12,7 @@ import Vision
 @objc(ExamplePluginSwift)
 public class ExamplePluginSwift: NSObject, FrameProcessorPluginBase {
     @objc
-    public static func callback(_ frame: Frame!, withArgs args: [Any]!) -> Any! {
+    public static func callback(_ frame: FrameOld!, withArgs args: [Any]!) -> Any! {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer) else {
             return nil
         }

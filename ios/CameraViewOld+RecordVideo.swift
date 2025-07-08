@@ -223,7 +223,7 @@ extension CameraViewOld: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
             self.isRunningFrameProcessor = true
 
             let perfSample = self.frameProcessorPerformanceDataCollector.beginPerformanceSampleCollection()
-            let frame = Frame(buffer: sampleBuffer, orientation: self.bufferOrientation)
+            let frame = FrameOld(buffer: sampleBuffer, orientation: self.bufferOrientation)
             frameProcessor(frame)
             perfSample.endPerformanceSampleCollection()
 

@@ -2,7 +2,7 @@ import type { ViewProps } from 'react-native';
 import type { CameraDevice, CameraDeviceFormat, ColorSpace, VideoStabilizationMode } from './CameraDevice';
 import type { CameraRuntimeError } from './CameraError';
 import type { CameraPreset } from './CameraPreset';
-import type { Frame } from './Frame';
+import type { FrameOld } from './FrameOld';
 
 export interface FrameProcessorPerformanceSuggestion {
   type: 'can-use-higher-fps' | 'should-use-lower-fps';

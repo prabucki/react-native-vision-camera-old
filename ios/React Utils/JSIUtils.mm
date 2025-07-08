@@ -76,7 +76,7 @@ jsi::Value convertObjCObjectToJSIValue(jsi::Runtime &runtime, id value)
     return convertNSArrayToJSIArray(runtime, (NSArray *)value);
   } else if (value == (id)kCFNull) {
     return jsi::Value::null();
-  } else if ([value isKindOfClass:[Frame class]]) {
+  } else if ([value isKindOfClass:[FrameOld class]]) {
     auto frameHostObject = std::make_shared<FrameHostObjectOld>((FrameOld*)value);
     return jsi::Object::createFromHostObject(runtime, frameHostObject);
   }

@@ -5,6 +5,7 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.common.annotations.FrameworkAPI
 import com.facebook.react.turbomodule.core.CallInvokerHolderImpl
 import com.facebook.react.uimanager.UIManagerHelper
 import com.mrousavy.old.camera.CameraViewOld
@@ -12,6 +13,7 @@ import com.mrousavy.old.camera.ViewNotFoundError
 import java.lang.ref.WeakReference
 import java.util.concurrent.ExecutorService
 
+@OptIn(FrameworkAPI::class)
 @Suppress("KotlinJniMissingFunction") // I use fbjni, Android Studio is not smart enough to realize that.
 class FrameProcessorRuntimeManagerOld(context: ReactApplicationContext, frameProcessorThread: ExecutorService) {
   companion object {

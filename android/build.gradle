@@ -321,6 +321,8 @@ dependencies {
   implementation "androidx.camera:camera-extensions:1.1.0"
 
   implementation "androidx.exifinterface:exifinterface:1.3.3"
+
+  implementation "androidx.lifecycle:lifecycle-common:2.8.7"
 }
 
 
@@ -334,7 +336,7 @@ if (ENABLE_FRAME_PROCESSORS) {
   def thirdPartyVersions = new Properties()
   thirdPartyVersions.load(new FileInputStream(thirdPartyVersionsFile))
 
-  def BOOST_VERSION = thirdPartyVersions["BOOST_VERSION"]
+  def BOOST_VERSION = thirdPartyVersions["BOOST_VERSION"] ?: "1_83_0"
   def boost_file = new File(downloadsDir, "boost_${BOOST_VERSION}.tar.gz")
   def DOUBLE_CONVERSION_VERSION = thirdPartyVersions["DOUBLE_CONVERSION_VERSION"]
   def double_conversion_file = new File(downloadsDir, "double-conversion-${DOUBLE_CONVERSION_VERSION}.tar.gz")

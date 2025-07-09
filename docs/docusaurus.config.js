@@ -1,24 +1,24 @@
 module.exports = {
-  title: 'VisionCamera',
+  title: 'VisionCameraOld',
   tagline: '📸 The Camera library that sees the vision.',
-  url: 'https://react-native-vision-camera.com',
+  url: 'https://react-native-vision-camera-old.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
   favicon: '/favicon.ico',
   organizationName: 'mrousavy',
-  projectName: 'react-native-vision-camera',
+  projectName: 'react-native-vision-camera-old',
   themeConfig: {
     algolia: {
       appId: 'HBHXBT6T9E',
       apiKey: '64bc77eda92b7efcb7003b56815f1113',
-      indexName: 'react-native-vision-camera',
+      indexName: 'react-native-vision-camera-old',
     },
     prism: {
       additionalLanguages: ['swift', 'java', 'kotlin'],
     },
     navbar: {
-      title: 'VisionCamera',
+      title: 'VisionCameraOld',
       logo: {
         alt: 'Logo',
         src: './android-chrome-192x192.png',
@@ -35,12 +35,12 @@ module.exports = {
           position: 'left'
         },
         {
-          href: 'https://github.com/mrousavy/react-native-vision-camera/tree/main/example',
+          href: 'https://github.com/mrousavy/react-native-vision-camera-old/tree/main/example',
           label: 'Example App',
           position: 'left'
         },
         {
-          href: 'https://github.com/mrousavy/react-native-vision-camera',
+          href: 'https://github.com/mrousavy/react-native-vision-camera-old',
           label: 'GitHub',
           position: 'right',
         },
@@ -62,7 +62,7 @@ module.exports = {
             },
             {
               label: 'Example App',
-              href: 'https://github.com/mrousavy/react-native-vision-camera/tree/main/example',
+              href: 'https://github.com/mrousavy/react-native-vision-camera-old/tree/main/example',
             },
           ],
         },
@@ -71,7 +71,7 @@ module.exports = {
           items: [
             {
               label: 'GitHub discussions',
-              href: 'https://github.com/mrousavy/react-native-vision-camera/discussions',
+              href: 'https://github.com/mrousavy/react-native-vision-camera-old/discussions',
             },
             {
               label: 'Twitter (@mrousavy)',
@@ -84,7 +84,7 @@ module.exports = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/mrousavy/react-native-vision-camera',
+              href: 'https://github.com/mrousavy/react-native-vision-camera-old',
             },
             {
               label: 'Marc\'s Portfolio',
@@ -103,7 +103,7 @@ module.exports = {
       },
       {
         name: 'og:title',
-        content: 'VisionCamera Documentation'
+        content: 'VisionCameraOld Documentation'
       },
       {
         name: 'og:type',
@@ -121,7 +121,7 @@ module.exports = {
     announcementBar: {
       id: 'support_us',
       content:
-        '<b>I am currently working on <a target="_blank" href="https://github.com/mrousavy/react-native-vision-camera/issues/1376">VisionCamera V3 ✨</a> which brings a lot of new features and a full rewrite on Android. Please consider <a target="_blank" href="https://github.com/sponsors/mrousavy">sponsoring me on GitHub</a> so I can work on this.</b>',
+        '<b>I am currently working on <a target="_blank" href="https://github.com/mrousavy/react-native-vision-camera-old/issues/1376">VisionCameraOld V3 ✨</a> which brings a lot of new features and a full rewrite on Android. Please consider <a target="_blank" href="https://github.com/sponsors/mrousavy">sponsoring me on GitHub</a> so I can work on this.</b>',
       backgroundColor: '#ff5c5c',
       textColor: '#ffffff',
       isCloseable: false,
@@ -139,7 +139,7 @@ module.exports = {
         },
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/mrousavy/react-native-vision-camera/edit/main/docs/',
+          editUrl: 'https://github.com/mrousavy/react-native-vision-camera-old/edit/main/docs/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -155,7 +155,7 @@ module.exports = {
     [
       'docusaurus-plugin-typedoc',
       {
-        name: 'VisionCamera',
+        name: 'VisionCameraOld',
         entryPoints: ['../src'],
         exclude: "../src/index.ts",
         tsconfig: '../tsconfig.json',

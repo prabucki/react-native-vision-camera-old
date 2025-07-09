@@ -1,6 +1,6 @@
 //
 //  JSConsoleHelper.mm
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Created by Marc Rousavy on 02.06.21.
 //  Copyright © 2021 mrousavy. All rights reserved.
@@ -36,9 +36,9 @@
   if (!cxxBridge.runtime) {
     return nil;
   }
-  
+
   facebook::jsi::Runtime* jsiRuntime = (facebook::jsi::Runtime*)cxxBridge.runtime;
-  
+
   return ^(RCTLogLevel level, NSString* message) {
     [bridge runOnJS:^{
       if (jsiRuntime != nullptr) {

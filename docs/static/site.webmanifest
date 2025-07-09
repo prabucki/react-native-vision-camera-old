@@ -1,6 +1,6 @@
 {
-  "name": "VisionCamera",
-  "short_name": "VisionCamera",
+  "name": "VisionCameraOld",
+  "short_name": "VisionCameraOld",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

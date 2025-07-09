@@ -12,7 +12,7 @@ import Foundation
 
 enum ReactLogger {
   /**
-   Log a message to the console in the format of `VisionCamera.[caller-function-name]: [message]`
+   Log a message to the console in the format of `VisionCameraOld.[caller-function-name]: [message]`
 
    @discussion
    If the global ConsoleLogFunction is set, this function also logs to the JavaScript console (console.log, console.trace, console.warn or console.error)
@@ -26,7 +26,7 @@ enum ReactLogger {
                   _ lineNumber: Int = #line,
                   _ function: String = #function) {
     #if DEBUG
-      RCTDefaultLogFunction(level, RCTLogSource.native, file, lineNumber as NSNumber, "VisionCamera.\(function): \(message)")
+      RCTDefaultLogFunction(level, RCTLogSource.native, file, lineNumber as NSNumber, "VisionCameraOld.\(function): \(message)")
     #endif
   }
 }

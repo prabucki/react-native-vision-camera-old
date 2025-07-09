@@ -1,6 +1,6 @@
 //
 //  AVCaptureSession+setVideoStabilizationMode.swift
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Created by Marc Rousavy on 02.06.21.
 //  Copyright © 2021 Facebook. All rights reserved.

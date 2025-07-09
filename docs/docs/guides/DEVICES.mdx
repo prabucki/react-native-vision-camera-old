@@ -77,7 +77,7 @@ Make sure to be careful when filtering out unneeded camera devices, since not ev
 
 ### The `useCameraDevices` hook
 
-VisionCamera provides a hook to make camera device selection a lot easier. You can specify a device type to only find devices with the given type:
+VisionCameraOld provides a hook to make camera device selection a lot easier. You can specify a device type to only find devices with the given type:
 
 ```tsx
 function App() {
@@ -131,7 +131,7 @@ If this property is `false`, you can either enable `video`, or add a `frameProce
 * An app that uses **Frame Processors** and supports **taking photos** and **videos** (e.g. Snapchat, Instagram) only works on Camera devices where `supportsParallelVideoProcessing` is `true`. (iPhones and newer Android Phones)
 
 :::note
-Actually the limitation also affects the `photo` feature, but VisionCamera will automatically fall-back to **Snapshot capture** if you are trying to use multiple features (`photo` + `video` + `frameProcessor`) and they are not natively supported. (See ["Taking Snapshots"](/docs/guides/capturing#taking-snapshots))
+Actually the limitation also affects the `photo` feature, but VisionCameraOld will automatically fall-back to **Snapshot capture** if you are trying to use multiple features (`photo` + `video` + `frameProcessor`) and they are not natively supported. (See ["Taking Snapshots"](/docs/guides/capturing#taking-snapshots))
 :::
 
 <br />

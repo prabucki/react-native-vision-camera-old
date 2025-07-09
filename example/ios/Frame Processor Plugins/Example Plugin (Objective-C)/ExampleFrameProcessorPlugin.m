@@ -1,13 +1,13 @@
 //
 //  ExampleFrameProcessorPlugin.m
-//  VisionCameraExample
+//  VisionCameraOldExample
 //
 //  Created by Marc Rousavy on 01.05.21.
 //
 
 #import <Foundation/Foundation.h>
-#import <VisionCamera/FrameProcessorPlugin.h>
-#import <VisionCamera/Frame.h>
+#import <VisionCameraOld/FrameProcessorPlugin.h>
+#import <VisionCameraOld/FrameOld.h>
 
 // Example for an Objective-C Frame Processor plugin
 
@@ -16,7 +16,7 @@
 
 @implementation ExampleFrameProcessorPlugin
 
-static inline id example_plugin(Frame* frame, NSArray* arguments) {
+static inline id example_plugin(FrameOld* frame, NSArray* arguments) {
   CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer);
   NSLog(@"ExamplePlugin: %zu x %zu Image. Logging %lu parameters:", CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer), (unsigned long)arguments.count);
 

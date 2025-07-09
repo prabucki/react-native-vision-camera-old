@@ -1,6 +1,6 @@
 //
 //  FourCharCode+toString.swift
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Created by Thomas Coldwell on 28/10/2021.
 //  Based off this SO answer: https://stackoverflow.com/a/25625744

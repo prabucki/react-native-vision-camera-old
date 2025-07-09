@@ -29,14 +29,14 @@
 To try the playground out for yourself, run the following commands:
 
 ```sh
-git clone https://github.com/mrousavy/react-native-vision-camera
-cd react-native-vision-camera
+git clone https://github.com/mrousavy/react-native-vision-camera-old
+cd react-native-vision-camera-old
 yarn bootstrap
 ```
 
 ### iOS
 
-1. Open the `example/ios/VisionCameraExample.xcworkspace` file with Xcode
+1. Open the `example/ios/VisionCameraOldExample.xcworkspace` file with Xcode
 2. Change signing configuration to your developer account
 3. Select your device in the devices drop-down
 4. Hit run

@@ -23,7 +23,7 @@ int JImageProxy::getHeight() const {
 }
 
 alias_ref<JClass> getUtilsClass() {
-  static const auto ImageProxyUtilsClass = findClassStatic("com/mrousavy/camera/frameprocessor/ImageProxyUtils");
+  static const auto ImageProxyUtilsClass = findClassStatic("com/mrousavy/old/camera/frameprocessor/ImageProxyUtils");
   return ImageProxyUtilsClass;
 }
 

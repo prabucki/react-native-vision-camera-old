@@ -6,8 +6,8 @@ body:
   - type: textarea
     attributes:
       label: What feature or enhancement are you suggesting?
-      description: Explain what the feature or enhancement you're suggesting is, how it might improve VisionCamera and what it's pros and cons are.
-      placeholder: I think it would be great to have support for rotation in VisionCamera.
+      description: Explain what the feature or enhancement you're suggesting is, how it might improve VisionCameraOld and what it's pros and cons are.
+      placeholder: I think it would be great to have support for rotation in VisionCameraOld.
     validations:
       required: true
   - type: dropdown
@@ -32,7 +32,7 @@ body:
       label: Additional information
       description: Please check all the boxes that apply
       options:
-        - label: I agree to follow this project's [Code of Conduct](https://github.com/mrousavy/react-native-vision-camera/blob/main/CODE_OF_CONDUCT.md)
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/mrousavy/react-native-vision-camera-old/blob/main/CODE_OF_CONDUCT.md)
           required: true
-        - label: I searched for [similar feature requests in this repository](https://github.com/mrousavy/react-native-vision-camera/issues?q=is%3Aopen+is%3Aissue+label%3A%22✨+enhancement%22) and found none.
+        - label: I searched for [similar feature requests in this repository](https://github.com/mrousavy/react-native-vision-camera-old/issues?q=is%3Aopen+is%3Aissue+label%3A%22✨+enhancement%22) and found none.
           required: true

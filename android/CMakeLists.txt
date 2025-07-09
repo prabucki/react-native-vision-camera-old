@@ -1,4 +1,4 @@
-project(VisionCamera)
+project(VisionCameraOld)
 cmake_minimum_required(VERSION 3.4.1)
 
 set (CMAKE_VERBOSE_MAKEFILE ON)
@@ -12,7 +12,7 @@ else()
 endif()
 
 
-set (PACKAGE_NAME "VisionCamera")
+set (PACKAGE_NAME "VisionCameraOld")
 set (BUILD_DIR ${CMAKE_SOURCE_DIR}/build)
 if(${REACT_NATIVE_VERSION} GREATER_EQUAL 71)
         # Consume shared libraries and headers from prefabs
@@ -21,7 +21,7 @@ if(${REACT_NATIVE_VERSION} GREATER_EQUAL 71)
 else()
         set (RN_SO_DIR ${NODE_MODULES_DIR}/react-native/ReactAndroid/src/main/jni/first-party/react/jni)
 endif()
-# VisionCamera shared
+# VisionCameraOld shared
 
 if(${REACT_NATIVE_VERSION} LESS 66)
         set (
@@ -37,12 +37,12 @@ endif()
 add_library(
         ${PACKAGE_NAME}
         SHARED
-        src/main/cpp/VisionCamera.cpp
+        src/main/cpp/VisionCameraOld.cpp
         src/main/cpp/JSIJNIConversion.cpp
-        src/main/cpp/FrameHostObject.cpp
-        src/main/cpp/FrameProcessorRuntimeManager.cpp
-        src/main/cpp/CameraView.cpp
-        src/main/cpp/VisionCameraScheduler.cpp
+        src/main/cpp/FrameHostObjectOld.cpp
+        src/main/cpp/FrameProcessorRuntimeManagerOld.cpp
+        src/main/cpp/CameraViewOld.cpp
+        src/main/cpp/VisionCameraOldScheduler.cpp
         src/main/cpp/java-bindings/JFrameProcessorPlugin.cpp
         src/main/cpp/java-bindings/JImageProxy.cpp
         src/main/cpp/java-bindings/JHashMap.cpp
@@ -213,7 +213,7 @@ find_library(
 )
 
 # linking
-message(WARNING "VisionCamera linking: FOR_HERMES=${FOR_HERMES}")
+message(WARNING "VisionCameraOld linking: FOR_HERMES=${FOR_HERMES}")
 target_link_libraries(
         ${PACKAGE_NAME}
         ${LOG_LIB}

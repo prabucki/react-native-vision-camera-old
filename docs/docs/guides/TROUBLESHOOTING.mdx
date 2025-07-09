@@ -21,11 +21,11 @@ Before opening an issue, make sure you try the following:
    npm i  # or "yarn"
    cd ios && pod repo update && pod update && pod install
    ```
-2. Check your minimum iOS version. VisionCamera requires a minimum iOS version of **11.0**.
+2. Check your minimum iOS version. VisionCameraOld requires a minimum iOS version of **11.0**.
    1. Open your `Podfile`
    2. Make sure `platform :ios` is set to `11.0` or higher
    3. Make sure `iOS Deployment Target` is set to `11.0` or higher (`IPHONEOS_DEPLOYMENT_TARGET` in `project.pbxproj`)
-3. Check your Swift version. VisionCamera requires a minimum Swift version of **5.2**.
+3. Check your Swift version. VisionCameraOld requires a minimum Swift version of **5.2**.
    1. Open `project.pbxproj` in a Text Editor
    2. If the `LIBRARY_SEARCH_PATH` value is set, make sure there is no explicit reference to Swift-5.0. If there is, remove it. See [this StackOverflow answer](https://stackoverflow.com/a/66281846/1123156).
    3. If the `SWIFT_VERSION` value is set, make sure it is set to `5.2` or higher.
@@ -49,7 +49,7 @@ Before opening an issue, make sure you try the following:
    ```
 2. Since the Android implementation uses the not-yet fully stable **CameraX** API, make sure you've browsed the [CameraX issue tracker](https://issuetracker.google.com/issues?q=componentid:618491%20status:open) to find out if your issue is a limitation by the **CameraX** library even I cannot get around.
 3. Make sure you have installed the [Android NDK](https://developer.android.com/ndk).
-4. Make sure your minimum SDK version is **21 or higher**, and target SDK version is **31 or higher**. See [the example's `build.gradle`](https://github.com/mrousavy/react-native-vision-camera/blob/main/example/android/build.gradle#L5-L10) for reference.
+4. Make sure your minimum SDK version is **21 or higher**, and target SDK version is **31 or higher**. See [the example's `build.gradle`](https://github.com/mrousavy/react-native-vision-camera-old/blob/main/example/android/build.gradle#L5-L10) for reference.
    1. Open your `build.gradle`
    2. Set `buildToolsVersion` to `30.0.0` or higher
    3. Set `compileSdkVersion` to `31` or higher
@@ -70,4 +70,4 @@ Before opening an issue, make sure you try the following:
 
 ## Issues
 
-If nothing has helped so far, try browsing the [GitHub issues](https://github.com/mrousavy/react-native-vision-camera/issues?q=is%3Aissue). If your issue doesn't exist, [create a new one](https://github.com/mrousavy/react-native-vision-camera/issues/new/choose). Make sure to fill out the template and include as many details as possible. Also try to reproduce the issue in the [example app](https://github.com/mrousavy/react-native-vision-camera/blob/main/example).
+If nothing has helped so far, try browsing the [GitHub issues](https://github.com/mrousavy/react-native-vision-camera-old/issues?q=is%3Aissue). If your issue doesn't exist, [create a new one](https://github.com/mrousavy/react-native-vision-camera-old/issues/new/choose). Make sure to fill out the template and include as many details as possible. Also try to reproduce the issue in the [example app](https://github.com/mrousavy/react-native-vision-camera-old/blob/main/example).

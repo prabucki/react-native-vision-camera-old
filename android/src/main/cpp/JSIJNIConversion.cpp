@@ -20,7 +20,7 @@
 #include <jsi/JSIDynamic.h>
 #include <folly/dynamic.h>
 
-#include "FrameHostObject.h"
+#include "FrameHostObjectOld.h"
 #include "java-bindings/JImageProxy.h"
 #include "java-bindings/JArrayList.h"
 #include "java-bindings/JHashMap.h"
@@ -69,7 +69,7 @@ jobject JSIJNIConversion::convertJSIValueToJNIObject(jsi::Runtime &runtime, cons
       // jsi::HostObject
 
       auto boxedHostObject = object.getHostObject(runtime);
-      auto hostObject = dynamic_cast<FrameHostObject*>(boxedHostObject.get());
+      auto hostObject = dynamic_cast<FrameHostObjectOld*>(boxedHostObject.get());
       if (hostObject != nullptr) {
         // return jni local_ref to the JImageProxy
         return hostObject->frame.get();
@@ -186,13 +186,13 @@ jsi::Value JSIJNIConversion::convertJNIObjectToJSIValue(jsi::Runtime &runtime, c
     auto frame = static_ref_cast<JImageProxy>(object);
 
     // box into HostObject
-    auto hostObject = std::make_shared<FrameHostObject>(frame);
+    auto hostObject = std::make_shared<FrameHostObjectOld>(frame);
     return jsi::Object::createFromHostObject(runtime, hostObject);
   }
 
   auto type = object->getClass()->toString();
   auto message = "Received unknown JNI type \"" + type + "\"! Cannot convert to jsi::Value.";
-  __android_log_write(ANDROID_LOG_ERROR, "VisionCamera", message.c_str());
+  __android_log_write(ANDROID_LOG_ERROR, "VisionCameraOld", message.c_str());
   throw std::runtime_error(message);
 }
 

@@ -1,6 +1,6 @@
 //
 //  JSIUtils.mm
-//  VisionCamera
+//  VisionCameraOld
 //
 //  Forked and Adjusted by Marc Rousavy on 02.05.21.
 //  Copyright © 2021 mrousavy & Facebook. All rights reserved.
@@ -20,8 +20,8 @@
 #import <ReactCommon/CallInvoker.h>
 #import <React/RCTBridge.h>
 #import <ReactCommon/TurboModuleUtils.h>
-#import "../Frame Processor/Frame.h"
-#import "../Frame Processor/FrameHostObject.h"
+#import "../Frame Processor/FrameOld.h"
+#import "../Frame Processor/FrameHostObjectOld.h"
 
 using namespace facebook;
 using namespace facebook::react;
@@ -76,8 +76,8 @@ jsi::Value convertObjCObjectToJSIValue(jsi::Runtime &runtime, id value)
     return convertNSArrayToJSIArray(runtime, (NSArray *)value);
   } else if (value == (id)kCFNull) {
     return jsi::Value::null();
-  } else if ([value isKindOfClass:[Frame class]]) {
-    auto frameHostObject = std::make_shared<FrameHostObject>((Frame*)value);
+  } else if ([value isKindOfClass:[FrameOld class]]) {
+    auto frameHostObject = std::make_shared<FrameHostObjectOld>((FrameOld*)value);
     return jsi::Object::createFromHostObject(runtime, frameHostObject);
   }
   return jsi::Value::undefined();
@@ -159,7 +159,7 @@ id convertJSIValueToObjCObject(jsi::Runtime &runtime, const jsi::Value &value, s
     }
     if (o.isHostObject(runtime)) {
       auto hostObject = o.asHostObject(runtime);
-      auto frame = dynamic_cast<FrameHostObject*>(hostObject.get());
+      auto frame = dynamic_cast<FrameHostObjectOld*>(hostObject.get());
       if (frame != nullptr) {
         return frame->frame;
       }

@@ -1,6 +1,6 @@
 {
-  "name": "react-native-vision-camera-example",
-  "description": "Example app for react-native-vision-camera",
+  "name": "react-native-vision-camera-old-example",
+  "description": "Example app for react-native-vision-camera-old",
   "version": "0.0.1",
   "private": true,
   "scripts": {

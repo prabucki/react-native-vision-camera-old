@@ -8,7 +8,7 @@ try {
   if (reanimated.createWorkletRuntime == null) {
     console.warn("Frame Processors are disabled because you're using an incompatible version of Reanimated.")
   }
-  workletRuntime = reanimated.createWorkletRuntime('VisionCamera')
+  workletRuntime = reanimated.createWorkletRuntime('VisionCameraOld')
   createWorklet = reanimated.makeShareableCloneRecursive
 } catch {
   // Frame Processors are not enabled

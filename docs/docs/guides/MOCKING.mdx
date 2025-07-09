@@ -39,32 +39,32 @@ module.exports = {
 
 ### Create proxy for original and mocked modules
 
-   1. Create a new folder `vision-camera` anywhere in your project.
-   2. Inside that folder, create `vision-camera.js` and `vision-camera.e2e.js`.
-   3. Inside `vision-camera.js`, export the original react native modules you need to mock, and
-   inside `vision-camera.e2e.js` export the mocked modules.
+   1. Create a new folder `vision-camera-old` anywhere in your project.
+   2. Inside that folder, create `vision-camera-old.js` and `vision-camera-old.e2e.js`.
+   3. Inside `vision-camera-old.js`, export the original react native modules you need to mock, and
+   inside `vision-camera-old.e2e.js` export the mocked modules.
 
    In this example, several functions of the modules `Camera` and `sortDevices` are mocked.
-   Define your mocks following the [original definitions](https://github.com/mrousavy/react-native-vision-camera/tree/main/src).
+   Define your mocks following the [original definitions](https://github.com/mrousavy/react-native-vision-camera-old/tree/main/src).
 
    ```js
-    // vision-camera.js
+    // vision-camera-old.js
 
-    import { Camera, sortDevices } from 'react-native-vision-camera';
+    import { Camera, sortDevices } from 'react-native-vision-camera-old';
 
-    export const VisionCamera = Camera;
-    export const visionCameraSortDevices = sortDevices;
+    export const VisionCameraOld = Camera;
+    export const visionCameraOldSortDevices = sortDevices;
    ```
 
    ```js
-    // vision-camera.e2e.js
+    // vision-camera-old.e2e.js
 
     import React from 'react';
     import RNFS, { writeFile } from 'react-native-fs';
 
-    console.log('[DETOX] Using mocked react-native-vision-camera');
+    console.log('[DETOX] Using mocked react-native-vision-camera-old');
 
-    export class VisionCamera extends React.PureComponent {
+    export class VisionCameraOld extends React.PureComponent {
       static async getAvailableCameraDevices() {
         return (
           [
@@ -97,7 +97,7 @@ module.exports = {
       }
     }
 
-    export const visionCameraSortDevices = (_left, _right) => 1;
+    export const visionCameraOldSortDevices = (_left, _right) => 1;
    ```
 
    These mocked modules allows us to get authorized camera permissions, get one back camera
@@ -110,10 +110,10 @@ we must reference the proxy module.
 
 ```ts
 // before
-import { Camera } from 'react-native-vision-camera';
+import { Camera } from 'react-native-vision-camera-old';
 
 // now
-import { VisionCamera } from '/your_path_to_created_folder/vision-camera/vision-camera';
+import { VisionCameraOld } from '/your_path_to_created_folder/vision-camera-old/vision-camera-old';
 ```
 
 ### Trigger
@@ -128,9 +128,9 @@ RN_SRC_EXT=e2e.js ./gradlew assembleRelease
 ```
 
 On your simulator, with debug mode enabled, you should see
-`"[DETOX] Using mocked react-native-vision-camera"`
+`"[DETOX] Using mocked react-native-vision-camera-old"`
 
 
 ## Issues
 
-If testing doesn't work, try browsing the [GitHub issues](https://github.com/mrousavy/react-native-vision-camera/issues?q=is%3Aissue). If your issue doesn't exist, [create a new one](https://github.com/mrousavy/react-native-vision-camera/issues/new/choose). Make sure to fill out the template and include as many details as possible.
+If testing doesn't work, try browsing the [GitHub issues](https://github.com/mrousavy/react-native-vision-camera-old/issues?q=is%3Aissue). If your issue doesn't exist, [create a new one](https://github.com/mrousavy/react-native-vision-camera-old/issues/new/choose). Make sure to fill out the template and include as many details as possible.

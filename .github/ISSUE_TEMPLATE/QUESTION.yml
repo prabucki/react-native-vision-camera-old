@@ -17,8 +17,8 @@ body:
       placeholder: I tried to use `Camera.takePhoto()`
   - type: input
     attributes:
-      label: VisionCamera Version
-      description: Which version of react-native-vision-camera are you using?
+      label: VisionCameraOld Version
+      description: Which version of react-native-vision-camera-old are you using?
       placeholder: ex. 2.0.1-beta.1
     validations:
       required: true
@@ -28,9 +28,9 @@ body:
       description: Please check all the boxes that apply
       options:
         - label: I am using Expo
-        - label: I have read the [Troubleshooting Guide](https://react-native-vision-camera.com/docs/guides/troubleshooting)
+        - label: I have read the [Troubleshooting Guide](https://react-native-vision-camera-old.com/docs/guides/troubleshooting)
           required: true
-        - label: I agree to follow this project's [Code of Conduct](https://github.com/mrousavy/react-native-vision-camera/blob/main/CODE_OF_CONDUCT.md)
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/mrousavy/react-native-vision-camera-old/blob/main/CODE_OF_CONDUCT.md)
           required: true
-        - label: I searched for similar questions [in the issues page](https://github.com/mrousavy/react-native-vision-camera/issues?q=is%3Aopen+is%3Aissue+label%3A%22❓+question%22) as well as [in the discussions page](https://github.com/mrousavy/react-native-vision-camera/discussions) and found none.
+        - label: I searched for similar questions [in the issues page](https://github.com/mrousavy/react-native-vision-camera-old/issues?q=is%3Aopen+is%3Aissue+label%3A%22❓+question%22) as well as [in the discussions page](https://github.com/mrousavy/react-native-vision-camera-old/discussions) and found none.
           required: true

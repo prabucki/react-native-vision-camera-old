@@ -26,4 +26,4 @@ This command generates static content into the `build` directory and can be serv
 
 ## Deployment
 
-Docs are deployed to https://react-native-vision-camera.com using Next.js/Vercel.
+Docs are deployed to https://react-native-vision-camera-old.com using Next.js/Vercel.

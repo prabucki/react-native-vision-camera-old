@@ -14,7 +14,7 @@ static def findNodeModules(baseDir) {
     }
     basePath = basePath.getParent()
   }
-  throw new GradleException("VisionCamera: Failed to find node_modules/ path!")
+  throw new GradleException("VisionCameraOld: Failed to find node_modules/ path!")
 }
 static def findNodeModulePath(baseDir, packageName) {
     def basePath = baseDir.toPath().normalize()
@@ -44,7 +44,7 @@ def reactNativeArchitectures() {
 }
 
 def nodeModules = findNodeModules(projectDir)
-logger.warn("VisionCamera: node_modules/ found at: ${nodeModules}")
+logger.warn("VisionCameraOld: node_modules/ found at: ${nodeModules}")
 def reactNative = new File("$nodeModules/react-native")
 def CMAKE_NODE_MODULES_DIR = project.getProjectDir().getParentFile().getParent()
 def reactProperties = new Properties()
@@ -69,11 +69,11 @@ def jsRuntimeDir = {
       return Paths.get(CMAKE_NODE_MODULES_DIR, "react-native", "ReactCommon", "jsi")
   }
 }.call()
-logger.warn("VisionCamera: Building with ${FOR_HERMES ? "Hermes" : "JSC"}...")
+logger.warn("VisionCameraOld: Building with ${FOR_HERMES ? "Hermes" : "JSC"}...")
 
 buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
-  def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['VisionCamera_kotlinVersion']
+  def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['VisionCameraOld_kotlinVersion']
 
   repositories {
     google()
@@ -96,11 +96,11 @@ apply plugin: 'de.undercouch.download'
 apply plugin: 'kotlin-android'
 
 def getExtOrDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['VisionCamera_' + name]
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['VisionCameraOld_' + name]
 }
 
 def getExtOrIntegerDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties['VisionCamera_' + name]).toInteger()
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties['VisionCameraOld_' + name]).toInteger()
 }
 
 def resolveBuildType() {
@@ -119,12 +119,12 @@ def disableFrameProcessors = rootProject.ext.has("disableFrameProcessors") ? roo
 def ENABLE_FRAME_PROCESSORS = hasReanimated3 && !disableFrameProcessors
 
 if (ENABLE_FRAME_PROCESSORS) {
-  logger.warn("VisionCamera: Frame Processors are enabled! Building C++ part...")
+  logger.warn("VisionCameraOld: Frame Processors are enabled! Building C++ part...")
 } else {
   if (disableFrameProcessors) {
-    logger.warn("VisionCamera: Frame Processors are disabled because the user explicitly disabled it ('disableFrameProcessors=${disableFrameProcessors}'). C++ part will not be built.")
+    logger.warn("VisionCameraOld: Frame Processors are disabled because the user explicitly disabled it ('disableFrameProcessors=${disableFrameProcessors}'). C++ part will not be built.")
   } else if (!hasReanimated3) {
-    logger.warn("VisionCamera: Frame Processors are disabled because Reanimated 3.5.0+ is not installed. C++ part will not be built.")
+    logger.warn("VisionCameraOld: Frame Processors are disabled because Reanimated 3.5.0+ is not installed. C++ part will not be built.")
   }
 }
 

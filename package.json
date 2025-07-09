@@ -1,5 +1,5 @@
 {
-  "name": "react-native-vision-camera",
+  "name": "react-native-vision-camera-old",
   "version": "2.16.8",
   "description": "The Camera library that sees the vision.",
   "main": "lib/commonjs/index",
@@ -21,9 +21,9 @@
     "ios/**/*.mm",
     "ios/**/*.cpp",
     "ios/**/*.swift",
-    "ios/VisionCamera.xcodeproj/project.pbxproj",
+    "ios/VisionCameraOld.xcodeproj/project.pbxproj",
     "app.plugin.js",
-    "VisionCamera.podspec",
+    "VisionCameraOld.podspec",
     "README.md"
   ],
   "scripts": {
@@ -58,13 +58,13 @@
     "qr-code",
     "scanner"
   ],
-  "repository": "https://github.com/mrousavy/react-native-vision-camera",
+  "repository": "https://github.com/mrousavy/react-native-vision-camera-old",
   "author": "Marc Rousavy <marcrousavy@hotmail.com> (https://github.com/mrousavy)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mrousavy/react-native-vision-camera/issues"
+    "url": "https://github.com/mrousavy/react-native-vision-camera-old/issues"
   },
-  "homepage": "https://react-native-vision-camera.com/",
+  "homepage": "https://react-native-vision-camera-old.com/",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

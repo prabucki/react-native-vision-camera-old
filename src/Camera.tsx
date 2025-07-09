@@ -5,7 +5,7 @@ import type { CameraDevice } from './CameraDevice';
 import type { ErrorWithCause } from './CameraError';
 import { CameraCaptureError, CameraRuntimeError, tryParseNativeCameraError, isErrorWithCause } from './CameraError';
 import type { CameraProps } from './CameraProps';
-import type { Frame } from './Frame';
+import type { FrameOld } from './FrameOld';
 import type { PhotoFile, TakePhotoOptions } from './PhotoFile';
 import type { Point } from './Point';
 import type { TakeSnapshotOptions } from './Snapshot';
@@ -21,7 +21,7 @@ interface OnErrorEvent {
   message: string;
   cause?: ErrorWithCause;
 }
-type NativeCameraViewProps = Omit<
+type NativeCameraViewOldProps = Omit<
   CameraProps,
   'device' | 'onInitialized' | 'onError' | 'onFrameProcessorPerformanceSuggestionAvailable' | 'frameProcessor' | 'frameProcessorFps'
 > & {
@@ -33,19 +33,19 @@ type NativeCameraViewProps = Omit<
   onFrameProcessorPerformanceSuggestionAvailable?: (event: NativeSyntheticEvent<FrameProcessorPerformanceSuggestion>) => void;
   onViewReady: () => void;
 };
-type RefType = React.Component<NativeCameraViewProps> & Readonly<NativeMethods>;
+type RefType = React.Component<NativeCameraViewOldProps> & Readonly<NativeMethods>;
 //#endregion
 
-// NativeModules automatically resolves 'CameraView' to 'CameraViewModule'
+// NativeModules automatically resolves 'CameraViewOld' to 'CameraViewOldModule'
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const CameraModule = NativeModules.CameraView;
-if (CameraModule == null) console.error("Camera: Native Module 'CameraView' was null! Did you run pod install?");
+const CameraModule = NativeModules.CameraViewOld;
+if (CameraModule == null) console.error("Camera: Native Module 'CameraViewOld' was null! Did you run pod install?");
 
 //#region Camera Component
 /**
  * ### A powerful `<Camera>` component.
  *
- * Read the [VisionCamera documentation](https://react-native-vision-camera.com/) for more information.
+ * Read the [VisionCameraOld documentation](https://react-native-vision-camera-old.com/) for more information.
  *
  * The `<Camera>` component's most important (and therefore _required_) properties are:
  *
@@ -76,7 +76,7 @@ export class Camera extends React.PureComponent<CameraProps> {
   static displayName = 'Camera';
   /** @internal */
   displayName = Camera.displayName;
-  private lastFrameProcessor: ((frame: Frame) => void) | undefined;
+  private lastFrameProcessor: ((frame: FrameOld) => void) | undefined;
   private isNativeViewMounted = false;
 
   private readonly ref: React.RefObject<RefType>;
@@ -274,9 +274,9 @@ export class Camera extends React.PureComponent<CameraProps> {
    * @param {Point} point The point to focus to. This should be relative to the Camera view's coordinate system,
    * and expressed in Pixel on iOS and Points on Android.
    *  * `(0, 0)` means **top left**.
-   *  * `(CameraView.width, CameraView.height)` means **bottom right**.
+   *  * `(CameraViewOld.width, CameraViewOld.height)` means **bottom right**.
    *
-   * Make sure the value doesn't exceed the CameraView's dimensions.
+   * Make sure the value doesn't exceed the CameraViewOld's dimensions.
    *
    * @throws {@linkcode CameraRuntimeError} When any kind of error occured while focussing. Use the {@linkcode CameraRuntimeError.code | code} property to get the actual error
    * @example
@@ -429,12 +429,12 @@ export class Camera extends React.PureComponent<CameraProps> {
     if (global.setFrameProcessor == null || global.unsetFrameProcessor == null) {
       throw new CameraRuntimeError(
         'frame-processor/unavailable',
-        'Frame Processors are not enabled. See https://react-native-vision-camera.com/docs/guides/troubleshooting',
+        'Frame Processors are not enabled. See https://react-native-vision-camera-old.com/docs/guides/troubleshooting',
       );
     }
   }
 
-  private setFrameProcessor(frameProcessor: (frame: Frame) => void): void {
+  private setFrameProcessor(frameProcessor: (frame: FrameOld) => void): void {
     this.assertFrameProcessorsEnabled();
     // @ts-expect-error JSI functions aren't typed
     global.setFrameProcessor(this.handle, FrameProcessorContext.createWorklet(frameProcessor), FrameProcessorContext.workletRuntime);
@@ -474,7 +474,7 @@ export class Camera extends React.PureComponent<CameraProps> {
     // We remove the big `device` object from the props because we only need to pass `cameraId` to native.
     const { device, frameProcessor, frameProcessorFps, ...props } = this.props;
     return (
-      <NativeCameraView
+      <NativeCameraViewOld
         {...props}
         frameProcessorFps={frameProcessorFps === 'auto' ? -1 : frameProcessorFps}
         cameraId={device.id}
@@ -490,9 +490,9 @@ export class Camera extends React.PureComponent<CameraProps> {
 }
 //#endregion
 
-// requireNativeComponent automatically resolves 'CameraView' to 'CameraViewManager'
-const NativeCameraView = requireNativeComponent<NativeCameraViewProps>(
-  'CameraView',
+// requireNativeComponent automatically resolves 'CameraViewOld' to 'CameraViewOldManager'
+const NativeCameraViewOld = requireNativeComponent<NativeCameraViewOldProps>(
+  'CameraViewOld',
   // @ts-expect-error because the type declarations are kinda wrong, no?
   Camera,
 );

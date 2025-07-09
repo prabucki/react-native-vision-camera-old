@@ -1,8 +1,8 @@
-rootProject.name = 'VisionCameraExample'
+rootProject.name = 'VisionCameraOldExample'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
 
-include ':react-native-vision-camera'
-project(':react-native-vision-camera').projectDir = new File(rootProject.projectDir, '../../android')
+include ':react-native-vision-camera-old'
+project(':react-native-vision-camera-old').projectDir = new File(rootProject.projectDir, '../../android')
 
 includeBuild('../node_modules/react-native-gradle-plugin')

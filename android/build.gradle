@@ -152,7 +152,8 @@ android {
                   "-DREACT_NATIVE_VERSION=${REACT_NATIVE_VERSION}",
                   "-DNODE_MODULES_DIR=${nodeModules}",
                   "-DFOR_HERMES=${FOR_HERMES}",
-                  "-DJS_RUNTIME_DIR=${jsRuntimeDir}"
+                  "-DJS_RUNTIME_DIR=${jsRuntimeDir}",
+                  "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
         }
       }
     }

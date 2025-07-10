@@ -5,7 +5,6 @@ export * from './CameraPosition';
 export * from './CameraPreset';
 export * from './CameraProps';
 export * from './FrameOld';
-export * from './CameraProps';
 export * from './PhotoFile';
 export * from './Point';
 export * from './Snapshot';

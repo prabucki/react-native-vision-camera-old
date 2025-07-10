@@ -28,7 +28,7 @@ class CameraViewOldManager(reactContext: ReactApplicationContext) : ViewGroupMan
       .put("cameraInitialized", MapBuilder.of("registrationName", "onInitialized"))
       .put("cameraError", MapBuilder.of("registrationName", "onError"))
       .put("cameraPerformanceSuggestionAvailable", MapBuilder.of("registrationName", "onFrameProcessorPerformanceSuggestionAvailable"))
-      .build()
+      .build()?.toMutableMap()
   }
 
   override fun getName(): String {

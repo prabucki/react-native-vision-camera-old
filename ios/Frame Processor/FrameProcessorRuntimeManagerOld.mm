@@ -36,11 +36,17 @@
 #import "FrameProcessorCallback.h"
 #import "../React Utils/JSIUtils.h"
 
-// Forward declarations for the Swift classes
-__attribute__((objc_runtime_name("_TtC12VisionCameraOld12CameraQueues")))
+// Import the generated Swift header
+// Import the generated Swift header conditionally
+#if __has_include(<VisionCameraOld/VisionCameraOld-Swift.h>)
+#import <VisionCameraOld/VisionCameraOld-Swift.h>
+#else
+// Fallback forward declaration for Swift class
+__attribute__((objc_runtime_name("_TtC15VisionCameraOld12CameraQueues")))
 @interface CameraQueues : NSObject
 @property (nonatomic, class, readonly, strong) dispatch_queue_t _Nonnull frameProcessorQueue;
 @end
+#endif
 __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
 @interface CameraViewOld : UIView
 @property (nonatomic, copy) FrameProcessorCallback _Nullable frameProcessorCallback;

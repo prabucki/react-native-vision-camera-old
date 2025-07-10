@@ -207,6 +207,50 @@ endif()
 
 find_package(react-native-reanimated REQUIRED CONFIG)
 
+# Find and link worklets library for Reanimated 3.15+
+# Try multiple possible paths for the worklets library
+set(WORKLETS_LIB_PATH1 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/library_jni/debug/copyDebugJniLibsProjectOnly/jni/${ANDROID_ABI}/libworklets.so")
+set(WORKLETS_LIB_PATH2 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/library_jni/release/copyReleaseJniLibsProjectOnly/jni/${ANDROID_ABI}/libworklets.so")
+set(WORKLETS_LIB_PATH3 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}/libworklets.so")
+set(WORKLETS_LIB_PATH4 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/release/obj/${ANDROID_ABI}/libworklets.so")
+set(WORKLETS_LIB_PATH5 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/library_jni/debug/jni/${ANDROID_ABI}/libworklets.so")
+set(WORKLETS_LIB_PATH6 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/library_jni/release/jni/${ANDROID_ABI}/libworklets.so")
+
+if(EXISTS ${WORKLETS_LIB_PATH1})
+    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH1}")
+    add_library(worklets SHARED IMPORTED)
+    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH1})
+    set(WORKLETS_LIB worklets)
+elseif(EXISTS ${WORKLETS_LIB_PATH2})
+    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH2}")
+    add_library(worklets SHARED IMPORTED)
+    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH2})
+    set(WORKLETS_LIB worklets)
+elseif(EXISTS ${WORKLETS_LIB_PATH3})
+    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH3}")
+    add_library(worklets SHARED IMPORTED)
+    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH3})
+    set(WORKLETS_LIB worklets)
+elseif(EXISTS ${WORKLETS_LIB_PATH4})
+    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH4}")
+    add_library(worklets SHARED IMPORTED)
+    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH4})
+    set(WORKLETS_LIB worklets)
+elseif(EXISTS ${WORKLETS_LIB_PATH5})
+    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH5}")
+    add_library(worklets SHARED IMPORTED)
+    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH5})
+    set(WORKLETS_LIB worklets)
+elseif(EXISTS ${WORKLETS_LIB_PATH6})
+    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH6}")
+    add_library(worklets SHARED IMPORTED)
+    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH6})
+    set(WORKLETS_LIB worklets)
+else()
+    message(STATUS "VisionCameraOld: Worklets library not found, using fallback")
+    set(WORKLETS_LIB "")
+endif()
+
 find_library(
         LOG_LIB
         log
@@ -219,6 +263,7 @@ target_link_libraries(
         ${LOG_LIB}
         ${JSI_LIB}
         react-native-reanimated::reanimated
+        ${WORKLETS_LIB}
         ${REACT_NATIVE_JNI_LIB}
         ${FBJNI_LIB}
         ${FOLLY_LIB}

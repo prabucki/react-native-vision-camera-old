@@ -269,8 +269,9 @@ class CameraViewOld(context: Context, private val frameProcessorThread: Executor
   private external fun initHybrid(): HybridData
   private external fun frameProcessorCallback(frame: ImageProxy)
 
-  override val lifecycle: Lifecycle
-    get() = lifecycleRegistry
+  override fun getLifecycle(): Lifecycle {
+    return lifecycleRegistry
+  }
 
   /**
    * Updates the custom Lifecycle to match the host activity's lifecycle, and if it's active we narrow it down to the [isActive] and [isAttachedToWindow] fields.

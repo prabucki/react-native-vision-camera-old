@@ -223,19 +223,40 @@ find_library(
 )
 
 # Find reanimated libraries
-find_library(
-        REANIMATED_LIB
-        reanimated
-        PATHS "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}"
-        NO_CMAKE_FIND_ROOT_PATH
-)
+# Check build type and prioritize matching libraries
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    find_library(
+            REANIMATED_LIB
+            reanimated
+            PATHS "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}"
+                  "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/release/obj/${ANDROID_ABI}"
+            NO_CMAKE_FIND_ROOT_PATH
+    )
 
-find_library(
-        WORKLETS_LIB
-        worklets
-        PATHS "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}"
-        NO_CMAKE_FIND_ROOT_PATH
-)
+    find_library(
+            WORKLETS_LIB
+            worklets
+            PATHS "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}"
+                  "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/release/obj/${ANDROID_ABI}"
+            NO_CMAKE_FIND_ROOT_PATH
+    )
+else()
+    find_library(
+            REANIMATED_LIB
+            reanimated
+            PATHS "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/release/obj/${ANDROID_ABI}"
+                  "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}"
+            NO_CMAKE_FIND_ROOT_PATH
+    )
+
+    find_library(
+            WORKLETS_LIB
+            worklets
+            PATHS "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/release/obj/${ANDROID_ABI}"
+                  "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}"
+            NO_CMAKE_FIND_ROOT_PATH
+    )
+endif()
 
 # linking
 message(WARNING "VisionCameraOld linking: FOR_HERMES=${FOR_HERMES}")

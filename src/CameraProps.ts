@@ -192,7 +192,7 @@ export interface CameraProps extends ViewProps {
    * return <Camera {...cameraProps} frameProcessor={frameProcessor} />
    * ```
    */
-  frameProcessor?: (frame: Frame) => void;
+  frameProcessor?: (frame: FrameOld) => void;
   /**
    * Specifies the maximum frame rate the frame processor can use, independent of the Camera's frame rate (`fps` property).
    *

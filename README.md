@@ -1,6 +1,15 @@
-<a href="https://margelo.io">
-  <img src="./docs/static/img/banner.svg" width="100%" />
-</a>
+> [!IMPORTANT]
+> **Unofficial Continuation Notice**
+>
+> This is an **unofficial continuation** of the abandoned React Native Vision Camera V2 by [@mrousavy](https://github.com/mrousavy). While the original author decided to rewrite the library from scratch (V3+), this project maintains and updates the stable V2 codebase to support the latest React Native versions and dependencies.
+>
+> **Why this fork exists:** The V3 rewrite introduced random performance issues that affected production applications. This project provides a reliable alternative by keeping the proven V2 architecture while ensuring compatibility with modern React Native versions.
+>
+> **Package naming:** The package and certain modules have been renamed with the suffix `*Old` (e.g., `react-native-vision-camera-old`, `CameraViewOld`) to allow having both versions of React Native Vision Camera installed in a project simultaneously without conflicts.
+>
+> **ML Kit support:** One of the main goals is to maintain compatibility with [@rodgomesc/vision-camera-code-scanner](https://github.com/rodgomesc/vision-camera-code-scanner) which provides ML Kit integration. This is important because Vision Camera V4's built-in scanning only offers limited Apple solutions on iOS, while ML Kit provides comprehensive cross-platform scanning capabilities.
+>
+> **Status:** Actively maintained with dependency updates, bug fixes, and React Native compatibility improvements.
 
 <h1 align="center">Vision Camera</h1>
 

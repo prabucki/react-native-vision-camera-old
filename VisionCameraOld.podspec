@@ -26,11 +26,26 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "11.0" }
   s.source       = { :git => "https://github.com/mrousavy/react-native-vision-camera-old.git", :tag => "#{s.version}" }
 
-  s.pod_target_xcconfig = {
-    "USE_HEADERMAP" => "YES",
-    "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_TARGET_SRCROOT)\" \"$(PODS_ROOT)/RCT-Folly\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/boost-for-react-native\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/Headers/Private/React-Core\" \"$(PODS_ROOT)/../../node_modules/react-native-reanimated/Common/cpp\" ",    "GCC_PREPROCESSOR_DEFINITIONS[config=Release]" => "$(inherited) NDEBUG=1"
-  }
-  s.compiler_flags = folly_compiler_flags + ' ' + boost_compiler_flags
+  # Check if New Architecture is enabled
+  new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
+
+  if new_arch_enabled
+    s.pod_target_xcconfig = {
+      "USE_HEADERMAP" => "YES",
+      "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_TARGET_SRCROOT)\" \"$(PODS_ROOT)/RCT-Folly\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/boost-for-react-native\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/Headers/Private/React-Core\" \"$(PODS_ROOT)/../../node_modules/react-native-reanimated/Common/cpp\" \"$(PODS_ROOT)/Headers/Private/React-Codegen/react/renderer/components/VisionCameraOldSpec\" \"$(PODS_ROOT)/Headers/Private/ReactCommon\" \"$(PODS_ROOT)/Headers/Private/React-Fabric\" \"$(PODS_ROOT)/Headers/Private/React-RCTFabric\" \"$(PODS_ROOT)/Headers/Private/React-utils\"",
+      "GCC_PREPROCESSOR_DEFINITIONS[config=Release]" => "$(inherited) NDEBUG=1",
+      "RCT_NEW_ARCH_ENABLED" => "1"
+    }
+    s.compiler_flags = folly_compiler_flags + ' ' + boost_compiler_flags + ' -DRCT_NEW_ARCH_ENABLED=1'
+  else
+    s.pod_target_xcconfig = {
+      "USE_HEADERMAP" => "YES",
+      "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_TARGET_SRCROOT)\" \"$(PODS_ROOT)/RCT-Folly\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/boost-for-react-native\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/Headers/Private/React-Core\" \"$(PODS_ROOT)/../../node_modules/react-native-reanimated/Common/cpp\" ",
+      "GCC_PREPROCESSOR_DEFINITIONS[config=Release]" => "$(inherited) NDEBUG=1"
+    }
+    s.compiler_flags = folly_compiler_flags + ' ' + boost_compiler_flags
+  end
+
   s.xcconfig = {
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
     "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/boost-for-react-native\" \"$(PODS_ROOT)/glog\" \"$(PODS_ROOT)/RCT-Folly\" \"${PODS_ROOT}/Headers/Public/React-hermes\" \"${PODS_ROOT}/Headers/Public/hermes-engine\"",
@@ -65,4 +80,12 @@ Pod::Spec.new do |s|
   s.dependency "React"
   s.dependency "React-Core"
   s.dependency "RNReanimated"
+
+  if new_arch_enabled
+    s.dependency "React-Codegen"
+    s.dependency "React-RCTFabric"
+    s.dependency "React-Fabric"
+    s.dependency "React-utils"
+    s.dependency "ReactCommon/turbomodule/core"
+  end
 end

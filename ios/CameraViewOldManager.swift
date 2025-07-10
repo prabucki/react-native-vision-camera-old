@@ -13,19 +13,14 @@ import Foundation
 final class CameraViewOldManager: RCTViewManager {
   // pragma MARK: Properties
 
-  private var runtimeManager: FrameProcessorRuntimeManagerOld?
+  private var moduleImplementation: CameraViewOldModuleImpl?
+  private var viewImplementation: CameraViewOldManagerImpl?
 
   override var bridge: RCTBridge! {
     didSet {
-      // Install Frame Processor bindings and setup Runtime
-      if VISION_CAMERA_ENABLE_FRAME_PROCESSORS {
-        CameraQueues.frameProcessorQueue.async {
-          self.runtimeManager = FrameProcessorRuntimeManagerOld(bridge: self.bridge)
-          self.bridge.runOnJS {
-            self.runtimeManager!.installFrameProcessorBindings()
-          }
-        }
-      }
+      // Initialize shared implementations
+      self.moduleImplementation = CameraViewOldModuleImpl(bridge: self.bridge)
+      self.viewImplementation = CameraViewOldManagerImpl(bridge: self.bridge)
     }
   }
 
@@ -38,160 +33,73 @@ final class CameraViewOldManager: RCTViewManager {
   }
 
   override final func view() -> UIView! {
-    return CameraViewOld()
+    return viewImplementation?.createView() ?? CameraViewOld()
   }
 
   // pragma MARK: React Functions
 
   @objc
   final func startRecording(_ node: NSNumber, options: NSDictionary, onRecordCallback: @escaping RCTResponseSenderBlock) {
-    let component = getCameraViewOld(withTag: node)
-    component.startRecording(options: options, callback: onRecordCallback)
+    moduleImplementation?.startRecording(node.doubleValue, options: options, onRecordCallback: onRecordCallback)
   }
 
   @objc
   final func pauseRecording(_ node: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    let component = getCameraViewOld(withTag: node)
-    component.pauseRecording(promise: Promise(resolver: resolve, rejecter: reject))
+    moduleImplementation?.pauseRecording(node.doubleValue, resolve: resolve, reject: reject)
   }
 
   @objc
   final func resumeRecording(_ node: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    let component = getCameraViewOld(withTag: node)
-    component.resumeRecording(promise: Promise(resolver: resolve, rejecter: reject))
+    moduleImplementation?.resumeRecording(node.doubleValue, resolve: resolve, reject: reject)
   }
 
   @objc
   final func stopRecording(_ node: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    let component = getCameraViewOld(withTag: node)
-    component.stopRecording(promise: Promise(resolver: resolve, rejecter: reject))
+    moduleImplementation?.stopRecording(node.doubleValue, resolve: resolve, reject: reject)
   }
 
   @objc
   final func takePhoto(_ node: NSNumber, options: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    let component = getCameraViewOld(withTag: node)
-    component.takePhoto(options: options, promise: Promise(resolver: resolve, rejecter: reject))
+    moduleImplementation?.takePhoto(node.doubleValue, options: options, resolve: resolve, reject: reject)
   }
 
   @objc
   final func focus(_ node: NSNumber, point: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    let promise = Promise(resolver: resolve, rejecter: reject)
-    guard let x = point["x"] as? NSNumber, let y = point["y"] as? NSNumber else {
-      promise.reject(error: .parameter(.invalid(unionName: "point", receivedValue: point.description)))
-      return
-    }
-    let component = getCameraViewOld(withTag: node)
-    component.focus(point: CGPoint(x: x.doubleValue, y: y.doubleValue), promise: promise)
+    moduleImplementation?.focus(node.doubleValue, point: point, resolve: resolve, reject: reject)
   }
 
   @objc
   final func getAvailableVideoCodecs(_ node: NSNumber, fileType: String?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    withPromise(resolve: resolve, reject: reject) {
-      let component = getCameraViewOld(withTag: node)
-      guard let videoOutput = component.videoOutput else {
-        throw CameraError.session(SessionError.cameraNotReady)
-      }
-
-      var parsedFileType = AVFileType.mov
-      if fileType != nil {
-        guard let parsed = try? AVFileType(withString: fileType!) else {
-          throw CameraError.parameter(ParameterError.invalid(unionName: "fileType", receivedValue: fileType!))
-        }
-        parsedFileType = parsed
-      }
-
-      return videoOutput.availableVideoCodecTypesForAssetWriter(writingTo: parsedFileType).map(\.descriptor)
-    }
+    moduleImplementation?.getAvailableVideoCodecs(node.doubleValue, fileType: fileType, resolve: resolve, reject: reject)
   }
 
   @objc
   final func getAvailableCameraDevices(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    withPromise(resolve: resolve, reject: reject) {
-      let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: getAllDeviceTypes(), mediaType: .video, position: .unspecified)
-      let devices = discoverySession.devices.filter {
-        if #available(iOS 11.1, *) {
-          // exclude the true-depth camera. The True-Depth camera has YUV and Infrared, can't take photos!
-          return $0.deviceType != .builtInTrueDepthCamera
-        }
-        return true
-      }
-      return devices.map {
-        return [
-          "id": $0.uniqueID,
-          "devices": $0.physicalDevices.map(\.deviceType.descriptor),
-          "position": $0.position.descriptor,
-          "name": $0.localizedName,
-          "hasFlash": $0.hasFlash,
-          "hasTorch": $0.hasTorch,
-          "minZoom": $0.minAvailableVideoZoomFactor,
-          "neutralZoom": $0.neutralZoomFactor,
-          "maxZoom": $0.maxAvailableVideoZoomFactor,
-          "isMultiCam": $0.isMultiCam,
-          "supportsParallelVideoProcessing": true,
-          "supportsDepthCapture": false, // TODO: supportsDepthCapture
-          "supportsRawCapture": false, // TODO: supportsRawCapture
-          "supportsLowLightBoost": $0.isLowLightBoostSupported,
-          "supportsFocus": $0.isFocusPointOfInterestSupported,
-          "formats": $0.formats.map { format -> [String: Any] in
-            format.toDictionary()
-          },
-        ]
-      }
-    }
+    moduleImplementation?.getAvailableCameraDevices(resolve, reject: reject)
   }
 
   @objc
   final func getCameraPermissionStatus(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     withPromise(resolve: resolve, reject: reject) {
-      let status = AVCaptureDevice.authorizationStatus(for: .video)
-      return status.descriptor
+      return moduleImplementation?.getCameraPermissionStatus() ?? "not-determined"
     }
   }
 
   @objc
   final func getMicrophonePermissionStatus(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     withPromise(resolve: resolve, reject: reject) {
-      let status = AVCaptureDevice.authorizationStatus(for: .audio)
-      return status.descriptor
+      return moduleImplementation?.getMicrophonePermissionStatus() ?? "not-determined"
     }
   }
 
   @objc
-  final func requestCameraPermission(_ resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
-    AVCaptureDevice.requestAccess(for: .video) { granted in
-      let result: AVAuthorizationStatus = granted ? .authorized : .denied
-      resolve(result.descriptor)
-    }
+  final func requestCameraPermission(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    moduleImplementation?.requestCameraPermission(resolve, reject: reject)
   }
 
   @objc
-  final func requestMicrophonePermission(_ resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
-    AVCaptureDevice.requestAccess(for: .audio) { granted in
-      let result: AVAuthorizationStatus = granted ? .authorized : .denied
-      resolve(result.descriptor)
-    }
+  final func requestMicrophonePermission(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    moduleImplementation?.requestMicrophonePermission(resolve, reject: reject)
   }
 
-  // MARK: Private
-
-  private func getCameraViewOld(withTag tag: NSNumber) -> CameraViewOld {
-    // swiftlint:disable force_cast
-    return bridge.uiManager.view(forReactTag: tag) as! CameraViewOld
-  }
-
-  private final func getAllDeviceTypes() -> [AVCaptureDevice.DeviceType] {
-    var deviceTypes: [AVCaptureDevice.DeviceType] = []
-    if #available(iOS 13.0, *) {
-      deviceTypes.append(.builtInTripleCamera)
-      deviceTypes.append(.builtInDualWideCamera)
-      deviceTypes.append(.builtInUltraWideCamera)
-    }
-    if #available(iOS 11.1, *) {
-      deviceTypes.append(.builtInTrueDepthCamera)
-    }
-    deviceTypes.append(.builtInDualCamera)
-    deviceTypes.append(.builtInWideAngleCamera)
-    deviceTypes.append(.builtInTelephotoCamera)
-    return deviceTypes
-  }
 }

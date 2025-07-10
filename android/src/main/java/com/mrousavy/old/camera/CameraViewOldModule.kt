@@ -36,57 +36,27 @@ import java.util.concurrent.Executors
 class CameraViewOldModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
   companion object {
     const val TAG = "CameraViewOld"
-    var RequestCode = 10
-
-    fun parsePermissionStatus(status: Int): String {
-      return when (status) {
-        PackageManager.PERMISSION_DENIED -> "denied"
-        PackageManager.PERMISSION_GRANTED -> "authorized"
-        else -> "not-determined"
-      }
-    }
   }
 
-  var frameProcessorThread: ExecutorService = Executors.newSingleThreadExecutor()
-  private val coroutineScope = CoroutineScope(Dispatchers.Default) // TODO: or Dispatchers.Main?
-  private var frameProcessorManager: FrameProcessorRuntimeManagerOld? = null
-
-  private fun cleanup() {
-    if (coroutineScope.isActive) {
-      coroutineScope.cancel("CameraViewOldModule has been destroyed.")
-    }
-    frameProcessorManager = null
-  }
+  private val moduleImpl = CameraViewOldModuleImpl(reactContext)
 
   override fun initialize() {
     super.initialize()
-
-    if (frameProcessorManager == null) {
-      frameProcessorThread.execute {
-        frameProcessorManager = FrameProcessorRuntimeManagerOld(reactApplicationContext, frameProcessorThread)
-      }
-    }
+    moduleImpl.initialize()
   }
 
   override fun onCatalystInstanceDestroy() {
     super.onCatalystInstanceDestroy()
-    cleanup()
+    moduleImpl.invalidate()
   }
 
   override fun invalidate() {
     super.invalidate()
-    cleanup()
+    moduleImpl.invalidate()
   }
 
   override fun getName(): String {
     return TAG
-  }
-
-  private fun findCameraViewOld(viewId: Int): CameraViewOld {
-    Log.d(TAG, "Finding view $viewId...")
-    val view = if (reactApplicationContext != null) UIManagerHelper.getUIManager(reactApplicationContext, viewId)?.resolveView(viewId) as CameraViewOld? else null
-    Log.d(TAG,  if (reactApplicationContext != null) "Found view $viewId!" else "Couldn't find view $viewId!")
-    return view ?: throw ViewNotFoundError(viewId)
   }
 
   @ReactMethod

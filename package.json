@@ -160,5 +160,13 @@
         }
       ]
     ]
+  },
+  "codegenConfig": {
+    "name": "VisionCameraOldSpec",
+    "type": "all",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.mrousavy.old.camera"
+    }
   }
 }

@@ -287,6 +287,15 @@ dependencies {
       implementation 'com.facebook.react:react-native:+'
   }
 
+  // New Architecture support
+  if (isNewArchitectureEnabled()) {
+    // For the New Architecture, we need these additional dependencies
+    implementation "com.facebook.react:react-android"
+    implementation "com.facebook.react:turbomodule-core"
+    implementation "com.facebook.react:fabric"
+    implementation "com.facebook.react:react-native-codegen"
+  }
+
   if (ENABLE_FRAME_PROCESSORS) {
     implementation project(':react-native-reanimated')
 

@@ -1,14 +1,11 @@
 package com.mrousavy.old.camera
 
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.uimanager.annotations.ReactProp
 
 @Suppress("unused")
-class CameraViewOldManager(reactContext: ReactApplicationContext) : ViewGroupManager<CameraViewOld>() {
+class CameraViewOldFabricManager(reactContext: ReactApplicationContext) : ViewGroupManager<CameraViewOld>() {
 
   private val managerImpl = CameraViewOldManagerImpl(reactContext)
 
@@ -26,114 +23,88 @@ class CameraViewOldManager(reactContext: ReactApplicationContext) : ViewGroupMan
   }
 
   override fun getName(): String {
-    return TAG
+    return "CameraViewOld"
   }
 
-  @ReactProp(name = "cameraId")
+  // Fabric Component Properties - delegated to implementation
+
   fun setCameraId(view: CameraViewOld, cameraId: String?) {
     managerImpl.setCameraId(view, cameraId)
   }
 
-  @ReactProp(name = "isActive")
   fun setIsActive(view: CameraViewOld, isActive: Boolean) {
     managerImpl.setIsActive(view, isActive)
   }
 
-  @ReactProp(name = "photo")
   fun setPhoto(view: CameraViewOld, photo: Boolean?) {
     managerImpl.setPhoto(view, photo)
   }
 
-  @ReactProp(name = "video")
   fun setVideo(view: CameraViewOld, video: Boolean?) {
     managerImpl.setVideo(view, video)
   }
 
-  @ReactProp(name = "audio")
   fun setAudio(view: CameraViewOld, audio: Boolean?) {
     managerImpl.setAudio(view, audio)
   }
 
-  @ReactProp(name = "enableFrameProcessor")
   fun setEnableFrameProcessor(view: CameraViewOld, enableFrameProcessor: Boolean) {
     managerImpl.setEnableFrameProcessor(view, enableFrameProcessor)
   }
 
-  @ReactProp(name = "enableDepthData")
   fun setEnableDepthData(view: CameraViewOld, enableDepthData: Boolean) {
     managerImpl.setEnableDepthData(view, enableDepthData)
   }
 
-  @ReactProp(name = "enableHighQualityPhotos")
   fun setEnableHighQualityPhotos(view: CameraViewOld, enableHighQualityPhotos: Boolean?) {
     managerImpl.setEnableHighQualityPhotos(view, enableHighQualityPhotos)
   }
 
-  @ReactProp(name = "enablePortraitEffectsMatteDelivery")
   fun setEnablePortraitEffectsMatteDelivery(view: CameraViewOld, enablePortraitEffectsMatteDelivery: Boolean) {
     managerImpl.setEnablePortraitEffectsMatteDelivery(view, enablePortraitEffectsMatteDelivery)
   }
 
-  @ReactProp(name = "format")
-  fun setFormat(view: CameraViewOld, format: ReadableMap?) {
+  fun setFormat(view: CameraViewOld, format: com.facebook.react.bridge.ReadableMap?) {
     managerImpl.setFormat(view, format)
   }
 
-  @ReactProp(name = "fps", defaultInt = -1)
-  fun setFps(view: CameraViewOld, fps: Int) {
-    managerImpl.setFps(view, if (fps > 0) fps else -1)
+  fun setFps(view: CameraViewOld, fps: Int?) {
+    managerImpl.setFps(view, fps)
   }
 
-  @ReactProp(name = "frameProcessorFps", defaultDouble = 1.0)
   fun setFrameProcessorFps(view: CameraViewOld, frameProcessorFps: Double) {
     managerImpl.setFrameProcessorFps(view, frameProcessorFps)
   }
 
-  @ReactProp(name = "hdr")
   fun setHdr(view: CameraViewOld, hdr: Boolean?) {
     managerImpl.setHdr(view, hdr)
   }
 
-  @ReactProp(name = "lowLightBoost")
   fun setLowLightBoost(view: CameraViewOld, lowLightBoost: Boolean?) {
     managerImpl.setLowLightBoost(view, lowLightBoost)
   }
 
-  @ReactProp(name = "colorSpace")
   fun setColorSpace(view: CameraViewOld, colorSpace: String?) {
     managerImpl.setColorSpace(view, colorSpace)
   }
 
-  @ReactProp(name = "torch")
-  fun setTorch(view: CameraViewOld, torch: String?) {
+  fun setTorch(view: CameraViewOld, torch: String) {
     managerImpl.setTorch(view, torch)
   }
 
-  @ReactProp(name = "zoom")
-  fun setZoom(view: CameraViewOld, zoom: Double) {
+  fun setZoom(view: CameraViewOld, zoom: Float) {
     managerImpl.setZoom(view, zoom)
   }
 
-  @ReactProp(name = "enableZoomGesture")
-  fun setEnableZoomGesture(view: CameraViewOld, enableZoomGesture: Boolean) {
-    managerImpl.setEnableZoomGesture(view, enableZoomGesture)
-  }
-
-  @ReactProp(name = "orientation")
   fun setOrientation(view: CameraViewOld, orientation: String?) {
     managerImpl.setOrientation(view, orientation)
   }
 
+  fun setEnableZoomGesture(view: CameraViewOld, enableZoomGesture: Boolean) {
+    managerImpl.setEnableZoomGesture(view, enableZoomGesture)
+  }
+
   companion object {
     const val TAG = "CameraViewOld"
-
-    val cameraViewTransactions: HashMap<CameraViewOld, ArrayList<String>> = HashMap()
-
-    private fun addChangedPropToTransaction(view: CameraViewOld, changedProp: String) {
-      if (cameraViewTransactions[view] == null) {
-        cameraViewTransactions[view] = ArrayList()
-      }
-      cameraViewTransactions[view]!!.add(changedProp)
-    }
   }
 }

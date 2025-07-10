@@ -182,6 +182,8 @@ android {
                 "**/libhermes.so",
                 "**/libfolly_runtime.so",
                 "**/libglog.so",
+                "**/libreactnative.so",
+                "**/libworklets.so",
     ]
     // META-INF is duplicate by CameraX.
     exclude "META-INF/**"
@@ -335,15 +337,19 @@ if (ENABLE_FRAME_PROCESSORS) {
   def thirdPartyNdkDir = new File("$buildDir/third-party-ndk")
   def thirdPartyVersionsFile = new File("${nodeModules}/react-native/ReactAndroid/gradle.properties")
   def thirdPartyVersions = new Properties()
-  thirdPartyVersions.load(new FileInputStream(thirdPartyVersionsFile))
 
-  def BOOST_VERSION = thirdPartyVersions["BOOST_VERSION"] ?: "1_76_0"
+  // Try to load versions from gradle.properties, but provide fallbacks for RN 0.76+
+  if (thirdPartyVersionsFile.exists()) {
+    thirdPartyVersions.load(new FileInputStream(thirdPartyVersionsFile))
+  }
+
+  def BOOST_VERSION = thirdPartyVersions["BOOST_VERSION"] ?: "1_84_0"
   def boost_file = new File(downloadsDir, "boost_${BOOST_VERSION}.tar.gz")
-  def DOUBLE_CONVERSION_VERSION = thirdPartyVersions["DOUBLE_CONVERSION_VERSION"]
+  def DOUBLE_CONVERSION_VERSION = thirdPartyVersions["DOUBLE_CONVERSION_VERSION"] ?: "3.3.0"
   def double_conversion_file = new File(downloadsDir, "double-conversion-${DOUBLE_CONVERSION_VERSION}.tar.gz")
-  def FOLLY_VERSION = thirdPartyVersions["FOLLY_VERSION"]
+  def FOLLY_VERSION = thirdPartyVersions["FOLLY_VERSION"] ?: "2024.01.01.00"
   def folly_file = new File(downloadsDir, "folly-${FOLLY_VERSION}.tar.gz")
-  def GLOG_VERSION = thirdPartyVersions["GLOG_VERSION"]
+  def GLOG_VERSION = thirdPartyVersions["GLOG_VERSION"] ?: "0.3.5"
   def glog_file = new File(downloadsDir, "glog-${GLOG_VERSION}.tar.gz")
 
   task createNativeDepsDirectories {

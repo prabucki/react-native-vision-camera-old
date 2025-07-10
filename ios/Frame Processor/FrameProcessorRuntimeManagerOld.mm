@@ -20,16 +20,22 @@
 #import <ReactCommon/RCTTurboModuleManager.h>
 
 #ifndef VISION_CAMERA_DISABLE_FRAME_PROCESSORS
-  #if __has_include(<RNReanimated/NativeReanimatedModule.h>)
-    #if __has_include(<RNReanimated/WorkletRuntime.h>)
+  #if __has_include(<RNReanimated/reanimated/apple/REAModule.h>)
+    #if __has_include(<RNReanimated/worklets/WorkletRuntime/WorkletRuntime.h>)
+      #import <RNReanimated/worklets/WorkletRuntime/WorkletRuntime.h>
+      #import <RNReanimated/worklets/SharedItems/Shareables.h>
+      #import "VisionCameraOldScheduler.h"
+      #define ENABLE_FRAME_PROCESSORS
+    #elif __has_include(<RNReanimated/WorkletRuntime.h>)
       #import <RNReanimated/WorkletRuntime.h>
+      #import <RNReanimated/Shareables.h>
       #import "VisionCameraOldScheduler.h"
       #define ENABLE_FRAME_PROCESSORS
     #else
       #warning Your react-native-reanimated version is not compatible with VisionCameraOld, Frame Processors are disabled. Make sure you're using react-native-reanimated 3.5.0 or above!
     #endif
   #else
-    #warning NativeReanimatedModule.h header could not be found, Frame Processors are disabled. If you want to use Frame Processors, make sure you install react-native-reanimated 3.5.0 or above!
+    #warning REAModule.h header could not be found, Frame Processors are disabled. If you want to use Frame Processors, make sure you install react-native-reanimated 3.5.0 or above!
   #endif
 #endif
 
@@ -54,7 +60,7 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
 
 @implementation FrameProcessorRuntimeManagerOld {
 #ifdef ENABLE_FRAME_PROCESSORS
-  std::shared_ptr<reanimated::WorkletRuntime> workletRuntime;
+  std::shared_ptr<worklets::WorkletRuntime> workletRuntime;
 #endif
   __weak RCTBridge* weakBridge;
 }
@@ -94,7 +100,7 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
                                   const jsi::Value& thisValue,
                                   const jsi::Value* arguments,
                                   size_t count) -> jsi::Value {
-    self->workletRuntime = reanimated::extractWorkletRuntime(rnRuntime, arguments[2].asObject(rnRuntime));
+    self->workletRuntime = worklets::extractWorkletRuntime(rnRuntime, arguments[2].asObject(rnRuntime));
     jsi::Runtime &visionRuntime = self->workletRuntime->getJSIRuntime();
 
     // TODO: call reanimated::RuntimeDecorator::decorateRuntime(*runtime, "FRAME_PROCESSOR");
@@ -135,7 +141,7 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
     auto viewTag = arguments[0].asNumber();
     NSLog(@"FrameProcessorBindings: Adapting Shareable value from function (conversion to worklet)...");
 
-    auto worklet = reanimated::extractShareableOrThrow<reanimated::ShareableWorklet>(rnRuntime, arguments[1].asObject(rnRuntime));
+    auto worklet = worklets::extractShareableOrThrow<worklets::ShareableWorklet>(rnRuntime, arguments[1].asObject(rnRuntime));
     NSLog(@"FrameProcessorBindings: Successfully created worklet!");
 
     RCTExecuteOnMainQueue([=]() {
@@ -146,8 +152,8 @@ __attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
       dispatch_async(CameraQueues.frameProcessorQueue, [=]() {
         NSLog(@"FrameProcessorBindings: Converting worklet to Objective-C callback...");
 
-        std::weak_ptr<reanimated::WorkletRuntime> weakWorkletRuntime = workletRuntime;
-        std::weak_ptr<reanimated::ShareableWorklet> weakShareableWorklet = worklet;
+        std::weak_ptr<worklets::WorkletRuntime> weakWorkletRuntime = workletRuntime;
+        std::weak_ptr<worklets::ShareableWorklet> weakShareableWorklet = worklet;
 
         view.frameProcessorCallback = ^(FrameOld* frame) {
           auto workletRuntime = weakWorkletRuntime.lock();

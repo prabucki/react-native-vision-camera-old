@@ -61,6 +61,7 @@ if(${REACT_NATIVE_VERSION} GREATER_EQUAL 71)
                 "${NODE_MODULES_DIR}/react-native/ReactCommon/runtimeexecutor"
                 "${NODE_MODULES_DIR}/react-native/ReactCommon/yoga"
                 "src/main/cpp"
+                "${NODE_MODULES_DIR}/react-native-reanimated/Common/cpp"
         )
 else()
         file (GLOB LIBFBJNI_INCLUDE_DIR "${BUILD_DIR}/fbjni-*-headers.jar/")
@@ -87,6 +88,7 @@ else()
                 ${INCLUDE_JSI_CPP} # only on older RN versions
                 ${INCLUDE_JSIDYNAMIC_CPP} # only on older RN versions
                 "src/main/cpp"
+                "${NODE_MODULES_DIR}/react-native-reanimated/Common/cpp"
         )
 endif()
 
@@ -183,7 +185,17 @@ if(${REACT_NATIVE_VERSION} LESS 71)
         )
 endif()
 
-if(${REACT_NATIVE_VERSION} GREATER_EQUAL 71)
+if(${REACT_NATIVE_VERSION} GREATER_EQUAL 76)
+        # React Native 0.76+ uses merged libraries (libreactnative.so)
+        target_link_libraries(
+                ${PACKAGE_NAME}
+                ReactAndroid::jsi
+                ReactAndroid::reactnative
+                fbjni::fbjni
+                ${REANIMATED_LIB}
+                ${WORKLETS_LIB}
+        )
+elseif(${REACT_NATIVE_VERSION} GREATER_EQUAL 71)
         target_link_libraries(
                 ${PACKAGE_NAME}
                 ReactAndroid::folly_runtime
@@ -205,67 +217,47 @@ else()
         )
 endif()
 
-find_package(react-native-reanimated REQUIRED CONFIG)
-
-# Find and link worklets library for Reanimated 3.15+
-# Try multiple possible paths for the worklets library
-set(WORKLETS_LIB_PATH1 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/library_jni/debug/copyDebugJniLibsProjectOnly/jni/${ANDROID_ABI}/libworklets.so")
-set(WORKLETS_LIB_PATH2 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/library_jni/release/copyReleaseJniLibsProjectOnly/jni/${ANDROID_ABI}/libworklets.so")
-set(WORKLETS_LIB_PATH3 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}/libworklets.so")
-set(WORKLETS_LIB_PATH4 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/release/obj/${ANDROID_ABI}/libworklets.so")
-set(WORKLETS_LIB_PATH5 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/library_jni/debug/jni/${ANDROID_ABI}/libworklets.so")
-set(WORKLETS_LIB_PATH6 "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/library_jni/release/jni/${ANDROID_ABI}/libworklets.so")
-
-if(EXISTS ${WORKLETS_LIB_PATH1})
-    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH1}")
-    add_library(worklets SHARED IMPORTED)
-    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH1})
-    set(WORKLETS_LIB worklets)
-elseif(EXISTS ${WORKLETS_LIB_PATH2})
-    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH2}")
-    add_library(worklets SHARED IMPORTED)
-    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH2})
-    set(WORKLETS_LIB worklets)
-elseif(EXISTS ${WORKLETS_LIB_PATH3})
-    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH3}")
-    add_library(worklets SHARED IMPORTED)
-    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH3})
-    set(WORKLETS_LIB worklets)
-elseif(EXISTS ${WORKLETS_LIB_PATH4})
-    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH4}")
-    add_library(worklets SHARED IMPORTED)
-    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH4})
-    set(WORKLETS_LIB worklets)
-elseif(EXISTS ${WORKLETS_LIB_PATH5})
-    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH5}")
-    add_library(worklets SHARED IMPORTED)
-    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH5})
-    set(WORKLETS_LIB worklets)
-elseif(EXISTS ${WORKLETS_LIB_PATH6})
-    message(STATUS "VisionCameraOld: Found worklets library at ${WORKLETS_LIB_PATH6}")
-    add_library(worklets SHARED IMPORTED)
-    set_target_properties(worklets PROPERTIES IMPORTED_LOCATION ${WORKLETS_LIB_PATH6})
-    set(WORKLETS_LIB worklets)
-else()
-    message(STATUS "VisionCameraOld: Worklets library not found, using fallback")
-    set(WORKLETS_LIB "")
-endif()
-
 find_library(
         LOG_LIB
         log
 )
 
+# Find reanimated libraries
+find_library(
+        REANIMATED_LIB
+        reanimated
+        PATHS "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}"
+        NO_CMAKE_FIND_ROOT_PATH
+)
+
+find_library(
+        WORKLETS_LIB
+        worklets
+        PATHS "${NODE_MODULES_DIR}/react-native-reanimated/android/build/intermediates/cmake/debug/obj/${ANDROID_ABI}"
+        NO_CMAKE_FIND_ROOT_PATH
+)
+
 # linking
 message(WARNING "VisionCameraOld linking: FOR_HERMES=${FOR_HERMES}")
-target_link_libraries(
-        ${PACKAGE_NAME}
-        ${LOG_LIB}
-        ${JSI_LIB}
-        react-native-reanimated::reanimated
-        ${WORKLETS_LIB}
-        ${REACT_NATIVE_JNI_LIB}
-        ${FBJNI_LIB}
-        ${FOLLY_LIB}
-        android
-)
+if(${REACT_NATIVE_VERSION} LESS 76)
+        target_link_libraries(
+                ${PACKAGE_NAME}
+                ${LOG_LIB}
+                ${JSI_LIB}
+                ${REANIMATED_LIB}
+                ${WORKLETS_LIB}
+                ${REACT_NATIVE_JNI_LIB}
+                ${FBJNI_LIB}
+                ${FOLLY_LIB}
+                android
+        )
+else()
+        # React Native 0.76+ - only link additional libraries not already included above
+        target_link_libraries(
+                ${PACKAGE_NAME}
+                ${LOG_LIB}
+                ${REANIMATED_LIB}
+                ${WORKLETS_LIB}
+                android
+        )
+endif()

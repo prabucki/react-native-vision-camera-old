@@ -10,7 +10,8 @@
 #include <memory>
 #include <string>
 
-#include "WorkletRuntime.h"
+#include "worklets/WorkletRuntime/WorkletRuntime.h"
+#include "worklets/SharedItems/Shareables.h"
 
 #include "CameraViewOld.h"
 #include "VisionCameraOldScheduler.h"
@@ -45,7 +46,7 @@ class FrameProcessorRuntimeManagerOld : public jni::HybridClass<FrameProcessorRu
   jni::global_ref<FrameProcessorRuntimeManagerOld::javaobject> javaPart_;
   jsi::Runtime* runtime_;
   std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker_;
-  std::shared_ptr<reanimated::WorkletRuntime> workletRuntime_;
+  std::shared_ptr<worklets::WorkletRuntime> workletRuntime_;
   std::shared_ptr<vision::VisionCameraOldScheduler> scheduler_;
 
   jni::global_ref<CameraViewOld::javaobject> findCameraViewOldById(int viewId);

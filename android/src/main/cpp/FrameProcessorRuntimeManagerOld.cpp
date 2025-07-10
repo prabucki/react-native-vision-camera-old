@@ -102,7 +102,7 @@ void FrameProcessorRuntimeManagerOld::setFrameProcessor(jsi::Runtime& rnRuntime,
   __android_log_write(ANDROID_LOG_INFO, TAG,
                       "Setting new Frame Processor...");
 
-  workletRuntime_ = reanimated::extractWorkletRuntime(rnRuntime, workletRuntimeValue);
+  workletRuntime_ = worklets::extractWorkletRuntime(rnRuntime, workletRuntimeValue);
   jsi::Runtime &visionRuntime = workletRuntime_->getJSIRuntime();
   visionRuntime.global().setProperty(visionRuntime, "_FRAME_PROCESSOR", jsi::Value(true));
 
@@ -115,7 +115,7 @@ void FrameProcessorRuntimeManagerOld::setFrameProcessor(jsi::Runtime& rnRuntime,
   // convert jsi::Function to a ShareableValue (can be shared across runtimes)
   __android_log_write(ANDROID_LOG_INFO, TAG,
                       "Adapting Shareable value from function (conversion to worklet)...");
-  auto shareableWorklet = reanimated::extractShareableOrThrow<reanimated::ShareableWorklet>(rnRuntime, frameProcessor);
+  auto shareableWorklet = worklets::extractShareableOrThrow<worklets::ShareableWorklet>(rnRuntime, frameProcessor);
   __android_log_write(ANDROID_LOG_INFO, TAG, "Successfully created worklet!");
 
   scheduler_->scheduleOnUI([=]() {

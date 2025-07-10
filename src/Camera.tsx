@@ -79,7 +79,7 @@ export class Camera extends React.PureComponent<CameraProps> {
   private lastFrameProcessor: ((frame: FrameOld) => void) | undefined;
   private isNativeViewMounted = false;
 
-  private readonly ref: React.RefObject<RefType>;
+  private readonly ref: React.RefObject<RefType | null>;
 
   /** @internal */
   constructor(props: CameraProps) {

@@ -1,7 +1,6 @@
 import { withPlugins, AndroidConfig, ConfigPlugin, createRunOncePlugin } from '@expo/config-plugins';
 import { withDisableFrameProcessorsAndroid } from './withDisableFrameProcessorsAndroid';
 import { withDisableFrameProcessorsIOS } from './withDisableFrameProcessorsIOS';
-// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
 const pkg = require('../../../package.json');
 
 const CAMERA_USAGE = 'Allow $(PRODUCT_NAME) to access your camera';

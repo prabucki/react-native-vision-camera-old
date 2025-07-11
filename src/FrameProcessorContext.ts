@@ -5,9 +5,8 @@ let createWorklet = () => {
 
 try {
   const reanimated = require('react-native-reanimated')
-  if (reanimated.createWorkletRuntime == null) {
+  if (reanimated.createWorkletRuntime == null)
     console.warn("Frame Processors are disabled because you're using an incompatible version of Reanimated.")
-  }
   workletRuntime = reanimated.createWorkletRuntime('VisionCameraOld')
   createWorklet = reanimated.makeShareableCloneRecursive
 } catch {

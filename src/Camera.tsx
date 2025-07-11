@@ -37,7 +37,6 @@ type RefType = React.Component<NativeCameraViewOldProps> & Readonly<NativeMethod
 //#endregion
 
 // NativeModules automatically resolves 'CameraViewOld' to 'CameraViewOldModule'
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const CameraModule = NativeModules.CameraViewOld;
 if (CameraModule == null) console.error("Camera: Native Module 'CameraViewOld' was null! Did you run pod install?");
 

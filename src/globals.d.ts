@@ -1,5 +1,3 @@
-/* eslint-disable no-var */
-
 /**
  * `true` if currently running in a Frame Processor runtime
  */

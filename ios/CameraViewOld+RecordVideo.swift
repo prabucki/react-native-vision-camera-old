@@ -190,43 +190,119 @@ extension CameraViewOld: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
   }
 
   public final func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from _: AVCaptureConnection) {
+    // Early validation to prevent crashes
+    guard CMSampleBufferIsValid(sampleBuffer) else {
+      ReactLogger.log(level: .warning, message: "Invalid sample buffer received, skipping processing")
+      return
+    }
+
     // Video Recording runs in the same queue
     if isRecording {
       guard let recordingSession = recordingSession else {
-        invokeOnError(.capture(.unknown(message: "isRecording was true but the RecordingSession was null!")))
+        ReactLogger.log(level: .error, message: "isRecording was true but the RecordingSession was null!")
+        invokeOnError(.capture(.unknown(message: "Recording session is null")))
         return
       }
 
       switch captureOutput {
       case is AVCaptureVideoDataOutput:
-        recordingSession.appendBuffer(sampleBuffer, type: .video, timestamp: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
+        let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        guard timestamp.isValid else {
+          ReactLogger.log(level: .warning, message: "Invalid timestamp for video buffer")
+          return
+        }
+        recordingSession.appendBuffer(sampleBuffer, type: .video, timestamp: timestamp)
+
       case is AVCaptureAudioDataOutput:
         let timestamp = CMSyncConvertTime(CMSampleBufferGetPresentationTimeStamp(sampleBuffer),
                                           from: audioCaptureSession.masterClock ?? CMClockGetHostTimeClock(),
                                           to: captureSession.masterClock ?? CMClockGetHostTimeClock())
+        guard timestamp.isValid else {
+          ReactLogger.log(level: .warning, message: "Invalid timestamp for audio buffer")
+          return
+        }
         recordingSession.appendBuffer(sampleBuffer, type: .audio, timestamp: timestamp)
+
       default:
         break
       }
     }
 
+    // Frame processor handling with comprehensive error handling
     if let frameProcessor = frameProcessorCallback, captureOutput is AVCaptureVideoDataOutput {
-      // check if last frame was x nanoseconds ago, effectively throttling FPS
+      // Validate frame processor prerequisites
+      guard enableFrameProcessor else {
+        return
+      }
+
+      // Check if last frame was x nanoseconds ago, effectively throttling FPS
       let frameTime = UInt64(CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds * 1_000_000_000.0)
       let lastFrameProcessorCallElapsedTime = frameTime - lastFrameProcessorCall
       let secondsPerFrame = 1.0 / actualFrameProcessorFps
       let nanosecondsPerFrame = secondsPerFrame * 1_000_000_000.0
+
       if lastFrameProcessorCallElapsedTime >= UInt64(nanosecondsPerFrame) {
         if !isRunningFrameProcessor {
           // we're not in the middle of executing the Frame Processor, so prepare for next call.
           CameraQueues.frameProcessorQueue.async {
+            // Double-check that we're still not running a frame processor
+            guard !self.isRunningFrameProcessor else {
+              ReactLogger.log(level: .warning, message: "Frame processor is already running, skipping frame")
+              return
+            }
+
             self.isRunningFrameProcessor = true
 
-            let perfSample = self.frameProcessorPerformanceDataCollector.beginPerformanceSampleCollection()
-            let frame = FrameOld(buffer: sampleBuffer, orientation: self.bufferOrientation)
-            frameProcessor(frame)
-            perfSample.endPerformanceSampleCollection()
+            // Execute frame processor with comprehensive error handling
+            var perfSample: PerformanceSampleCollection?
 
+            do {
+              // Validate sample buffer before processing
+              guard CMSampleBufferIsValid(sampleBuffer) else {
+                ReactLogger.log(level: .warning, message: "Sample buffer became invalid before frame processing")
+                return
+              }
+
+              perfSample = self.frameProcessorPerformanceDataCollector.beginPerformanceSampleCollection()
+              let frame = FrameOld(buffer: sampleBuffer, orientation: self.bufferOrientation)
+
+              // Execute the frame processor with timeout protection
+              let timeoutQueue = DispatchQueue.global(qos: .userInitiated)
+              let semaphore = DispatchSemaphore(value: 0)
+              var processingCompleted = false
+
+              timeoutQueue.async {
+                defer {
+                  if !processingCompleted {
+                    ReactLogger.log(level: .error, message: "Frame processor timed out")
+                  }
+                  semaphore.signal()
+                }
+
+                do {
+                  frameProcessor(frame)
+                  processingCompleted = true
+                } catch let error as NSError {
+                  ReactLogger.log(level: .error, message: "Frame processor threw NSError: \(error.localizedDescription)")
+                } catch {
+                  ReactLogger.log(level: .error, message: "Frame processor threw error: \(error.localizedDescription)")
+                }
+              }
+
+              // Wait for completion with timeout (100ms)
+              let timeoutResult = semaphore.wait(timeout: .now() + 0.1)
+              if timeoutResult == .timedOut {
+                ReactLogger.log(level: .error, message: "Frame processor execution timed out")
+              }
+
+            } catch let error as NSError {
+              ReactLogger.log(level: .error, message: "Frame processor setup error: \(error.localizedDescription)")
+            } catch {
+              ReactLogger.log(level: .error, message: "Frame processor unknown error: \(error.localizedDescription)")
+            }
+
+            // Always clean up
+            perfSample?.endPerformanceSampleCollection()
             self.isRunningFrameProcessor = false
           }
           lastFrameProcessorCall = frameTime

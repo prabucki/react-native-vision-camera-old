@@ -1,5 +1,5 @@
 //
-// Created by Marc on 19/06/2021.
+// Created by Marc Rousavy on 22.03.21.
 //
 
 #pragma once
@@ -7,8 +7,8 @@
 #include <jsi/jsi.h>
 #include <jni.h>
 #include <fbjni/fbjni.h>
+#include <memory>
 #include <vector>
-#include <string>
 
 #include "java-bindings/JImageProxy.h"
 
@@ -16,24 +16,25 @@ namespace vision {
 
 using namespace facebook;
 
-class JSI_EXPORT FrameHostObjectOld : public jsi::HostObject {
- public:
-  explicit FrameHostObjectOld(jni::alias_ref<JImageProxy::javaobject> image);
+class FrameHostObjectOld : public jsi::HostObject, public std::enable_shared_from_this<FrameHostObjectOld> {
+public:
+  explicit FrameHostObjectOld(const jni::alias_ref<JImageProxy::javaobject>& imageProxy);
   ~FrameHostObjectOld();
 
- public:
-  jsi::Value get(jsi::Runtime &, const jsi::PropNameID &name) override;
-  std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime &rt) override;
+public:
+  jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& propName) override;
+  std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime& rt) override;
 
+public:
   void close();
 
- public:
-  jni::global_ref<JImageProxy> frame;
+private:
+  void assertIsFrameStrong(jsi::Runtime& runtime, const std::string& accessedPropName);
+  static void cleanupOldFrames();
 
- private:
-  static auto constexpr TAG = "VisionCameraOld";
-
-  void assertIsFrameStrong(jsi::Runtime& runtime, const std::string& accessedPropName) const; // NOLINT(runtime/references)
+private:
+  jni::global_ref<JImageProxy::javaobject> imageProxy;
+  static std::vector<std::weak_ptr<FrameHostObjectOld>> frames;
 };
 
 } // namespace vision

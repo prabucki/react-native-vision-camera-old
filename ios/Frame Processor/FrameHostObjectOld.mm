@@ -1,5 +1,5 @@
 //
-//  FrameHostObjectOld.m
+//  FrameHostObjectOld.mm
 //  VisionCameraOld
 //
 //  Created by Marc Rousavy on 22.03.21.
@@ -7,8 +7,46 @@
 //
 
 #import "FrameHostObjectOld.h"
-#import <Foundation/Foundation.h>
-#import <jsi/jsi.h>
+#import <React/RCTBridge+Private.h>
+#import <React/RCTUtils.h>
+#import <ReactCommon/RCTTurboModule.h>
+#import <React/RCTLog.h>
+
+#import "FrameOld.h"
+#import "JSConsoleHelper.h"
+
+std::vector<std::shared_ptr<FrameHostObjectOld>> FrameHostObjectOld::frames;
+
+FrameHostObjectOld::FrameHostObjectOld(FrameOld* frame): frame(frame) {
+  // Add to global frames list for memory management
+  frames.push_back(shared_from_this());
+
+  // Clean up old frames if we have too many
+  if (frames.size() > 10) {
+    cleanupOldFrames();
+  }
+}
+
+FrameHostObjectOld::~FrameHostObjectOld() {
+  // Remove from global frames list
+  frames.erase(std::remove_if(frames.begin(), frames.end(),
+    [this](const std::weak_ptr<FrameHostObjectOld>& ptr) {
+      return ptr.expired() || ptr.lock().get() == this;
+    }), frames.end());
+}
+
+void FrameHostObjectOld::cleanupOldFrames() {
+  // Remove expired weak pointers and limit to 5 most recent frames
+  frames.erase(std::remove_if(frames.begin(), frames.end(),
+    [](const std::shared_ptr<FrameHostObjectOld>& ptr) {
+      return !ptr || ptr->frame == nil;
+    }), frames.end());
+
+  // If still too many, remove oldest ones
+  if (frames.size() > 5) {
+    frames.erase(frames.begin(), frames.begin() + (frames.size() - 5));
+  }
+}
 
 std::vector<jsi::PropNameID> FrameHostObjectOld::getPropertyNames(jsi::Runtime& rt) {
   std::vector<jsi::PropNameID> result;
@@ -26,73 +64,55 @@ jsi::Value FrameHostObjectOld::get(jsi::Runtime& runtime, const jsi::PropNameID&
   auto name = propName.utf8(runtime);
 
   if (name == "toString") {
-    auto toString = [this] (jsi::Runtime& runtime, const jsi::Value&, const jsi::Value*, size_t) -> jsi::Value {
-      if (this->frame == nil) {
+    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forAscii(runtime, "toString"), 0, [=](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments, size_t count) -> jsi::Value {
+      if (!this->frame) {
         return jsi::String::createFromUtf8(runtime, "[closed frame]");
       }
-      auto imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer);
-      auto width = CVPixelBufferGetWidth(imageBuffer);
-      auto height = CVPixelBufferGetHeight(imageBuffer);
+      auto width = this->frame.width;
+      auto height = this->frame.height;
 
-      NSMutableString* string = [NSMutableString stringWithFormat:@"%lu x %lu Frame", width, height];
-      return jsi::String::createFromUtf8(runtime, string.UTF8String);
-    };
-    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "toString"), 0, toString);
+      auto string = std::to_string(width) + " x " + std::to_string(height) + " Frame";
+      return jsi::String::createFromUtf8(runtime, string);
+    });
   }
-  if (name == "close") {
-    auto close = [this] (jsi::Runtime& runtime, const jsi::Value&, const jsi::Value*, size_t) -> jsi::Value {
-      if (this->frame == nil) {
-        throw jsi::JSError(runtime, "Trying to close an already closed frame! Did you call frame.close() twice?");
-      }
-      this->close();
-      return jsi::Value::undefined();
-    };
-    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "close"), 0, close);
-  }
-
   if (name == "isValid") {
-    auto isValid = frame != nil && CMSampleBufferIsValid(frame.buffer);
-    return jsi::Value(isValid);
+    return jsi::Value(this->frame && this->frame.buffer != nil);
   }
   if (name == "width") {
     this->assertIsFrameStrong(runtime, name);
-    auto imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer);
-    auto width = CVPixelBufferGetWidth(imageBuffer);
-    return jsi::Value((double) width);
+    return jsi::Value((double) this->frame.width);
   }
   if (name == "height") {
     this->assertIsFrameStrong(runtime, name);
-    auto imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer);
-    auto height = CVPixelBufferGetHeight(imageBuffer);
-    return jsi::Value((double) height);
+    return jsi::Value((double) this->frame.height);
   }
   if (name == "bytesPerRow") {
     this->assertIsFrameStrong(runtime, name);
-    auto imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer);
-    auto bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer);
-    return jsi::Value((double) bytesPerRow);
+    return jsi::Value((double) this->frame.bytesPerRow);
   }
   if (name == "planesCount") {
     this->assertIsFrameStrong(runtime, name);
-    auto imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer);
-    auto planesCount = CVPixelBufferGetPlaneCount(imageBuffer);
-    return jsi::Value((double) planesCount);
+    return jsi::Value((double) this->frame.planesCount);
+  }
+  if (name == "close") {
+    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forAscii(runtime, "close"), 0, [=](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments, size_t count) -> jsi::Value {
+      this->close();
+      return jsi::Value::undefined();
+    });
   }
 
   return jsi::Value::undefined();
 }
 
-void FrameHostObjectOld::assertIsFrameStrong(jsi::Runtime &runtime, const std::string &accessedPropName) {
-  if (frame == nil) {
-    auto message = "Cannot get `" + accessedPropName + "`, frame is already closed!";
-    throw jsi::JSError(runtime, message.c_str());
+void FrameHostObjectOld::assertIsFrameStrong(jsi::Runtime& runtime, const std::string& accessedPropName) {
+  if (!this->frame) {
+    auto message = "Cannot get `" + accessedPropName + "` from a Frame that has already been closed! Did you call `frame.close()`?";
+    throw jsi::JSError(runtime, message);
   }
 }
 
 void FrameHostObjectOld::close() {
-  if (frame != nil) {
-    CMSampleBufferInvalidate(frame.buffer);
-    // ARC will hopefully delete it lol
+  if (this->frame) {
     this->frame = nil;
   }
 }

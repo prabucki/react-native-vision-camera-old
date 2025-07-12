@@ -9,23 +9,30 @@
 #pragma once
 
 #import <jsi/jsi.h>
-#import <CoreMedia/CMSampleBuffer.h>
+#import <memory>
+#import <vector>
+
 #import "FrameOld.h"
 
 using namespace facebook;
 
-class JSI_EXPORT FrameHostObjectOld: public jsi::HostObject {
+class FrameHostObjectOld: public jsi::HostObject, public std::enable_shared_from_this<FrameHostObjectOld> {
 public:
-  explicit FrameHostObjectOld(FrameOld* frame): frame(frame) {}
+  explicit FrameHostObjectOld(FrameOld* frame);
+  ~FrameHostObjectOld();
 
 public:
   jsi::Value get(jsi::Runtime&, const jsi::PropNameID& name) override;
   std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime& rt) override;
-  void close();
 
 public:
-  FrameOld* frame;
+  void close();
 
 private:
   void assertIsFrameStrong(jsi::Runtime& runtime, const std::string& accessedPropName);
+  static void cleanupOldFrames();
+
+private:
+  FrameOld* frame;
+  static std::vector<std::shared_ptr<FrameHostObjectOld>> frames;
 };

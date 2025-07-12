@@ -481,20 +481,57 @@ class CameraViewOld(context: Context, private val frameProcessorThread: Executor
         Log.i(TAG, "Adding ImageAnalysis use-case...")
         imageAnalysis = imageAnalysisBuilder.build().apply {
           setAnalyzer(cameraExecutor, { image ->
-            val now = System.currentTimeMillis()
-            val intervalMs = (1.0 / actualFrameProcessorFps) * 1000.0
-            if (now - lastFrameProcessorCall > intervalMs) {
+            // Early check to avoid unnecessary work
+            if (!isActive || frameProcessorFps <= 0) {
+              image.close()
+              return@setAnalyzer
+            }
+
+            val now = System.nanoTime()
+            val intervalNs = if (actualFrameProcessorFps > 0) {
+              (1_000_000_000.0 / actualFrameProcessorFps).toLong()
+            } else {
+              33_333_333L // Default to ~30 FPS
+            }
+
+            val timeSinceLastCall = now - lastFrameProcessorCall
+
+            if (timeSinceLastCall >= intervalNs) {
+              // Check if we're already processing a frame to avoid backlog
+              if (frameProcessorThread.isShutdown || frameProcessorThread.isTerminated) {
+                image.close()
+                return@setAnalyzer
+              }
+
               lastFrameProcessorCall = now
 
-              val perfSample = frameProcessorPerformanceDataCollector.beginPerformanceSampleCollection()
-              frameProcessorCallback(image)
-              perfSample.endPerformanceSampleCollection()
-            }
-            image.close()
+              // Submit to frame processor thread with proper error handling
+              frameProcessorThread.execute {
+                var perfSample: PerformanceSampleCollection? = null
+                try {
+                  perfSample = frameProcessorPerformanceDataCollector.beginPerformanceSampleCollection()
+                  frameProcessorCallback(image)
+                } catch (e: Exception) {
+                  Log.e(TAG, "Frame processor error: ${e.message}", e)
+                } finally {
+                  perfSample?.endPerformanceSampleCollection()
 
-            if (isReadyForNewEvaluation) {
-              // last evaluation was more than a second ago, evaluate again
-              evaluateNewPerformanceSamples()
+                  // Ensure image is always closed
+                  try {
+                    image.close()
+                  } catch (e: Exception) {
+                    Log.w(TAG, "Error closing image: ${e.message}")
+                  }
+                }
+              }
+
+              // Check for performance evaluation less frequently
+              if (isReadyForNewEvaluation) {
+                evaluateNewPerformanceSamples()
+              }
+            } else {
+              // Frame dropped due to throttling
+              image.close()
             }
           })
         }
@@ -530,18 +567,33 @@ class CameraViewOld(context: Context, private val frameProcessorThread: Executor
 
   private fun evaluateNewPerformanceSamples() {
     lastFrameProcessorPerformanceEvaluation = System.currentTimeMillis()
-    val maxFrameProcessorFps = 30 // TODO: Get maxFrameProcessorFps from ImageAnalyser
-    val averageFps = 1.0 / frameProcessorPerformanceDataCollector.averageExecutionTimeSeconds
-    val suggestedFrameProcessorFps = floor(min(averageFps, maxFrameProcessorFps.toDouble()))
+
+    if (!frameProcessorPerformanceDataCollector.hasEnoughData) {
+      return
+    }
+
+    val suggestedFrameProcessorFps = frameProcessorPerformanceDataCollector.getSuggestedFrameRate(30.0)
 
     if (frameProcessorFps == -1.0) {
-      // frameProcessorFps="auto"
-      actualFrameProcessorFps = suggestedFrameProcessorFps
+      // frameProcessorFps="auto" - automatically adjust based on performance
+      val newFps = suggestedFrameProcessorFps.coerceIn(1.0, 30.0)
+      if (Math.abs(actualFrameProcessorFps - newFps) > 0.5) {
+        actualFrameProcessorFps = newFps
+        Log.d(TAG_PERF, "Auto-adjusted frame processor FPS to: $actualFrameProcessorFps")
+      }
     } else {
-      // frameProcessorFps={someCustomFpsValue}
-      if (suggestedFrameProcessorFps != lastSuggestedFrameProcessorFps && suggestedFrameProcessorFps != frameProcessorFps) {
-        invokeOnFrameProcessorPerformanceSuggestionAvailable(frameProcessorFps, suggestedFrameProcessorFps)
+      // frameProcessorFps={someCustomFpsValue} - provide suggestions
+      val currentFps = frameProcessorFps
+      val difference = Math.abs(suggestedFrameProcessorFps - currentFps)
+
+      // Only suggest if there's a significant difference (> 2 FPS)
+      if (difference > 2.0 && suggestedFrameProcessorFps != lastSuggestedFrameProcessorFps) {
+        invokeOnFrameProcessorPerformanceSuggestionAvailable(currentFps, suggestedFrameProcessorFps)
         lastSuggestedFrameProcessorFps = suggestedFrameProcessorFps
+
+        // Log performance stats for debugging
+        val stats = frameProcessorPerformanceDataCollector.processingStats
+        Log.d(TAG_PERF, "Frame processor performance stats: $stats")
       }
     }
   }

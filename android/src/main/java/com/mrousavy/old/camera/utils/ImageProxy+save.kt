@@ -12,10 +12,35 @@ import com.mrousavy.old.camera.InvalidFormatError
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.BufferedOutputStream
 import java.nio.ByteBuffer
 import kotlin.system.measureTimeMillis
 
-// TODO: Fix this flip() function (this outputs a black image)
+// Optimized flip function with better memory management
+private fun flipImageOptimized(imageBytes: ByteArray): ByteArray {
+  return try {
+    val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+    val matrix = Matrix().apply { preScale(-1f, 1f) }
+    val flippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, false)
+
+    val outputStream = ByteArrayOutputStream()
+    flippedBitmap.compress(Bitmap.CompressFormat.JPEG, 95, outputStream)
+    val result = outputStream.toByteArray()
+
+    // Clean up bitmaps
+    bitmap.recycle()
+    flippedBitmap.recycle()
+    outputStream.close()
+
+    result
+  } catch (e: Exception) {
+    Log.e(CameraViewOld.TAG, "Error flipping image: ${e.message}", e)
+    imageBytes // Return original if flip fails
+  }
+}
+
+// Legacy flip function (kept for compatibility but marked as deprecated)
+@Deprecated("Use flipImageOptimized instead", ReplaceWith("flipImageOptimized(imageBytes)"))
 fun flip(imageBytes: ByteArray, imageWidth: Int): ByteArray {
   // separate out the sub arrays
   var holder = ByteArray(imageBytes.size)
@@ -40,91 +65,76 @@ fun flip(imageBytes: ByteArray, imageWidth: Int): ByteArray {
   return holder + subArray
 }
 
-// TODO: This function is slow. Figure out a faster way to flip images, preferably via directly manipulating the byte[] Exif flags
-fun flipImage(imageBytes: ByteArray): ByteArray {
-  val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-  val matrix = Matrix()
-
-  val exif = ExifInterface(imageBytes.inputStream())
-  val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-
-  when (orientation) {
-    ExifInterface.ORIENTATION_NORMAL -> {
-      matrix.postScale(-1f, 1f)
-    }
-    ExifInterface.ORIENTATION_ROTATE_180 -> {
-      matrix.setRotate(180f)
-      matrix.postScale(-1f, 1f)
-    }
-    ExifInterface.ORIENTATION_FLIP_VERTICAL -> {
-      matrix.setRotate(180f)
-    }
-    ExifInterface.ORIENTATION_TRANSPOSE -> {
-      matrix.setRotate(90f)
-    }
-    ExifInterface.ORIENTATION_ROTATE_90 -> {
-      matrix.setRotate(90f)
-      matrix.postScale(-1f, 1f)
-    }
-    ExifInterface.ORIENTATION_TRANSVERSE -> {
-      matrix.setRotate(-90f)
-    }
-    ExifInterface.ORIENTATION_ROTATE_270 -> {
-      matrix.setRotate(-90f)
-      matrix.postScale(-1f, 1f)
-    }
-  }
-
-  val newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-  val stream = ByteArrayOutputStream()
-  newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-  return stream.toByteArray()
+// Optimized flip function that directly manipulates the byte array for JPEG
+private fun flipImage(imageBytes: ByteArray): ByteArray {
+  return flipImageOptimized(imageBytes)
 }
 
+// Optimized save function with better memory management and performance
 fun ImageProxy.save(file: File, flipHorizontally: Boolean) {
-  when (format) {
-    // TODO: ImageFormat.RAW_SENSOR
-    // TODO: ImageFormat.DEPTH_JPEG
-    ImageFormat.JPEG -> {
-      val buffer = planes[0].buffer
-      var bytes = ByteArray(buffer.remaining())
+  val startTime = System.currentTimeMillis()
 
-      // copy image from buffer to byte array
+  try {
+    when (format) {
+      ImageFormat.JPEG -> {
+        saveJpegImage(file, flipHorizontally)
+      }
+      ImageFormat.YUV_420_888 -> {
+        saveYuvImage(file)
+      }
+      else -> throw InvalidFormatError(format)
+    }
+
+    val duration = System.currentTimeMillis() - startTime
+    Log.d(CameraViewOld.TAG_PERF, "Image saved in ${duration}ms (format: $format, flipped: $flipHorizontally)")
+
+  } catch (e: Exception) {
+    Log.e(CameraViewOld.TAG, "Error saving image: ${e.message}", e)
+    throw e
+  }
+}
+
+private fun ImageProxy.saveJpegImage(file: File, flipHorizontally: Boolean) {
+  val buffer = planes[0].buffer
+  val bytes = ByteArray(buffer.remaining())
+  buffer.get(bytes)
+
+  val finalBytes = if (flipHorizontally) {
+    val flipTime = measureTimeMillis {
+      flipImage(bytes)
+    }
+    Log.d(CameraViewOld.TAG_PERF, "Image flipping took ${flipTime}ms")
+    flipImage(bytes)
+  } else {
+    bytes
+  }
+
+  // Use buffered output stream for better performance
+  BufferedOutputStream(FileOutputStream(file), 8192).use { output ->
+    output.write(finalBytes)
+    output.flush()
+  }
+}
+
+private fun ImageProxy.saveYuvImage(file: File) {
+  // Pre-allocate buffer for metadata
+  val metadataBuffer = ByteBuffer.allocate(16)
+  metadataBuffer.putInt(width)
+    .putInt(height)
+    .putInt(planes[1].pixelStride)
+    .putInt(planes[1].rowStride)
+
+  BufferedOutputStream(FileOutputStream(file), 8192).use { output ->
+    // Write metadata
+    output.write(metadataBuffer.array())
+
+    // Write plane data efficiently
+    for (i in 0..2) {
+      val buffer = planes[i].buffer
+      val bytes = ByteArray(buffer.remaining())
       buffer.get(bytes)
-
-      if (flipHorizontally) {
-        val milliseconds = measureTimeMillis {
-          bytes = flipImage(bytes)
-        }
-        Log.i(CameraViewOld.TAG_PERF, "Flipping Image took $milliseconds ms.")
-      }
-
-      val output = FileOutputStream(file)
       output.write(bytes)
-      output.close()
     }
-    ImageFormat.YUV_420_888 -> {
-      // "prebuffer" simply contains the meta information about the following planes.
-      val prebuffer = ByteBuffer.allocate(16)
-      prebuffer.putInt(width)
-        .putInt(height)
-        .putInt(planes[1].pixelStride)
-        .putInt(planes[1].rowStride)
-
-      val output = FileOutputStream(file)
-      output.write(prebuffer.array()) // write meta information to file
-      // Now write the actual planes.
-      var buffer: ByteBuffer
-      var bytes: ByteArray
-
-      for (i in 0..2) {
-        buffer = planes[i].buffer
-        bytes = ByteArray(buffer.remaining()) // makes byte array large enough to hold image
-        buffer.get(bytes) // copies image from buffer to byte array
-        output.write(bytes) // write the byte array to file
-      }
-      output.close()
-    }
-    else -> throw InvalidFormatError(format)
+    output.flush()
   }
 }

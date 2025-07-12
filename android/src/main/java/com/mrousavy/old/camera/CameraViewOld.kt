@@ -118,10 +118,38 @@ class CameraViewOld(context: Context, private val frameProcessorThread: Executor
 
   @Suppress("JoinDeclarationAndAssignment")
   internal val previewView: PreviewView
-  private val cameraExecutor = Executors.newSingleThreadExecutor()
-  internal val takePhotoExecutor = Executors.newSingleThreadExecutor()
-  internal val recordVideoExecutor = Executors.newSingleThreadExecutor()
-  internal var coroutineScope = CoroutineScope(Dispatchers.Main)
+
+  // Optimized executors with proper thread configuration
+  private val cameraExecutor = Executors.newSingleThreadExecutor { r ->
+    Thread(r, "CameraView-Main").apply {
+      priority = Thread.MAX_PRIORITY
+      isDaemon = false
+    }
+  }
+
+  internal val takePhotoExecutor = Executors.newSingleThreadExecutor { r ->
+    Thread(r, "CameraView-Photo").apply {
+      priority = Thread.NORM_PRIORITY + 1
+      isDaemon = false
+    }
+  }
+
+  internal val recordVideoExecutor = Executors.newSingleThreadExecutor { r ->
+    Thread(r, "CameraView-Video").apply {
+      priority = Thread.NORM_PRIORITY + 1
+      isDaemon = false
+    }
+  }
+
+  // Background executor for non-critical operations
+  private val backgroundExecutor = Executors.newCachedThreadPool { r ->
+    Thread(r, "CameraView-Background").apply {
+      priority = Thread.MIN_PRIORITY
+      isDaemon = true
+    }
+  }
+
+  internal var coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   internal var camera: Camera? = null
   internal var imageCapture: ImageCapture? = null
@@ -302,7 +330,60 @@ class CameraViewOld(context: Context, private val frameProcessorThread: Executor
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    updateLifecycleState()
+
+    Log.i(TAG, "CameraViewOld detached from window, cleaning up resources...")
+
+    // Cancel all coroutines
+    coroutineScope.cancel()
+
+    // Clean up executors with timeout
+    cleanupExecutors()
+
+    // Clear performance data
+    frameProcessorPerformanceDataCollector.clear()
+
+    // Clear any cached data
+    backgroundExecutor.execute {
+      try {
+        // Clean up temporary files
+        val cacheDir = context.cacheDir
+        cacheDir.listFiles()?.forEach { file ->
+          if (file.name.startsWith("mrousavy")) {
+            file.delete()
+          }
+        }
+      } catch (e: Exception) {
+        Log.w(TAG, "Error cleaning up cache: ${e.message}")
+      }
+    }
+  }
+
+  private fun cleanupExecutors() {
+    val executors = listOf(
+      "cameraExecutor" to cameraExecutor,
+      "takePhotoExecutor" to takePhotoExecutor,
+      "recordVideoExecutor" to recordVideoExecutor,
+      "backgroundExecutor" to backgroundExecutor
+    )
+
+    executors.forEach { (name, executor) ->
+      try {
+        executor.shutdown()
+        if (!executor.awaitTermination(2, java.util.concurrent.TimeUnit.SECONDS)) {
+          Log.w(TAG, "$name did not terminate gracefully, forcing shutdown")
+          executor.shutdownNow()
+          if (!executor.awaitTermination(1, java.util.concurrent.TimeUnit.SECONDS)) {
+            Log.e(TAG, "$name did not terminate after forced shutdown")
+          }
+        }
+      } catch (e: InterruptedException) {
+        Log.w(TAG, "$name cleanup interrupted")
+        executor.shutdownNow()
+        Thread.currentThread().interrupt()
+      } catch (e: Exception) {
+        Log.e(TAG, "Error cleaning up $name: ${e.message}")
+      }
+    }
   }
 
   /**

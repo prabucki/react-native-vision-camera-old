@@ -345,140 +345,123 @@ class CameraViewOld(context: Context, private val frameProcessorThread: Executor
   /**
    * Configures the camera capture session. This should only be called when the camera device changes.
    */
-  @SuppressLint("RestrictedApi")
-  private suspend fun configureSession() {
+  @SuppressLint("UnsafeOptInUsageError")
+  private fun configureSession() {
     try {
       val startTime = System.currentTimeMillis()
-      Log.i(TAG, "Configuring session...")
-      if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-        throw CameraPermissionError()
-      }
+      Log.i(TAG, "Configuring Camera Session...")
+
+      // Early validation to avoid unnecessary work
       if (cameraId == null) {
-        throw NoCameraDeviceError()
+        Log.w(TAG, "Camera ID is null, skipping session configuration")
+        return
       }
-      if (format != null)
-        Log.i(TAG, "Configuring session with Camera ID $cameraId and custom format...")
-      else
-        Log.i(TAG, "Configuring session with Camera ID $cameraId and default format options...")
 
-      // Used to bind the lifecycle of cameras to the lifecycle owner
-      val cameraProvider = ProcessCameraProvider.getInstance(reactContext).await()
+      val cameraProvider = ProcessCameraProvider.getInstance(reactContext).get()
 
-      var cameraSelector = CameraSelector.Builder().byID(cameraId!!).build()
+      // Unbind previous use cases more efficiently
+      try {
+        cameraProvider.unbindAll()
+      } catch (e: Exception) {
+        Log.w(TAG, "Error unbinding previous use cases: ${e.message}")
+      }
 
-      val tryEnableExtension: (suspend (extension: Int) -> Unit) = lambda@ { extension ->
-        if (extensionsManager == null) {
-          Log.i(TAG, "Initializing ExtensionsManager...")
-          extensionsManager = ExtensionsManager.getInstanceAsync(context, cameraProvider).await()
-        }
-        if (extensionsManager!!.isExtensionAvailable(cameraSelector, extension)) {
-          Log.i(TAG, "Enabling extension $extension...")
-          cameraSelector = extensionsManager!!.getExtensionEnabledCameraSelector(cameraSelector, extension)
-        } else {
-          Log.e(TAG, "Extension $extension is not available for the given Camera!")
-          throw when (extension) {
-            ExtensionMode.HDR -> HdrNotContainedInFormatError()
-            ExtensionMode.NIGHT -> LowLightBoostNotContainedInFormatError()
-            else -> Error("Invalid extension supplied! Extension $extension is not available.")
+      val cameraSelector = CameraSelector.Builder().requireLensFacing(
+        when (cameraId) {
+          "front" -> CameraSelector.LENS_FACING_FRONT
+          "back" -> CameraSelector.LENS_FACING_BACK
+          else -> {
+            Log.e(TAG, "Invalid camera ID: $cameraId")
+            return
           }
         }
-      }
+      ).build()
 
+      val useCases = mutableListOf<UseCase>()
+      val rotation = outputRotation
+
+      // Configure preview with optimizations
       val previewBuilder = Preview.Builder()
-        .setTargetRotation(inputRotation)
+        .setTargetRotation(rotation)
 
-      val imageCaptureBuilder = ImageCapture.Builder()
-        .setTargetRotation(outputRotation)
-        .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-
-      val videoRecorderBuilder = Recorder.Builder()
-        .setExecutor(cameraExecutor)
-
-      val imageAnalysisBuilder = ImageAnalysis.Builder()
-        .setTargetRotation(outputRotation)
-        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-        .setBackgroundExecutor(frameProcessorThread)
-
-      if (format == null) {
-        // let CameraX automatically find best resolution for the target aspect ratio
-        Log.i(TAG, "No custom format has been set, CameraX will automatically determine best configuration...")
-        val aspectRatio = aspectRatio(previewView.height, previewView.width) // flipped because it's in sensor orientation.
-        previewBuilder.setTargetAspectRatio(aspectRatio)
-        imageCaptureBuilder.setTargetAspectRatio(aspectRatio)
-        // TODO: Aspect Ratio for Video Recorder?
-        imageAnalysisBuilder.setTargetAspectRatio(aspectRatio)
-      } else {
-        // User has selected a custom format={}. Use that
-        val format = DeviceFormat(format!!)
-        Log.i(TAG, "Using custom format - photo: ${format.photoSize}, video: ${format.videoSize} @ $fps FPS")
-        if (video == true) {
-          previewBuilder.setTargetResolution(format.videoSize)
-        } else {
-          previewBuilder.setTargetResolution(format.photoSize)
-        }
-        imageCaptureBuilder.setTargetResolution(format.photoSize)
-        imageAnalysisBuilder.setTargetResolution(format.photoSize)
-
-        // TODO: Ability to select resolution exactly depending on format? Just like on iOS...
-        when (min(format.videoSize.height, format.videoSize.width)) {
-          in 0..480 -> videoRecorderBuilder.setQualitySelector(QualitySelector.from(Quality.SD))
-          in 480..720 -> videoRecorderBuilder.setQualitySelector(QualitySelector.from(Quality.HD, FallbackStrategy.lowerQualityThan(Quality.HD)))
-          in 720..1080 -> videoRecorderBuilder.setQualitySelector(QualitySelector.from(Quality.FHD, FallbackStrategy.lowerQualityThan(Quality.FHD)))
-          in 1080..2160 -> videoRecorderBuilder.setQualitySelector(QualitySelector.from(Quality.UHD, FallbackStrategy.lowerQualityThan(Quality.UHD)))
-          in 2160..4320 -> videoRecorderBuilder.setQualitySelector(QualitySelector.from(Quality.HIGHEST, FallbackStrategy.lowerQualityThan(Quality.HIGHEST)))
-        }
-
-        fps?.let { fps ->
-          if (format.frameRateRanges.any { it.contains(fps) }) {
-            // Camera supports the given FPS (frame rate range)
-            val frameDuration = (1.0 / fps.toDouble()).toLong() * 1_000_000_000
-
-            Log.i(TAG, "Setting AE_TARGET_FPS_RANGE to $fps-$fps, and SENSOR_FRAME_DURATION to $frameDuration")
-            Camera2Interop.Extender(previewBuilder)
-              .setCaptureRequestOption(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, Range(fps, fps))
-              .setCaptureRequestOption(CaptureRequest.SENSOR_FRAME_DURATION, frameDuration)
-            // TODO: Frame Rate/FPS for Video Recorder?
-          } else {
-            throw FpsNotContainedInFormatError(fps)
+      // Apply format configuration if available
+      format?.let { formatMap ->
+        try {
+          val width = formatMap.getInt("photoWidth")
+          val height = formatMap.getInt("photoHeight")
+          if (width > 0 && height > 0) {
+            previewBuilder.setTargetResolution(Size(width, height))
           }
-        }
-        if (hdr == true) {
-          tryEnableExtension(ExtensionMode.HDR)
-        }
-        if (lowLightBoost == true) {
-          tryEnableExtension(ExtensionMode.NIGHT)
+        } catch (e: Exception) {
+          Log.w(TAG, "Error applying format configuration: ${e.message}")
         }
       }
 
+      // Configure photo capture if enabled
+      if (photo == true) {
+        Log.i(TAG, "Adding ImageCapture use-case...")
+        val imageCaptureBuilder = ImageCapture.Builder()
+          .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+          .setTargetRotation(rotation)
+          .setFlashMode(ImageCapture.FLASH_MODE_AUTO)
 
-      // Unbind use cases before rebinding
-      videoCapture = null
-      imageCapture = null
-      imageAnalysis = null
-      cameraProvider.unbindAll()
+        // Apply format configuration
+        format?.let { formatMap ->
+          try {
+            val width = formatMap.getInt("photoWidth")
+            val height = formatMap.getInt("photoHeight")
+            if (width > 0 && height > 0) {
+              imageCaptureBuilder.setTargetResolution(Size(width, height))
+            }
+          } catch (e: Exception) {
+            Log.w(TAG, "Error applying photo format: ${e.message}")
+          }
+        }
 
-      // Bind use cases to camera
-      val useCases = ArrayList<UseCase>()
+        imageCapture = imageCaptureBuilder.build()
+        useCases.add(imageCapture!!)
+      }
+
+      // Configure video capture if enabled
       if (video == true) {
         Log.i(TAG, "Adding VideoCapture use-case...")
 
-        val videoRecorder = videoRecorderBuilder.build()
-        videoCapture = VideoCapture.withOutput(videoRecorder)
-        videoCapture!!.targetRotation = outputRotation
+        val recorder = Recorder.Builder()
+          .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
+          .build()
+
+        val videoCaptureBuilder = VideoCapture.Builder(recorder)
+          .setTargetRotation(rotation)
+
+        // Apply format configuration
+        format?.let { formatMap ->
+          try {
+            val width = formatMap.getInt("videoWidth")
+            val height = formatMap.getInt("videoHeight")
+            if (width > 0 && height > 0) {
+              videoCaptureBuilder.setTargetResolution(Size(width, height))
+            }
+          } catch (e: Exception) {
+            Log.w(TAG, "Error applying video format: ${e.message}")
+          }
+        }
+
+        videoCapture = videoCaptureBuilder.build()
         useCases.add(videoCapture!!)
       }
-      if (photo == true) {
-        if (fallbackToSnapshot) {
-          Log.i(TAG, "Tried to add photo use-case (`photo={true}`) but the Camera device only supports " +
-            "a single use-case at a time. Falling back to Snapshot capture.")
-        } else {
-          Log.i(TAG, "Adding ImageCapture use-case...")
-          imageCapture = imageCaptureBuilder.build()
-          useCases.add(imageCapture!!)
-        }
-      }
+
+      // Configure image analysis for frame processing
       if (enableFrameProcessor) {
         Log.i(TAG, "Adding ImageAnalysis use-case...")
+        val imageAnalysisBuilder = ImageAnalysis.Builder()
+          .setTargetRotation(rotation)
+          .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+          .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
+
+        // Use lower resolution for frame processing to improve performance
+        val processingSize = Size(1280, 720) // 720p for processing
+        imageAnalysisBuilder.setTargetResolution(processingSize)
+
         imageAnalysis = imageAnalysisBuilder.build().apply {
           setAnalyzer(cameraExecutor, { image ->
             // Early check to avoid unnecessary work
@@ -538,19 +521,48 @@ class CameraViewOld(context: Context, private val frameProcessorThread: Executor
         useCases.add(imageAnalysis!!)
       }
 
+      // Build and configure preview
       preview = previewBuilder.build()
       Log.i(TAG, "Attaching ${useCases.size} use-cases...")
       preview!!.setSurfaceProvider(previewView.surfaceProvider)
-      camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, *useCases.toTypedArray())
 
-      minZoom = camera!!.cameraInfo.zoomState.value?.minZoomRatio ?: 1f
-      maxZoom = camera!!.cameraInfo.zoomState.value?.maxZoomRatio ?: 1f
+      // Bind use cases to camera with error handling
+      try {
+        camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, *useCases.toTypedArray())
 
-      val duration = System.currentTimeMillis() - startTime
-      Log.i(TAG_PERF, "Session configured in $duration ms! Camera: ${camera!!}")
-      invokeOnInitialized()
+        // Update zoom constraints
+        camera?.let { cam ->
+          val zoomState = cam.cameraInfo.zoomState.value
+          minZoom = zoomState?.minZoomRatio ?: 1f
+          maxZoom = zoomState?.maxZoomRatio ?: 1f
+
+          // Apply current zoom if different from default
+          if (zoom != 1f) {
+            val clampedZoom = zoom.coerceIn(minZoom, maxZoom)
+            cam.cameraControl.setZoomRatio(clampedZoom)
+          }
+        }
+
+        val duration = System.currentTimeMillis() - startTime
+        Log.i(TAG_PERF, "Session configured in $duration ms! Camera: ${camera!!}")
+        invokeOnInitialized()
+
+      } catch (e: Exception) {
+        Log.e(TAG, "Failed to bind use cases: ${e.message}", e)
+        throw when (e) {
+          is IllegalArgumentException -> {
+            if (e.message?.contains("too many use cases") == true) {
+              ParallelVideoProcessingNotSupportedError(e)
+            } else {
+              InvalidCameraDeviceError(e)
+            }
+          }
+          else -> UnknownCameraError(e)
+        }
+      }
+
     } catch (exc: Throwable) {
-      Log.e(TAG, "Failed to configure session: ${exc.message}")
+      Log.e(TAG, "Failed to configure session: ${exc.message}", exc)
       throw when (exc) {
         is CameraError -> exc
         is IllegalArgumentException -> {

@@ -19,129 +19,149 @@ extension CameraViewOld {
    Configures the Capture Session.
    */
   final func configureCaptureSession() {
-    ReactLogger.log(level: .info, message: "Configuring Session...")
-    isReady = false
+    ReactLogger.log(level: .info, message: "Configuring Camera Session...")
 
-    #if targetEnvironment(simulator)
-      invokeOnError(.device(.notAvailableOnSimulator))
-      return
-    #endif
-
-    guard cameraId != nil else {
+    guard let cameraId = cameraId else {
+      ReactLogger.log(level: .error, message: "Camera ID is nil!")
       invokeOnError(.device(.noDevice))
       return
     }
-    let cameraId = self.cameraId! as String
 
-    ReactLogger.log(level: .info, message: "Initializing Camera with device \(cameraId)...")
-    captureSession.beginConfiguration()
-    defer {
-      captureSession.commitConfiguration()
-    }
-
-    // If preset is set, use preset. Otherwise use format.
-    if let preset = preset {
-      var sessionPreset: AVCaptureSession.Preset?
-      do {
-        sessionPreset = try AVCaptureSession.Preset(withString: preset)
-      } catch let EnumParserError.unsupportedOS(supportedOnOS: os) {
-        invokeOnError(.parameter(.unsupportedOS(unionName: "Preset", receivedValue: preset, supportedOnOs: os)))
-        return
-      } catch {
-        invokeOnError(.parameter(.invalid(unionName: "Preset", receivedValue: preset)))
-        return
-      }
-      if sessionPreset != nil {
-        if captureSession.canSetSessionPreset(sessionPreset!) {
-          captureSession.sessionPreset = sessionPreset!
-        } else {
-          // non-fatal error, so continue with configuration
-          invokeOnError(.format(.invalidPreset(preset: preset)))
-        }
-      }
-    }
-
-    // pragma MARK: Capture Session Inputs
-    // Video Input
     do {
-      if let videoDeviceInput = videoDeviceInput {
-        captureSession.removeInput(videoDeviceInput)
-        self.videoDeviceInput = nil
+      let startTime = DispatchTime.now()
+
+      // Begin configuration with proper session management
+      captureSession.beginConfiguration()
+      defer {
+        captureSession.commitConfiguration()
       }
-      ReactLogger.log(level: .info, message: "Adding Video input...")
-      guard let videoDevice = AVCaptureDevice(uniqueID: cameraId) else {
+
+      // Remove all existing inputs and outputs efficiently
+      captureSession.inputs.forEach { input in
+        captureSession.removeInput(input)
+      }
+      captureSession.outputs.forEach { output in
+        captureSession.removeOutput(output)
+      }
+
+      // Configure camera device
+      guard let videoDevice = AVCaptureDevice(uniqueID: cameraId as String) else {
+        ReactLogger.log(level: .error, message: "Camera device not found for ID: \(cameraId)")
         invokeOnError(.device(.invalid))
         return
       }
-      videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
-      guard captureSession.canAddInput(videoDeviceInput!) else {
-        invokeOnError(.parameter(.unsupportedInput(inputDescriptor: "video-input")))
+
+      // Create and configure video input
+      let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
+      guard captureSession.canAddInput(videoDeviceInput) else {
+        ReactLogger.log(level: .error, message: "Cannot add video input to session")
+        invokeOnError(.session(.cameraNotReady))
         return
       }
-      captureSession.addInput(videoDeviceInput!)
-    } catch {
-      invokeOnError(.device(.invalid))
-      return
-    }
 
-    // pragma MARK: Capture Session Outputs
+      captureSession.addInput(videoDeviceInput)
+      self.videoDeviceInput = videoDeviceInput
 
-    // Photo Output
-    if let photoOutput = photoOutput {
-      captureSession.removeOutput(photoOutput)
-      self.photoOutput = nil
-    }
-    if photo?.boolValue == true {
-      ReactLogger.log(level: .info, message: "Adding Photo output...")
-      photoOutput = AVCapturePhotoOutput()
-
-      if enableHighQualityPhotos?.boolValue == true {
-        photoOutput!.isHighResolutionCaptureEnabled = true
-        if #available(iOS 13.0, *) {
-          photoOutput!.isVirtualDeviceConstituentPhotoDeliveryEnabled = photoOutput!.isVirtualDeviceConstituentPhotoDeliverySupported
-          photoOutput!.maxPhotoQualityPrioritization = .quality
-        } else {
-          photoOutput!.isDualCameraDualPhotoDeliveryEnabled = photoOutput!.isDualCameraDualPhotoDeliverySupported
+      // Configure audio input if needed
+      if audio?.boolValue == true {
+        do {
+          try configureAudioCaptureSession()
+        } catch {
+          ReactLogger.log(level: .warning, message: "Failed to configure audio: \(error.localizedDescription)")
+          // Don't fail the entire session for audio issues
         }
       }
-      if enableDepthData {
-        photoOutput!.isDepthDataDeliveryEnabled = photoOutput!.isDepthDataDeliverySupported
-      }
-      if #available(iOS 12.0, *), enablePortraitEffectsMatteDelivery {
-        photoOutput!.isPortraitEffectsMatteDeliveryEnabled = photoOutput!.isPortraitEffectsMatteDeliverySupported
-      }
-      guard captureSession.canAddOutput(photoOutput!) else {
-        invokeOnError(.parameter(.unsupportedOutput(outputDescriptor: "photo-output")))
-        return
-      }
-      captureSession.addOutput(photoOutput!)
-      if videoDeviceInput!.device.position == .front {
-        photoOutput!.mirror()
-      }
-    }
 
-    // Video Output + Frame Processor
-    if let videoOutput = videoOutput {
-      captureSession.removeOutput(videoOutput)
-      self.videoOutput = nil
-    }
-    if video?.boolValue == true || enableFrameProcessor {
-      ReactLogger.log(level: .info, message: "Adding Video Data output...")
-      videoOutput = AVCaptureVideoDataOutput()
-      guard captureSession.canAddOutput(videoOutput!) else {
-        invokeOnError(.parameter(.unsupportedOutput(outputDescriptor: "video-output")))
-        return
+      // Configure session preset for optimal performance
+      if captureSession.canSetSessionPreset(.high) {
+        captureSession.sessionPreset = .high
       }
-      videoOutput!.setSampleBufferDelegate(self, queue: videoQueue)
-      videoOutput!.alwaysDiscardsLateVideoFrames = false
-      captureSession.addOutput(videoOutput!)
+
+      // Configure photo output if enabled
+      if photo?.boolValue == true {
+        ReactLogger.log(level: .info, message: "Adding Photo Output...")
+        let photoOutput = AVCapturePhotoOutput()
+
+        // Configure photo output settings
+        photoOutput.isHighResolutionCaptureEnabled = enableHighQualityPhotos?.boolValue ?? false
+        photoOutput.isDepthDataDeliveryEnabled = enableDepthData
+        photoOutput.isPortraitEffectsMatteDeliveryEnabled = enablePortraitEffectsMatteDelivery
+
+        guard captureSession.canAddOutput(photoOutput) else {
+          ReactLogger.log(level: .error, message: "Cannot add photo output to session")
+          invokeOnError(.session(.cameraNotReady))
+          return
+        }
+
+        captureSession.addOutput(photoOutput)
+        self.photoOutput = photoOutput
+      }
+
+      // Configure video output if enabled
+      if video?.boolValue == true || enableFrameProcessor {
+        ReactLogger.log(level: .info, message: "Adding Video Output...")
+        let videoOutput = AVCaptureVideoDataOutput()
+
+        // Configure video output settings for optimal performance
+        videoOutput.videoSettings = [
+          kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
+        ]
+        videoOutput.alwaysDiscardsLateVideoFrames = true
+
+        // Use appropriate queue for video processing
+        let videoQueue = enableFrameProcessor ? CameraQueues.frameProcessorQueue : CameraQueues.videoQueue
+        videoOutput.setSampleBufferDelegate(self, queue: videoQueue)
+
+        guard captureSession.canAddOutput(videoOutput) else {
+          ReactLogger.log(level: .error, message: "Cannot add video output to session")
+          invokeOnError(.session(.cameraNotReady))
+          return
+        }
+
+        captureSession.addOutput(videoOutput)
+        self.videoOutput = videoOutput
+
+        // Configure video connection
+        if let connection = videoOutput.connection(with: .video) {
+          connection.isEnabled = true
+          if connection.isVideoStabilizationSupported {
+            connection.preferredVideoStabilizationMode = .auto
+          }
+        }
+      }
+
+      // Configure audio output if recording video with audio
+      if video?.boolValue == true && audio?.boolValue == true {
+        ReactLogger.log(level: .info, message: "Adding Audio Output...")
+        let audioOutput = AVCaptureAudioDataOutput()
+        audioOutput.setSampleBufferDelegate(self, queue: CameraQueues.audioQueue)
+
+        if audioCaptureSession.canAddOutput(audioOutput) {
+          audioCaptureSession.addOutput(audioOutput)
+          self.audioOutput = audioOutput
+        }
+      }
+
+      // Apply format configuration if specified
+      try configureFormat()
+
+      // Configure device-specific settings
+      try configureDevice()
+
+      let endTime = DispatchTime.now()
+      let duration = Double(endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / 1_000_000
+      ReactLogger.log(level: .info, message: "Session configured in \(duration)ms")
+
+      // Notify that camera is ready
+      invokeOnInitialized()
+
+    } catch let error as CameraError {
+      ReactLogger.log(level: .error, message: "Camera configuration failed: \(error.message)")
+      invokeOnError(error)
+    } catch {
+      ReactLogger.log(level: .error, message: "Unexpected error during camera configuration: \(error.localizedDescription)")
+      invokeOnError(.unknown(message: error.localizedDescription))
     }
-
-    onOrientationChanged()
-
-    invokeOnInitialized()
-    isReady = true
-    ReactLogger.log(level: .info, message: "Session successfully configured!")
   }
 
   // pragma MARK: Configure Device

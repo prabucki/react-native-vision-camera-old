@@ -33,3 +33,10 @@ static bool VISION_CAMERA_ENABLE_FRAME_PROCESSORS = true;
 - (void) installFrameProcessorBindings;
 
 @end
+
+// RCTBridge category extension for runOnJS method
+@interface RCTBridge (RunOnJS)
+
+- (void) runOnJS:(void (^)(void))block NS_SWIFT_NAME( runOnJS(_:) );
+
+@end

@@ -13,6 +13,9 @@ FOUNDATION_EXPORT double VisionCameraOldVersionNumber;
 //! Project version string for VisionCameraOld.
 FOUNDATION_EXPORT const unsigned char VisionCameraOldVersionString[];
 
+// React Native types and constants (required for Swift compatibility)
+#import <VisionCameraOld/VisionCameraOldTypes.h>
+
 // Core public headers (pure Objective-C, no C++ dependencies)
 #import <VisionCameraOld/FrameOld.h>
 #import <VisionCameraOld/FrameProcessorCallback.h>

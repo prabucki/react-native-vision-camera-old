@@ -61,18 +61,13 @@ Pod::Spec.new do |s|
   s.module_map = "ios/VisionCameraOld.modulemap"
 
   # Public headers for framework support
+  # Only include headers without C++/JSI dependencies in public headers
   s.public_header_files = [
     "ios/VisionCameraOld.h",
-    "ios/CameraBridge.h",
     "ios/Frame Processor/FrameOld.h",
     "ios/Frame Processor/FrameProcessorCallback.h",
-    "ios/Frame Processor/FrameProcessorRuntimeManagerOld.h",
     "ios/Frame Processor/FrameProcessorPluginRegistryOld.h",
-    "ios/Frame Processor/FrameProcessorPlugin.h",
-    "ios/Frame Processor/FrameHostObjectOld.h",
-    "ios/Frame Processor/VisionCameraOldScheduler.h",
-    "ios/React Utils/RCTBridge+runOnJS.h",
-    "ios/React Utils/JSConsoleHelper.h"
+    "ios/Frame Processor/FrameProcessorPlugin.h"
   ]
 
   # Any private headers that are not globally unique should be mentioned here.

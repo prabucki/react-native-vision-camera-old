@@ -1,6 +1,21 @@
 framework module VisionCameraOld {
   umbrella header "VisionCameraOld.h"
 
+  // Core Objective-C headers (safe for module inclusion)
+  header "FrameOld.h"
+  header "FrameProcessorCallback.h"
+  header "FrameProcessorPlugin.h"
+  header "FrameProcessorPluginRegistryOld.h"
+
+  // Headers with C++/JSI dependencies (exclude from automatic module inclusion)
+  exclude header "CameraBridge.h"
+  exclude header "FrameProcessorRuntimeManagerOld.h"
+  exclude header "FrameHostObjectOld.h"
+  exclude header "RCTBridge+runOnJS.h"
+  exclude header "JSConsoleHelper.h"
+  exclude header "VisionCameraOldScheduler.h"
+  exclude header "JSIUtils.h"
+
   export *
   module * { export * }
 

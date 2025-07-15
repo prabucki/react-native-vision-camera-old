@@ -78,6 +78,8 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libVisionCameraOld.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVisionCameraOld.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8UMBRELLA01 /* VisionCameraOld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisionCameraOld.h; sourceTree = "<group>"; };
+		B8MODULEMAP01 /* VisionCameraOld.modulemap */ = {isa = PBXFileReference; lastKnownFileType = text; path = VisionCameraOld.modulemap; sourceTree = "<group>"; };
 		B80416F026AB16E8000DEB6A /* VisionCameraOldScheduler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VisionCameraOldScheduler.mm; sourceTree = "<group>"; };
 		B80416F126AB16F3000DEB6A /* VisionCameraOldScheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisionCameraOldScheduler.h; sourceTree = "<group>"; };
 		B80C0DFE260BDD97001699AB /* FrameProcessorPluginRegistryOld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameProcessorPluginRegistryOld.h; sourceTree = "<group>"; };
@@ -174,6 +176,8 @@
 			isa = PBXGroup;
 			children = (
 				B8DCF2D725EA940700EA5C72 /* Frame Processor */,
+				B8UMBRELLA01 /* VisionCameraOld.h */,
+				B8MODULEMAP01 /* VisionCameraOld.modulemap */,
 				B887515E25E0102000DB86D6 /* CameraBridge.h */,
 				B84760DE2608F57D004C3180 /* CameraQueues.swift */,
 				B887518325E0102000DB86D6 /* CameraError.swift */,
@@ -557,6 +561,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.2;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../cpp\"/**";
+				MODULEMAP_FILE = "$(SRCROOT)/VisionCameraOld.modulemap";
 			};
 			name = Debug;
 		};
@@ -577,6 +582,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = CameraBridge.h;
 				SWIFT_VERSION = 5.2;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../cpp\"/**";
+				MODULEMAP_FILE = "$(SRCROOT)/VisionCameraOld.modulemap";
 			};
 			name = Release;
 		};

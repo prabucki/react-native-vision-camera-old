@@ -1,0 +1,26 @@
+//
+//  VisionCameraOld.h
+//  VisionCameraOld
+//
+//  Umbrella header for VisionCameraOld framework
+//
+
+#import <Foundation/Foundation.h>
+
+//! Project version number for VisionCameraOld.
+FOUNDATION_EXPORT double VisionCameraOldVersionNumber;
+
+//! Project version string for VisionCameraOld.
+FOUNDATION_EXPORT const unsigned char VisionCameraOldVersionString[];
+
+// Public headers of your framework
+#import <VisionCameraOld/CameraBridge.h>
+#import <VisionCameraOld/FrameOld.h>
+#import <VisionCameraOld/FrameProcessorCallback.h>
+#import <VisionCameraOld/FrameProcessorPlugin.h>
+#import <VisionCameraOld/FrameProcessorPluginRegistryOld.h>
+#import <VisionCameraOld/FrameProcessorRuntimeManagerOld.h>
+#import <VisionCameraOld/FrameHostObjectOld.h>
+#import <VisionCameraOld/RCTBridge+runOnJS.h>
+#import <VisionCameraOld/JSConsoleHelper.h>
+#import <VisionCameraOld/VisionCameraOldScheduler.h>

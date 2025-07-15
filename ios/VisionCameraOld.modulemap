@@ -1,0 +1,8 @@
+framework module VisionCameraOld {
+  umbrella header "VisionCameraOld.h"
+
+  export *
+  module * { export * }
+
+  requires objc
+}

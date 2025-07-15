@@ -43,16 +43,38 @@ Pod::Spec.new do |s|
   # Note how this does not include headers, since those can nameclash.
   s.source_files = [
     "ios/**/*.{m,mm,swift}",
+    "ios/VisionCameraOld.h",
     "ios/CameraBridge.h",
     "ios/Frame Processor/FrameOld.h",
     "ios/Frame Processor/FrameProcessorCallback.h",
     "ios/Frame Processor/FrameProcessorRuntimeManagerOld.h",
     "ios/Frame Processor/FrameProcessorPluginRegistryOld.h",
     "ios/Frame Processor/FrameProcessorPlugin.h",
+    "ios/Frame Processor/FrameHostObjectOld.h",
+    "ios/Frame Processor/VisionCameraOldScheduler.h",
     "ios/React Utils/RCTBridge+runOnJS.h",
     "ios/React Utils/JSConsoleHelper.h",
     "cpp/**/*.{cpp}",
   ]
+
+  # Module map for framework support
+  s.module_map = "ios/VisionCameraOld.modulemap"
+
+  # Public headers for framework support
+  s.public_header_files = [
+    "ios/VisionCameraOld.h",
+    "ios/CameraBridge.h",
+    "ios/Frame Processor/FrameOld.h",
+    "ios/Frame Processor/FrameProcessorCallback.h",
+    "ios/Frame Processor/FrameProcessorRuntimeManagerOld.h",
+    "ios/Frame Processor/FrameProcessorPluginRegistryOld.h",
+    "ios/Frame Processor/FrameProcessorPlugin.h",
+    "ios/Frame Processor/FrameHostObjectOld.h",
+    "ios/Frame Processor/VisionCameraOldScheduler.h",
+    "ios/React Utils/RCTBridge+runOnJS.h",
+    "ios/React Utils/JSConsoleHelper.h"
+  ]
+
   # Any private headers that are not globally unique should be mentioned here.
   # Otherwise there will be a nameclash, since CocoaPods flattens out any header directories
   # See https://github.com/firebase/firebase-ios-sdk/issues/4035 for more details.

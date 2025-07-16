@@ -45,6 +45,8 @@ Pod::Spec.new do |s|
     "ios/**/*.{m,mm,swift}",
     "ios/VisionCameraOld.h",
     "ios/VisionCameraOldTypes.h",
+    "ios/VisionCameraOldWrapper.h",
+    "ios/VisionCameraOldWrapper.mm",
     "ios/CameraBridge.h",
     "ios/Frame Processor/FrameOld.h",
     "ios/Frame Processor/FrameProcessorCallback.h",
@@ -66,6 +68,7 @@ Pod::Spec.new do |s|
   s.public_header_files = [
     "ios/VisionCameraOld.h",
     "ios/VisionCameraOldTypes.h",
+    "ios/VisionCameraOldWrapper.h",
     "ios/Frame Processor/FrameOld.h",
     "ios/Frame Processor/FrameProcessorCallback.h",
     "ios/Frame Processor/FrameProcessorPluginRegistryOld.h",

@@ -1,8 +1,9 @@
 framework module VisionCameraOld {
   umbrella header "VisionCameraOld.h"
 
-    // React Native types for Swift compatibility
+      // React Native types for Swift compatibility
   header "VisionCameraOldTypes.h"
+  header "VisionCameraOldWrapper.h"
 
   // Core Objective-C headers (safe for module inclusion)
   header "FrameOld.h"

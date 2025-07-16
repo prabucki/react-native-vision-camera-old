@@ -27,12 +27,8 @@ static bool VISION_CAMERA_ENABLE_FRAME_PROCESSORS = true;
 
 @end
 
-// Minimal interface for FrameProcessorRuntimeManagerOld (Swift compatibility)
-// Full implementation is in FrameProcessorRuntimeManagerOld.h/.mm
-@interface FrameProcessorRuntimeManagerOld : NSObject
-- (instancetype) initWithBridge:(RCTBridge*)bridge;
-- (void) installFrameProcessorBindings;
-@end
+// Wrapper functions for FrameProcessorRuntimeManagerOld to avoid class conflicts
+#import "VisionCameraOldWrapper.h"
 
 // RCTBridge category extension for runOnJS method
 @interface RCTBridge (RunOnJS)

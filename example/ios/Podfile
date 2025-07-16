@@ -12,11 +12,17 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+# Firebase requirement
+use_frameworks! :linkage => :static
+
+# Fix for gRPC issue in React Native 0.76+
+$RNFirebaseAsStaticFramework = true
+
+# linkage = ENV['USE_FRAMEWORKS']
+# if linkage != nil
+#   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+#   use_frameworks! :linkage => linkage.to_sym
+# end
 
 target 'VisionCameraOldExample' do
   config = use_native_modules!

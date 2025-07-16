@@ -26,23 +26,34 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "11.0" }
   s.source       = { :git => "https://github.com/mrousavy/react-native-vision-camera-old.git", :tag => "#{s.version}" }
 
+  # Configure for static framework
+  s.static_framework = true
+
   s.pod_target_xcconfig = {
     "USE_HEADERMAP" => "YES",
-    "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_TARGET_SRCROOT)\" \"$(PODS_ROOT)/RCT-Folly\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/boost-for-react-native\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/Headers/Private/React-Core\" \"$(PODS_ROOT)/../../node_modules/react-native-reanimated/Common/cpp\" ",    "GCC_PREPROCESSOR_DEFINITIONS[config=Release]" => "$(inherited) NDEBUG=1"
+    "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_TARGET_SRCROOT)\" \"$(PODS_ROOT)/RCT-Folly\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/boost-for-react-native\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/Headers/Private/React-Core\" \"$(PODS_ROOT)/../../node_modules/react-native-reanimated/Common/cpp\" ",
+    "GCC_PREPROCESSOR_DEFINITIONS[config=Release]" => "$(inherited) NDEBUG=1",
+    "DEFINES_MODULE" => "YES"
   }
   s.compiler_flags = folly_compiler_flags + ' ' + boost_compiler_flags
   s.xcconfig = {
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
     "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/boost-for-react-native\" \"$(PODS_ROOT)/glog\" \"$(PODS_ROOT)/RCT-Folly\" \"${PODS_ROOT}/Headers/Public/React-hermes\" \"${PODS_ROOT}/Headers/Public/hermes-engine\"",
-    "OTHER_CFLAGS" => "$(inherited)" + " " + folly_flags
+    "OTHER_CFLAGS" => "$(inherited)" + " " + folly_flags,
+    "DEFINES_MODULE" => "YES"
   }
 
   s.requires_arc = true
 
-  # All source files that should be publicly visible
-  # Note how this does not include headers, since those can nameclash.
+  # All source files including Swift
   s.source_files = [
-    "ios/**/*.{m,mm,swift}",
+    "ios/**/*.{m,mm,h,swift}",
+    "cpp/**/*.{cpp,h}"
+  ]
+
+  # Only Objective-C headers that don't have C++ dependencies should be public
+  s.public_header_files = [
+    "ios/VisionCameraOld.h",
     "ios/CameraBridge.h",
     "ios/Frame Processor/FrameOld.h",
     "ios/Frame Processor/FrameProcessorCallback.h",
@@ -50,15 +61,15 @@ Pod::Spec.new do |s|
     "ios/Frame Processor/FrameProcessorPluginRegistryOld.h",
     "ios/Frame Processor/FrameProcessorPlugin.h",
     "ios/React Utils/RCTBridge+runOnJS.h",
-    "ios/React Utils/JSConsoleHelper.h",
-    "cpp/**/*.{cpp}",
+    "ios/React Utils/JSConsoleHelper.h"
   ]
-  # Any private headers that are not globally unique should be mentioned here.
-  # Otherwise there will be a nameclash, since CocoaPods flattens out any header directories
-  # See https://github.com/firebase/firebase-ios-sdk/issues/4035 for more details.
-  s.preserve_paths = [
-    "cpp/**/*.h",
-    "ios/**/*.h"
+
+  # Make all C++ headers and problematic headers private
+  s.private_header_files = [
+    "ios/Frame Processor/VisionCameraOldScheduler.h",
+    "ios/Frame Processor/FrameHostObjectOld.h",
+    "ios/React Utils/JSIUtils.h",
+    "cpp/**/*.h"
   ]
 
   s.dependency "React-callinvoker"

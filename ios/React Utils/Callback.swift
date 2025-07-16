@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import React
 
 /**
  Represents a callback to JavaScript. Syntax is the same as with Promise.

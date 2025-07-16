@@ -7,6 +7,8 @@
 //
 
 import AVFoundation
+import Foundation
+import React
 
 // MARK: - CameraViewOld + AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate
 

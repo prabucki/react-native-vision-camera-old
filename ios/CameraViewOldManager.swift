@@ -8,6 +8,7 @@
 
 import AVFoundation
 import Foundation
+import React
 
 @objc(CameraViewOldManager)
 final class CameraViewOldManager: RCTViewManager {

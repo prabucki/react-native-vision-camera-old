@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
 #import "FrameProcessorRuntimeManagerOld.h"
 #import "FrameProcessorPluginRegistryOld.h"
 #import "FrameHostObjectOld.h"
@@ -52,11 +53,8 @@ __attribute__((objc_runtime_name("_TtC15VisionCameraOld12CameraQueues")))
 @interface CameraQueues : NSObject
 @property (nonatomic, class, readonly, strong) dispatch_queue_t _Nonnull frameProcessorQueue;
 @end
+// CameraViewOld will be available through the Swift header when the framework is properly configured
 #endif
-__attribute__((objc_runtime_name("_TtC12VisionCameraOld10CameraViewOld")))
-@interface CameraViewOld : UIView
-@property (nonatomic, copy) FrameProcessorCallback _Nullable frameProcessorCallback;
-@end
 
 @implementation FrameProcessorRuntimeManagerOld {
 #ifdef ENABLE_FRAME_PROCESSORS

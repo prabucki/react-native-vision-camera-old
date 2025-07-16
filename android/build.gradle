@@ -43,7 +43,11 @@ def reactNativeArchitectures() {
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
-def nodeModules = findNodeModules(projectDir)
+// When building as a project dependency (like in example app),
+// we should look for node_modules from the root project, not from this library's directory
+def searchDir = rootProject.projectDir
+logger.warn("VisionCameraOld: Searching for node_modules/ starting from: ${searchDir}")
+def nodeModules = findNodeModules(searchDir)
 logger.warn("VisionCameraOld: node_modules/ found at: ${nodeModules}")
 def reactNative = new File("$nodeModules/react-native")
 def CMAKE_NODE_MODULES_DIR = project.getProjectDir().getParentFile().getParent()

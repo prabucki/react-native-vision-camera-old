@@ -69,8 +69,7 @@ Pod::Spec.new do |s|
     "ios/Frame Processor/FrameOld.h",
     "ios/Frame Processor/FrameProcessorCallback.h",
     "ios/Frame Processor/FrameProcessorPluginRegistryOld.h",
-    "ios/Frame Processor/FrameProcessorPlugin.h",
-    "ios/Frame Processor/FrameProcessorRuntimeManagerOld.h"
+    "ios/Frame Processor/FrameProcessorPlugin.h"
   ]
 
   # Any private headers that are not globally unique should be mentioned here.

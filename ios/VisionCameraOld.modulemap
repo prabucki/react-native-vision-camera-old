@@ -9,10 +9,10 @@ framework module VisionCameraOld {
   header "FrameProcessorCallback.h"
   header "FrameProcessorPlugin.h"
   header "FrameProcessorPluginRegistryOld.h"
-  header "FrameProcessorRuntimeManagerOld.h"
 
-  // Headers with C++/JSI dependencies (exclude from automatic module inclusion)
+      // Headers with C++/JSI dependencies (exclude from automatic module inclusion)
   exclude header "CameraBridge.h"
+  exclude header "FrameProcessorRuntimeManagerOld.h"
   exclude header "FrameHostObjectOld.h"
   exclude header "RCTBridge+runOnJS.h"
   exclude header "JSConsoleHelper.h"

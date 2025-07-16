@@ -43,6 +43,8 @@
 	<string>VisionCameraOld needs access to your Microphone to record videos with audio.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>VisionCameraOld needs access to your photo library to save captured videos and photos.</string>
+	<key>RCTNewArchEnabled</key>
+	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Ionicons.ttf</string>

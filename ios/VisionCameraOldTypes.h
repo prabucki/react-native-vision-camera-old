@@ -8,6 +8,7 @@
 #pragma once
 
 #import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
 #import <React/RCTViewManager.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTBridge.h>
@@ -26,13 +27,8 @@ static bool VISION_CAMERA_ENABLE_FRAME_PROCESSORS = true;
 
 @end
 
-@interface FrameProcessorRuntimeManagerOld : NSObject
-
-- (instancetype)init NS_UNAVAILABLE;
-- (instancetype) initWithBridge:(RCTBridge*)bridge;
-- (void) installFrameProcessorBindings;
-
-@end
+// Import the runtime manager header directly since Swift needs it
+#import "FrameProcessorRuntimeManagerOld.h"
 
 // RCTBridge category extension for runOnJS method
 @interface RCTBridge (RunOnJS)

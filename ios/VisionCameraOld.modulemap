@@ -1,7 +1,7 @@
 framework module VisionCameraOld {
   umbrella header "VisionCameraOld.h"
 
-  // React Native types for Swift compatibility
+    // React Native types for Swift compatibility
   header "VisionCameraOldTypes.h"
 
   // Core Objective-C headers (safe for module inclusion)
@@ -9,15 +9,18 @@ framework module VisionCameraOld {
   header "FrameProcessorCallback.h"
   header "FrameProcessorPlugin.h"
   header "FrameProcessorPluginRegistryOld.h"
+  header "FrameProcessorRuntimeManagerOld.h"
 
   // Headers with C++/JSI dependencies (exclude from automatic module inclusion)
   exclude header "CameraBridge.h"
-  exclude header "FrameProcessorRuntimeManagerOld.h"
   exclude header "FrameHostObjectOld.h"
   exclude header "RCTBridge+runOnJS.h"
   exclude header "JSConsoleHelper.h"
   exclude header "VisionCameraOldScheduler.h"
   exclude header "JSIUtils.h"
+
+  // Exclude Swift generated headers that might cause conflicts
+  exclude header "VisionCameraOld-Swift.h"
 
   export *
   module * { export * }

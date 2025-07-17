@@ -20,8 +20,8 @@
 #import <React/RCTUIManager.h>
 #import <ReactCommon/RCTTurboModuleManager.h>
 
-#import <RNReanimated/worklets/WorkletRuntime/WorkletRuntime.h>
-#import <RNReanimated/worklets/SharedItems/Shareables.h>
+#import <worklets/WorkletRuntime/WorkletRuntime.h>
+#import <worklets/SharedItems/Shareables.h>
 #import "VisionCameraOldScheduler.h"
 #define ENABLE_FRAME_PROCESSORS
 

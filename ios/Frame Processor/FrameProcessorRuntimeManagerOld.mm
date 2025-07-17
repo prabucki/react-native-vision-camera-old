@@ -20,25 +20,10 @@
 #import <React/RCTUIManager.h>
 #import <ReactCommon/RCTTurboModuleManager.h>
 
-#ifndef VISION_CAMERA_DISABLE_FRAME_PROCESSORS
-  #if __has_include(<RNReanimated/reanimated/apple/REAModule.h>)
-    #if __has_include(<RNReanimated/worklets/WorkletRuntime/WorkletRuntime.h>)
-      #import <RNReanimated/worklets/WorkletRuntime/WorkletRuntime.h>
-      #import <RNReanimated/worklets/SharedItems/Shareables.h>
-      #import "VisionCameraOldScheduler.h"
-      #define ENABLE_FRAME_PROCESSORS
-    #elif __has_include(<RNReanimated/WorkletRuntime.h>)
-      #import <RNReanimated/WorkletRuntime.h>
-      #import <RNReanimated/Shareables.h>
-      #import "VisionCameraOldScheduler.h"
-      #define ENABLE_FRAME_PROCESSORS
-    #else
-      #warning Your react-native-reanimated version is not compatible with VisionCameraOld, Frame Processors are disabled. Make sure you're using react-native-reanimated 3.5.0 or above!
-    #endif
-  #else
-    #warning REAModule.h header could not be found, Frame Processors are disabled. If you want to use Frame Processors, make sure you install react-native-reanimated 3.5.0 or above!
-  #endif
-#endif
+#import <RNReanimated/worklets/WorkletRuntime/WorkletRuntime.h>
+#import <RNReanimated/worklets/SharedItems/Shareables.h>
+#import "VisionCameraOldScheduler.h"
+#define ENABLE_FRAME_PROCESSORS
 
 #import "FrameProcessorCallback.h"
 #import "../React Utils/JSIUtils.h"

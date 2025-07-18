@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "11.0" }
+  s.platforms    = { :ios => "15.6" }
   s.source       = { :git => "https://github.com/mrousavy/react-native-vision-camera-old.git", :tag => "#{s.version}" }
 
   # Configure for static framework
